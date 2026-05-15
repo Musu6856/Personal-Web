@@ -71,6 +71,43 @@ body::before {
   position: relative;
 }
 
+/* Plain Masthead */
+.masthead {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line-faint);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mh-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.mh-mark {
+  width: 28px; height: 28px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-style: italic; font-size: 14px;
+}
+.mh-nav {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+.mh-nav a { color: var(--ink-soft); text-decoration: none; transition: color 0.18s ease; }
+.mh-nav a:hover { color: var(--coral); }
+.mh-actions { display: flex; align-items: center; gap: 24px; }
+
 /* Nav & Topbar Structure */
 .side-rail {
   position: fixed;
@@ -236,7 +273,8 @@ body::before {
 /* Footers Base */
 footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60px; }
 .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
-.foot-brand .brand { margin-bottom: 18px; }
+.foot-brand .brand { margin-bottom: 18px; display: inline-flex; align-items: center; gap: 10px; font-family: var(--sans); font-size: 16px; font-weight: 700; color: var(--ink); text-decoration: none; }
+.foot-brand .brand .mh-mark { width: 24px; height: 24px; font-size: 12px; }
 .foot-brand p { font-family: var(--body); font-size: 13.5px; color: var(--ink-mute); line-height: 1.55; max-width: 38ch; }
 .foot-col h5 { font-family: var(--sans); font-size: 11px; color: var(--ink); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; font-weight: 700; }
 .foot-col ul { list-style: none; }
@@ -450,6 +488,7 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
   .foot-col:nth-child(4), .foot-col:nth-child(5) { display: none; }
 }
 @media (max-width: 880px) { .container { padding: 0 24px; } .nav-links, .brand-meta, .nav-cta { display: none; } }
+@media (max-width: 768px) { .mh-nav { display: none; } }
 @media (max-width: 640px) {
   .pt-gallery { grid-template-columns: 1fr; }
   .pt-meta { grid-template-columns: 1fr; gap: 20px; }
@@ -472,55 +511,25 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
 
 <div class="shell">
 
-  <!-- top metadata strip -->
-  <div class="topbar">
-    <div class="container">
-      <div class="topbar-inner">
-        <span data-len><b>Musu</b> &nbsp;·&nbsp; Personal</span>
-        <span data-lzh><b>Musu</b> &nbsp;·&nbsp; 个人主页</span>
-        <span class="mid">
-        <span data-len>Filed under <span class="coral">AI Product · Prototypes · Notes</span></span>
-        <span data-lzh>归档于 <span class="coral">AI 产品 · 原型 · 笔记</span></span>
-          <span>Edition <b>MMXXVI</b></span>
-        </span>
-        <span class="right">
-          <span data-len><span class="pulse"></span> Open to collaborate</span>
-          <span data-lzh><span class="pulse"></span> 欢迎合作</span>
-          <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
-            <span class="lt-opt" data-lang="en">EN</span>
-            <span class="lt-opt" data-lang="zh">中文</span>
-          </button>
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <!-- nav -->
-  <header class="nav" id="nav">
-    <div class="container">
-      <div class="nav-inner">
-        <a href="index.html" class="brand">
-          <span class="brand-mark">M</span>
-          Musu
-        </a>
-        <span class="brand-meta">
-          <b data-len>Personal Page</b><b data-lzh>个人主页</b>
-          <span data-len>Learn · Prototype · Share</span>
-          <span data-lzh>学习 · 原型 · 分享</span>
-        </span>
-        <ul class="nav-links">
-          <li><a href="index.html#about"><span data-len>About</span><span data-lzh>关于</span></a></li>
-          <li><a href="index.html#skills"><span data-len>Skills</span><span data-lzh>技能</span></a></li>
-          <li><a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a></li>
-          <li><a href="index.html#blog"><span data-len>Blog</span><span data-lzh>博客</span></a></li>
-        </ul>
-        <div class="nav-side">
-          <a href="index.html#contact" class="nav-cta">
-            <span data-len>Get in touch</span>
-            <span data-lzh>取得联系</span>
-          </a>
-        </div>
-      </div>
+  <!-- Masthead -->
+  <header class="masthead container">
+    <a href="index.html" class="mh-brand">
+      <span class="mh-mark">M</span>
+      Musu
+    </a>
+    <ul class="mh-nav">
+      <li><a href="index.html#about"><span data-len>About</span><span data-lzh>关于</span></a></li>
+      <li><a href="index.html#skills"><span data-len>Skills</span><span data-lzh>技能</span></a></li>
+      <li><a href="index.html#projects" style="color:var(--coral);">
+        <span data-len>Projects</span><span data-lzh>项目</span>
+      </a></li>
+      <li><a href="index.html#blog"><span data-len>Blog</span><span data-lzh>博客</span></a></li>
+    </ul>
+    <div class="mh-actions">
+      <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+        <span class="lt-opt" data-lang="en">EN</span>
+        <span class="lt-opt" data-lang="zh">中文</span>
+      </button>
     </div>
   </header>
 
@@ -632,7 +641,7 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
     <div class="container">
       <div class="foot-grid">
         <div class="foot-brand">
-          <a href="index.html" class="brand"><span class="brand-mark">M</span>Musu</a>
+          <a href="index.html" class="brand"><span class="mh-mark">M</span>Musu</a>
           <p data-len>Personal homepage of Musu — learning to become an AI product manager through prototypes, notes, and practice.</p>
           <p data-lzh>牧晚吟 / Musu 的个人主页 —— 通过原型、笔记和实践，学习成为一名 AI 产品经理。</p>
         </div>
