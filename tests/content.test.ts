@@ -13,6 +13,16 @@ function unique(values: string[]) {
   return new Set(values).size === values.length;
 }
 
+function relatedSection(html: string) {
+  const start = html.indexOf('<section class="bp-related"');
+  const end = html.indexOf("</section>", start);
+
+  expect(start).toBeGreaterThanOrEqual(0);
+  expect(end).toBeGreaterThan(start);
+
+  return html.slice(start, end);
+}
+
 describe("site content model", () => {
   it("keeps project and post slugs unique for generated routes", () => {
     expect(unique(projects.map((project) => project.slug))).toBe(true);
@@ -71,11 +81,16 @@ describe("site content model", () => {
     expect(html).not.toContain('<header class="nav" id="nav">');
   });
 
-  it("links related project cards to their matching project detail pages", async () => {
+  it("shows only other blog posts in the related section", async () => {
     const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[0].slug));
+    const relatedHtml = relatedSection(html);
 
-    expect(html).toContain('href="/projects/paperforge"');
-    expect(html).toContain('href="/projects/weblearnboost"');
-    expect(html).not.toContain('href="/project-detail.html" class="bp-related-card"');
+    expect((relatedHtml.match(/class="bp-related-card"/g) ?? []).length).toBe(2);
+    expect(relatedHtml).toContain('href="/blog/noticing-ai-tools"');
+    expect(relatedHtml).toContain('href="/blog/paperforge-as-product-exercise"');
+    expect(relatedHtml).toContain(">Blog 02<");
+    expect(relatedHtml).toContain(">Blog 03<");
+    expect(relatedHtml).not.toContain(`href="/blog/${posts[0].slug}"`);
+    expect(relatedHtml).not.toContain('href="/projects/');
   });
 });

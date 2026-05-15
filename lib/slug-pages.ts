@@ -4,6 +4,7 @@ import { escapeHtml, replaceAllPairs } from "@/lib/html-utils";
 import { prototypeHtml } from "@/lib/prototype-html";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
+import { renderBlogRelatedSection } from "@/lib/site-renderers";
 
 function first<T>(items: T[], fallback: T) {
   return items[0] ?? fallback;
@@ -40,7 +41,7 @@ export async function renderBlogSlugPage(slug: string) {
   const template = await prototypeHtml("blog-post.html");
   const post = posts.find((item) => item.slug === slug) ?? posts[0];
 
-  return replaceAllPairs(template, [
+  const rendered = replaceAllPairs(template, [
     ["<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`],
     ["<span data-len>Learning AI products by making prototypes</span>", `<span data-len>${escapeHtml(post.title.en)}</span>`],
     ["<span data-lzh>通过做原型学习 AI 产品</span>", `<span data-lzh>${escapeHtml(post.title.zh)}</span>`],
@@ -51,4 +52,6 @@ export async function renderBlogSlugPage(slug: string) {
     ["<span data-len>What I notice while using AI tools</span>", `<span data-len>${escapeHtml(posts[1]?.title.en ?? post.title.en)}</span>`],
     ["<span data-lzh>我在使用 AI 工具时观察到的事情</span>", `<span data-lzh>${escapeHtml(posts[1]?.title.zh ?? post.title.zh)}</span>`],
   ]);
+
+  return renderBlogRelatedSection(rendered, post.slug);
 }

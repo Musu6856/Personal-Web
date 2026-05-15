@@ -124,6 +124,40 @@ function blogDeckHtml() {
   return [blogDeckCard(0, "is-primary"), blogDeckCard(1, "is-secondary"), blogDeckCard(2, "is-hidden-right")].join("\n");
 }
 
+function blogRelatedCard(post: (typeof posts)[number], postIndex: number) {
+  const number = itemNumber(postIndex);
+  const fallback = ["work-1.png", "work-2.png", "work-3.png"][postIndex % 3];
+  const fallbackFill = ["ddd2b6", "ece4cf", "ddd2b6"][postIndex % 3];
+
+  return `
+        <a href="/blog/${post.slug}" class="bp-related-card">
+          <div class="img">
+            <img src="${post.image ?? `assets/${fallback}`}" alt="${escapeHtml(post.title.en)}" onerror="${blogImageFallback(number, fallbackFill)}">
+          </div>
+          <h4 data-len>${escapeHtml(post.title.en)}</h4>
+          <h4 data-lzh>${escapeHtml(post.title.zh)}</h4>
+          <p data-len>${escapeHtml(post.excerpt.en)}</p>
+          <p data-lzh>${escapeHtml(post.excerpt.zh)}</p>
+          <span class="meta">${escapeHtml(post.date)} · <span data-len>${escapeHtml(post.kind)}</span><span data-lzh>${escapeHtml(post.kindZh ?? post.kind)}</span></span>
+        </a>`;
+}
+
+export function renderBlogRelatedSection(html: string, currentSlug: string) {
+  const relatedHtml = posts
+    .map((post, index) => ({ post, index }))
+    .filter(({ post }) => post.slug !== currentSlug)
+    .slice(0, 3)
+    .map(({ post, index }) => blogRelatedCard(post, index))
+    .join("\n");
+
+  return replaceBetween(
+    html,
+    '<div class="bp-related-grid">',
+    '\n      </div>\n    </section>',
+    relatedHtml,
+  );
+}
+
 function restoreBlogLabel(html: string) {
   return html.replace(
     '<span class="label" data-len>Blog</span>\n        <span class="label" data-lzh>博客</span>',
@@ -213,7 +247,7 @@ export function renderToolListContent(html: string) {
 
 export function renderBlogPostContent(html: string, slug?: string) {
   const post = posts.find((item) => item.slug === slug) ?? posts[0];
-  return html
+  const rendered = html
     .replace("<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`)
     .replace(
       "<span data-len>Learning AI products by making prototypes</span>",
@@ -229,4 +263,6 @@ export function renderBlogPostContent(html: string, slug?: string) {
       `<span data-lzh>${escapeHtml(post.excerpt.zh)}</span>`,
     )
     .replace("May 14, 2026", post.dateDisplay ?? post.date);
+
+  return renderBlogRelatedSection(rendered, post.slug);
 }
