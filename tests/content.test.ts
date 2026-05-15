@@ -81,16 +81,24 @@ describe("site content model", () => {
     expect(html).not.toContain('<header class="nav" id="nav">');
   });
 
-  it("shows only other blog posts in the related section", async () => {
-    const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[0].slug));
+  it("centers the current blog post between previous and next related posts", async () => {
+    const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[1].slug));
     const relatedHtml = relatedSection(html);
+    const relatedHrefs = [...relatedHtml.matchAll(/<a href="([^"]+)" class="bp-related-card[^"]*"/g)].map(
+      (match) => match[1],
+    );
 
-    expect((relatedHtml.match(/class="bp-related-card"/g) ?? []).length).toBe(2);
-    expect(relatedHtml).toContain('href="/blog/noticing-ai-tools"');
-    expect(relatedHtml).toContain('href="/blog/paperforge-as-product-exercise"');
+    expect(relatedHrefs).toEqual([
+      `/blog/${posts[0].slug}`,
+      `/blog/${posts[1].slug}`,
+      `/blog/${posts[2].slug}`,
+    ]);
+    expect(relatedHtml).toContain('class="bp-related-card is-current"');
+    expect(relatedHtml).toContain('aria-current="page"');
+    expect(relatedHtml).toContain("正在阅读");
+    expect(relatedHtml).toContain(">Blog 01<");
     expect(relatedHtml).toContain(">Blog 02<");
     expect(relatedHtml).toContain(">Blog 03<");
-    expect(relatedHtml).not.toContain(`href="/blog/${posts[0].slug}"`);
     expect(relatedHtml).not.toContain('href="/projects/');
   });
 });

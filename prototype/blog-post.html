@@ -340,6 +340,23 @@ body::before {
 .bp-related-card .meta {
   font-family: var(--mono); font-size: 11px; color: var(--ink-faint); letter-spacing: 0.04em;
 }
+.bp-related-card.is-current .img {
+  border-color: rgba(237, 111, 92, 0.36);
+}
+.bp-related-card .current-marker {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 8px;
+  padding: 2px 7px;
+  border: 1px solid rgba(237, 111, 92, 0.32);
+  border-radius: 999px;
+  color: var(--coral);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+}
 
 /* Footers Base */
 footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60px; }

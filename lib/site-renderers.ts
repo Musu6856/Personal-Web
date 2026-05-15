@@ -124,13 +124,18 @@ function blogDeckHtml() {
   return [blogDeckCard(0, "is-primary"), blogDeckCard(1, "is-secondary"), blogDeckCard(2, "is-hidden-right")].join("\n");
 }
 
-function blogRelatedCard(post: (typeof posts)[number], postIndex: number) {
+function blogRelatedCard(post: (typeof posts)[number], postIndex: number, isCurrent = false) {
   const number = itemNumber(postIndex);
   const fallback = ["work-1.png", "work-2.png", "work-3.png"][postIndex % 3];
   const fallbackFill = ["ddd2b6", "ece4cf", "ddd2b6"][postIndex % 3];
+  const currentClass = isCurrent ? " is-current" : "";
+  const currentAttrs = isCurrent ? ' aria-current="page"' : "";
+  const currentMarker = isCurrent
+    ? '<span class="current-marker"><span data-len>Reading</span><span data-lzh>正在阅读</span></span>'
+    : "";
 
   return `
-        <a href="/blog/${post.slug}" class="bp-related-card">
+        <a href="/blog/${post.slug}" class="bp-related-card${currentClass}"${currentAttrs}>
           <div class="img">
             <img src="${post.image ?? `assets/${fallback}`}" alt="${escapeHtml(post.title.en)}" onerror="${blogImageFallback(number, fallbackFill)}">
           </div>
@@ -138,16 +143,19 @@ function blogRelatedCard(post: (typeof posts)[number], postIndex: number) {
           <h4 data-lzh>${escapeHtml(post.title.zh)}</h4>
           <p data-len>${escapeHtml(post.excerpt.en)}</p>
           <p data-lzh>${escapeHtml(post.excerpt.zh)}</p>
-          <span class="meta">${escapeHtml(post.date)} · <span data-len>${escapeHtml(post.kind)}</span><span data-lzh>${escapeHtml(post.kindZh ?? post.kind)}</span></span>
+          <span class="meta">${escapeHtml(post.date)} · <span data-len>${escapeHtml(post.kind)}</span><span data-lzh>${escapeHtml(post.kindZh ?? post.kind)}</span>${currentMarker}</span>
         </a>`;
 }
 
 export function renderBlogRelatedSection(html: string, currentSlug: string) {
-  const relatedHtml = posts
-    .map((post, index) => ({ post, index }))
-    .filter(({ post }) => post.slug !== currentSlug)
-    .slice(0, 3)
-    .map(({ post, index }) => blogRelatedCard(post, index))
+  const currentIndex = Math.max(posts.findIndex((post) => post.slug === currentSlug), 0);
+  const relatedIndexes = [
+    (currentIndex - 1 + posts.length) % posts.length,
+    currentIndex,
+    (currentIndex + 1) % posts.length,
+  ];
+  const relatedHtml = relatedIndexes
+    .map((postIndex, position) => blogRelatedCard(posts[postIndex] ?? posts[0], postIndex, position === 1))
     .join("\n");
 
   return replaceBetween(
