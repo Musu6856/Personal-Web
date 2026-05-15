@@ -4,10 +4,10 @@ import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import { escapeHtml, replaceAllPairs, replaceOnce } from "@/lib/html-utils";
-import { projectDetails } from "@/lib/project-detail-renderer";
-import { renderProjectDetailHtml } from "@/lib/project-detail-renderer";
+import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { prototypeHtml } from "@/lib/prototype-html";
+import { renderBlogSlugPage } from "@/lib/slug-pages";
 
 function unique(values: string[]) {
   return new Set(values).size === values.length;
@@ -69,5 +69,13 @@ describe("site content model", () => {
     expect(html).toContain('<a href="/#projects" style="color:var(--coral);">');
     expect(html).not.toContain('<div class="topbar">');
     expect(html).not.toContain('<header class="nav" id="nav">');
+  });
+
+  it("links related project cards to their matching project detail pages", async () => {
+    const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[0].slug));
+
+    expect(html).toContain('href="/projects/paperforge"');
+    expect(html).toContain('href="/projects/weblearnboost"');
+    expect(html).not.toContain('href="/project-detail.html" class="bp-related-card"');
   });
 });
