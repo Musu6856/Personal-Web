@@ -8,6 +8,12 @@ export const projects: Project[] = [
     category: "AI Tool",
     status: "2026",
     image: "assets/lab-1.png",
+    detailImages: {
+      cover: "assets/paperforge-1.png",
+      galleryOne: "assets/paperforge-2.png",
+      galleryTwo: "assets/paperforge-3.png",
+      wide: "assets/paperforge-3.png",
+    },
     summary: {
       en: "An AI academic writing tool that helps turn rough game theory research ideas into structured model setup drafts.",
       zh: "一个 AI 学术写作工具，帮助把粗略的博弈论研究想法整理成结构化的模型设定草稿。",
@@ -28,6 +34,12 @@ export const projects: Project[] = [
     category: "Browser Extension",
     status: "2026",
     image: "assets/lab-2.png",
+    detailImages: {
+      cover: "assets/weblearnboost-1.png",
+      galleryOne: "assets/weblearnboost-3.png",
+      galleryTwo: "assets/weblearnboost-4.png",
+      wide: "assets/weblearnboost-2.png",
+    },
     summary: {
       en: "A browser extension that turns webpages or selected text into learning maps, practice questions, local history, and Markdown study packs.",
       zh: "一个把网页或选中文本转换成学习地图、训练题、本地历史记录和 Markdown 学习包的浏览器扩展。",

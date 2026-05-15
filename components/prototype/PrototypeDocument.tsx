@@ -10,7 +10,7 @@ export function PrototypeDocument({ page }: PrototypeDocumentProps) {
       {page.styles.map((style, index) => (
         <style key={index} dangerouslySetInnerHTML={{ __html: style }} />
       ))}
-      <div dangerouslySetInnerHTML={{ __html: page.body }} />
+      <div suppressHydrationWarning dangerouslySetInnerHTML={{ __html: page.body }} />
       {page.scripts.map((script, index) => (
         <script key={index} dangerouslySetInnerHTML={{ __html: script }} />
       ))}

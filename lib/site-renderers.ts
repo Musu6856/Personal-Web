@@ -14,6 +14,10 @@ const projectTags: Record<string, { tag: string; labelEn: string; labelZh: strin
 
 const projectFallbackColors = ["f7f1de", "ece4cf", "ddd2b6", "f7f1de", "ece4cf"];
 
+function assetPath(path: string) {
+  return path.startsWith("/") ? path : `/${path}`;
+}
+
 function arrowMark() {
   return '<span class="arrow-mark"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>';
 }
@@ -35,7 +39,7 @@ function projectCard(project: Project, index: number) {
   return `
       <a href="/projects/${project.slug}" class="lab" data-reveal data-tag="${meta.tag}">
         <div class="lab-img">
-          <img src="${project.image ?? `assets/lab-${index + 1}.png`}" alt="Project ${number}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'320\\' height=\\'400\\'><rect width=\\'320\\' height=\\'400\\' fill=\\'%23${color}\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'serif\\' font-style=\\'italic\\' font-size=\\'18\\' fill=\\'%238b8676\\'>Project ${number}</text></svg>'">
+          <img src="${assetPath(project.image ?? `assets/lab-${index + 1}.png`)}" alt="Project ${number}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'320\\' height=\\'400\\'><rect width=\\'320\\' height=\\'400\\' fill=\\'%23${color}\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'serif\\' font-style=\\'italic\\' font-size=\\'18\\' fill=\\'%238b8676\\'>Project ${number}</text></svg>'">
           <span class="badge" data-len>${escapeHtml(meta.labelEn)}</span><span class="badge" data-lzh>${escapeHtml(meta.labelZh)}</span>
         </div>
         <div class="num-row"><span>Nº ${number}</span><span>${escapeHtml(projectStatus(project))}</span></div>
@@ -55,9 +59,15 @@ function replaceBetween(html: string, start: string, end: string, replacement: s
   const startIndex = html.indexOf(start);
   if (startIndex === -1) return html;
   const contentStart = startIndex + start.length;
-  const endIndex = html.indexOf(end, contentStart);
+  let endMarker = end;
+  let endIndex = html.indexOf(endMarker, contentStart);
+  if (endIndex === -1 && end.includes("\n")) {
+    endMarker = end.replaceAll("\n", "\r\n");
+    endIndex = html.indexOf(endMarker, contentStart);
+  }
   if (endIndex === -1) return html;
-  return html.slice(0, contentStart) + "\n" + replacement + "\n    " + html.slice(endIndex);
+  const newline = endMarker.includes("\r\n") ? "\r\n" : "\n";
+  return html.slice(0, contentStart) + newline + replacement + newline + "    " + html.slice(endIndex);
 }
 
 function toolItem(item: ToolSection["items"][number]) {
@@ -107,7 +117,7 @@ function blogDeckCard(postIndex: number, state: string) {
             <span class="index">${number} / 03</span>
           </div>
           <div class="img">
-            <img src="${post.image ?? `assets/${fallback}`}" alt="Blog ${number}" onerror="${blogImageFallback(number, fallbackFill)}">
+            <img src="${assetPath(post.image ?? `assets/${fallback}`)}" alt="Blog ${number}" onerror="${blogImageFallback(number, fallbackFill)}">
           </div>
           <h3 data-len>${escapeHtml(post.title.en)}</h3>
           <h3 data-lzh>${escapeHtml(post.title.zh)}</h3>
@@ -137,7 +147,7 @@ function blogRelatedCard(post: (typeof posts)[number], postIndex: number, isCurr
   return `
         <a href="/blog/${post.slug}" class="bp-related-card${currentClass}"${currentAttrs}>
           <div class="img">
-            <img src="${post.image ?? `assets/${fallback}`}" alt="${escapeHtml(post.title.en)}" onerror="${blogImageFallback(number, fallbackFill)}">
+            <img src="${assetPath(post.image ?? `assets/${fallback}`)}" alt="${escapeHtml(post.title.en)}" onerror="${blogImageFallback(number, fallbackFill)}">
           </div>
           <h4 data-len>${escapeHtml(post.title.en)}</h4>
           <h4 data-lzh>${escapeHtml(post.title.zh)}</h4>
@@ -241,6 +251,11 @@ export function renderHomeContent(html: string) {
     blogDeckHtml(),
   );
 
+  rendered = rendered.replace(
+    '<a href="blog-post.html" class="work-link">',
+    `<a href="/blog/${posts[0]?.slug ?? "learning-ai-products-by-making-prototypes"}" class="work-link">`,
+  );
+
   return restoreBlogLabel(rendered);
 }
 
@@ -255,6 +270,7 @@ export function renderToolListContent(html: string) {
 
 export function renderBlogPostContent(html: string, slug?: string) {
   const post = posts.find((item) => item.slug === slug) ?? posts[0];
+  const postImage = assetPath(post.image ?? "assets/work-1.png");
   const rendered = html
     .replace("<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`)
     .replace(
@@ -270,6 +286,7 @@ export function renderBlogPostContent(html: string, slug?: string) {
       "<span data-lzh>记录如何把产品想法、AI 工作流和界面参考变成一次次具体尝试。</span>",
       `<span data-lzh>${escapeHtml(post.excerpt.zh)}</span>`,
     )
+    .replace('src="assets/work-1.png"', `src="${postImage}"`)
     .replace("May 14, 2026", post.dateDisplay ?? post.date);
 
   return renderBlogRelatedSection(rendered, post.slug);

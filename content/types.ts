@@ -10,6 +10,12 @@ export type Project = {
   category: string;
   status?: string;
   image?: string;
+  detailImages?: {
+    cover: string;
+    galleryOne: string;
+    galleryTwo: string;
+    wide: string;
+  };
   summary: LocalizedText;
   description: LocalizedText[];
   stack: string[];

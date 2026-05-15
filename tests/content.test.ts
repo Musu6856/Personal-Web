@@ -7,7 +7,9 @@ import { escapeHtml, replaceAllPairs, replaceOnce } from "@/lib/html-utils";
 import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { prototypeHtml } from "@/lib/prototype-html";
+import { renderHomeContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage } from "@/lib/slug-pages";
+import { renderProjectSlugPage } from "@/lib/slug-pages";
 
 function unique(values: string[]) {
   return new Set(values).size === values.length;
@@ -61,9 +63,9 @@ describe("site content model", () => {
   it("normalizes prototype links into app routes", () => {
     expect(
       normalizePrototypeLinks(
-        '<a href="index.html">Home</a><a href="index.html#projects">Projects</a><a href="tool-list.html">Uses</a><a href="projects/paperforge">PaperForge</a>',
+        '<a href="index.html">Home</a><a href="index.html#projects">Projects</a><a href="tool-list.html">Uses</a><a href="blog-post.html">Blog</a><a href="projects/paperforge">PaperForge</a><img src="assets/work-1.png">',
       ),
-    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/projects/paperforge">PaperForge</a>');
+    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/learning-ai-products-by-making-prototypes">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/work-1.png">');
   });
 
   it("keeps HTML replacement utilities predictable", () => {
@@ -100,5 +102,39 @@ describe("site content model", () => {
     expect(relatedHtml).toContain(">Blog 02<");
     expect(relatedHtml).toContain(">Blog 03<");
     expect(relatedHtml).not.toContain('href="/projects/');
+  });
+
+  it("renders the homepage blog cards as three distinct post links", async () => {
+    const html = normalizePrototypeLinks(renderHomeContent(await prototypeHtml("index.html")));
+    const deckStart = html.indexOf('<div class="work-deck" id="blog-deck"');
+
+    expect(deckStart).toBeGreaterThanOrEqual(0);
+
+    const deckHtml = html.slice(deckStart);
+    const hrefs = [...deckHtml.matchAll(/<a href="([^"]+)" class="work-card/g)].map((match) => match[1]);
+
+    expect(hrefs.slice(0, 3)).toEqual(posts.slice(0, 3).map((post) => `/blog/${post.slug}`));
+  });
+
+  it("uses root asset paths on blog slug pages", async () => {
+    const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[0].slug));
+
+    expect(html).toContain('src="/assets/work-1.png"');
+    expect(html).toContain('src="/assets/pt-wide.png"');
+    expect(html).not.toContain('src="assets/');
+  });
+
+  it("uses real project screenshots on project detail pages", async () => {
+    const paperforgeHtml = await renderProjectSlugPage("paperforge");
+    const weblearnboostHtml = await renderProjectSlugPage("weblearnboost");
+
+    expect(paperforgeHtml).toContain('src="/assets/paperforge-1.png"');
+    expect(paperforgeHtml).toContain('src="/assets/paperforge-2.png"');
+    expect(paperforgeHtml).toContain('src="/assets/paperforge-3.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-1.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-2.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-3.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-4.png"');
+    expect(weblearnboostHtml).not.toContain('src="assets/');
   });
 });
