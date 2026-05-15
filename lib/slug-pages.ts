@@ -1,19 +1,9 @@
 import { posts } from "@/content/posts";
 import { projects } from "@/content/projects";
+import { escapeHtml, replaceAllPairs } from "@/lib/html-utils";
 import { prototypeHtml } from "@/lib/prototype-html";
-import { normalizeNestedLinks, projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
-
-function replaceAll(html: string, replacements: Array<[string, string]>) {
-  return replacements.reduce((current, [from, to]) => current.replaceAll(from, to), html);
-}
+import { normalizePrototypeLinks } from "@/lib/prototype-links";
+import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
 
 function first<T>(items: T[], fallback: T) {
   return items[0] ?? fallback;
@@ -30,8 +20,8 @@ export async function renderProjectSlugPage(slug: string) {
     ["WebLearnBoost Preview", project.image ?? "assets/lab-2.png"],
   ];
 
-  return normalizeNestedLinks(
-    replaceAll(html, [
+  return normalizePrototypeLinks(
+    replaceAllPairs(html, [
       ["<title>PaperForge — Project Detail</title>", `<title>${escapeHtml(project.title.en)} — Project Detail</title>`],
       ["<span data-len>PaperForge: An AI writing workspace for research <em>model setup</em><span class=\"dot\">.</span></span>", `<span data-len>${detail.titleEn}</span>`],
       ["<span data-lzh>PaperForge：面向研究<em>模型设定</em>的 AI 写作工作台<span class=\"dot\">。</span></span>", `<span data-lzh>${detail.titleZh}</span>`],
@@ -50,7 +40,7 @@ export async function renderBlogSlugPage(slug: string) {
   const template = await prototypeHtml("blog-post.html");
   const post = posts.find((item) => item.slug === slug) ?? posts[0];
 
-  return replaceAll(template, [
+  return replaceAllPairs(template, [
     ["<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`],
     ["<span data-len>Learning AI products by making prototypes</span>", `<span data-len>${escapeHtml(post.title.en)}</span>`],
     ["<span data-lzh>通过做原型学习 AI 产品</span>", `<span data-lzh>${escapeHtml(post.title.zh)}</span>`],

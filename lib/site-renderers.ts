@@ -1,7 +1,9 @@
 import { posts } from "@/content/posts";
+import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import type { Project, ToolSection } from "@/content/types";
+import { escapeHtml, replaceAllPairs } from "@/lib/html-utils";
 
 const projectTags: Record<string, { tag: string; labelEn: string; labelZh: string }> = {
   "AI Tool": { tag: "ai", labelEn: "AI", labelZh: "AI" },
@@ -11,14 +13,6 @@ const projectTags: Record<string, { tag: string; labelEn: string; labelZh: strin
 };
 
 const projectFallbackColors = ["f7f1de", "ece4cf", "ddd2b6", "f7f1de", "ece4cf"];
-
-function escapeHtml(value: string) {
-  return value
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;");
-}
 
 function arrowMark() {
   return '<span class="arrow-mark"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>';
@@ -137,9 +131,62 @@ function restoreBlogLabel(html: string) {
   );
 }
 
+function renderProfileContent(html: string) {
+  return replaceAllPairs(html, [
+    [
+      "I'm Musu — learning toward becoming an AI product manager. I use prototypes to learn and explore AI products: understanding how AI changes workflows, and turning vague ideas into things people can actually try. This is where I share projects, notes, and things I'm learning.",
+      escapeHtml(profile.intro.en),
+    ],
+    [
+      "我是牧晚吟，也叫 Musu，正在努力成为一名 AI 产品经理。我正在通过做原型来学习和探索 AI 产品：理解 AI 如何改变工作流，也把一些模糊的想法做成可以真正试用的东西。这里是我分享项目、笔记和所学所得的地方。",
+      escapeHtml(profile.intro.zh),
+    ],
+    ["Currently based in Xi'an &nbsp;·&nbsp; Open to remote", escapeHtml(profile.heroLocationLine.en).replace(" · ", " &nbsp;·&nbsp; ")],
+    ["现居西安 &nbsp;·&nbsp; 开放远程工作", escapeHtml(profile.heroLocationLine.zh).replace(" · ", " &nbsp;·&nbsp; ")],
+    [
+      "I'm learning product by making small prototypes, studying real workflows, and turning scattered ideas into concrete interfaces. I may not be a full-time developer, but I like using tools, AI, and design references to make ideas visible.",
+      escapeHtml(profile.aboutDetail.en),
+    ],
+    [
+      "我正在通过做小原型、观察真实工作流、把零散想法变成具体界面来学习产品。我不算真正的开发者，但我喜欢借助工具、AI 和设计参考，把想法做得可以被看见。",
+      escapeHtml(profile.aboutDetail.zh),
+    ],
+    [
+      "This site is where I keep the traces of that process: projects, notes, tool experiments, and the lessons I collect while trying to become an AI product manager.",
+      escapeHtml(profile.processTrace.en),
+    ],
+    [
+      "这个网站会记录这些过程留下的痕迹：项目、笔记、工具实验，以及我在努力成为 AI 产品经理的路上收集到的经验。",
+      escapeHtml(profile.processTrace.zh),
+    ],
+    [
+      "I'm open to conversations about AI products, workflow experiments, and small prototype ideas. If something here resonates with you, feel free to reach out.",
+      escapeHtml(profile.contactIntro.en),
+    ],
+    [
+      "我很愿意聊聊 AI 产品、工作流实验和一些小原型想法。如果这里的内容让你产生了共鸣，欢迎联系我。",
+      escapeHtml(profile.contactIntro.zh),
+    ],
+    ['href="mailto:1803162257@qq.com"', `href="mailto:${escapeHtml(profile.email)}"`],
+    ['href="https://github.com/Musu6856"', `href="${escapeHtml(profile.github)}"`],
+    ["Based in Xi'an &nbsp;·&nbsp; Open to remote", escapeHtml(profile.contactLocationLine.en).replace(" · ", " &nbsp;·&nbsp; ")],
+    ["现居西安 &nbsp;·&nbsp; 欢迎远程合作", escapeHtml(profile.contactLocationLine.zh).replace(" · ", " &nbsp;·&nbsp; ")],
+    [
+      "Personal homepage of Musu — learning to become an AI product manager through prototypes, notes, and practice.",
+      escapeHtml(profile.footerSummary.en),
+    ],
+    [
+      "牧晚吟 / Musu 的个人主页 —— 通过原型、笔记和实践，学习成为一名 AI 产品经理。",
+      escapeHtml(profile.footerSummary.zh),
+    ],
+  ]);
+}
+
 export function renderHomeContent(html: string) {
-  let rendered = replaceBetween(
-    html,
+  let rendered = renderProfileContent(html);
+
+  rendered = replaceBetween(
+    rendered,
     '<div class="labs-grid" id="projects-grid">',
     '\n    </div>\n\n    <div class="projects-foot">',
     projectGridHtml(),

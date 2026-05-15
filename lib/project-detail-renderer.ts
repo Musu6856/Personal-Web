@@ -1,4 +1,6 @@
+import { replaceOnce } from "@/lib/html-utils";
 import { prototypeHtml } from "@/lib/prototype-html";
+import { normalizePrototypeLinks } from "@/lib/prototype-links";
 
 type ProjectDetail = {
   titleTag: string;
@@ -261,22 +263,6 @@ const replacements: Array<[string, (detail: ProjectDetail) => string]> = [
   ["<h2 data-lzh>WebLearnBoost</h2>", (detail) => `<h2 data-lzh>${detail.nextZh}</h2>`],
 ];
 
-function replaceOnce(html: string, from: string, to: string) {
-  const index = html.indexOf(from);
-  if (index === -1 || from === to) return html;
-  return html.slice(0, index) + to + html.slice(index + from.length);
-}
-
-export function normalizeNestedLinks(html: string) {
-  return html
-    .replaceAll('href="index.html#', 'href="/#')
-    .replaceAll('href="index.html', 'href="/"')
-    .replaceAll('href="tool-list.html', 'href="/tool-list.html')
-    .replaceAll('href="blog-post.html', 'href="/blog-post.html')
-    .replaceAll('href="project-detail.html', 'href="/project-detail.html')
-    .replaceAll('href="projects/', 'href="/projects/');
-}
-
 export function renderProjectDetailHtml(template: string, detail: ProjectDetail) {
   let html = template;
 
@@ -284,7 +270,7 @@ export function renderProjectDetailHtml(template: string, detail: ProjectDetail)
     html = replaceOnce(html, original, resolve(detail));
   }
 
-  return normalizeNestedLinks(html);
+  return normalizePrototypeLinks(html);
 }
 
 export async function projectDetailHtml(slug: string) {

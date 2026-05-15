@@ -1,4 +1,5 @@
 import { prototypeHtml } from "@/lib/prototype-html";
+export { normalizePrototypeLinks } from "@/lib/prototype-links";
 
 export type PrototypePage = {
   title: string;
@@ -28,14 +29,4 @@ export function splitPrototypeHtml(html: string): PrototypePage {
 
 export async function getPrototypePage(fileName: string) {
   return splitPrototypeHtml(await prototypeHtml(fileName));
-}
-
-export function normalizePrototypeLinks(html: string) {
-  return html
-    .replaceAll('href="index.html#', 'href="/#')
-    .replaceAll('href="index.html', 'href="/"')
-    .replaceAll('href="tool-list.html', 'href="/tool-list.html')
-    .replaceAll('href="blog-post.html', 'href="/blog-post.html')
-    .replaceAll('href="project-detail.html', 'href="/project-detail.html')
-    .replaceAll('href="projects/', 'href="/projects/');
 }
