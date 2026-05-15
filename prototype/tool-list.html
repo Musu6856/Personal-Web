@@ -1,0 +1,469 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Uses — Musu's Workspace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ===== Canonical Stylesheet (Reused Base) ===== */
+:root {
+  --paper: #efe7d2;
+  --paper-warm: #ece4cf;
+  --paper-dark: #ddd2b6;
+  --ink: #15140f;
+  --ink-soft: #2a2620;
+  --ink-mute: #5a5448;
+  --ink-faint: #8b8676;
+  --coral: #ed6f5c;
+  --coral-soft: #f08e7c;
+  --mustard: #e9b94a;
+  --olive: #6e7448;
+  --bone: #f7f1de;
+  --line: rgba(21, 20, 15, 0.16);
+  --line-soft: rgba(21, 20, 15, 0.08);
+  --line-faint: rgba(21, 20, 15, 0.05);
+  --shadow: 0 30px 60px -30px rgba(21, 20, 15, 0.18);
+  --serif: 'Playfair Display', 'Times New Roman', serif;
+  --sans: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --body: 'Inter', -apple-system, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: var(--body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+}
+
+html[lang="en"] [data-lzh],
+html[lang="zh"] [data-len] { display: none !important; }
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(106, 92, 56, 0.07) 0, transparent 28%),
+    radial-gradient(circle at 88% 72%, rgba(106, 92, 56, 0.06) 0, transparent 32%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: auto, auto, 240px 240px;
+  mix-blend-mode: multiply;
+  opacity: 0.92;
+}
+
+.shell { position: relative; z-index: 2; }
+.container { max-width: 1360px; padding: 0 64px; margin: 0 auto; position: relative; }
+
+/* Plain Masthead */
+.masthead {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line-faint);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.mh-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.mh-mark {
+  width: 28px; height: 28px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-style: italic; font-size: 14px;
+}
+.mh-nav {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+}
+.mh-nav a { color: var(--ink-soft); text-decoration: none; transition: color 0.18s ease; }
+.mh-nav a:hover { color: var(--coral); }
+.mh-actions { display: flex; align-items: center; gap: 24px; }
+
+/* Lang Toggle */
+.lang-toggle {
+  display: inline-flex; align-items: center; gap: 0; cursor: pointer; background: none;
+  border: 1px solid var(--line); border-radius: 999px; padding: 2px;
+  font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 0.08em;
+  transition: border-color 0.18s ease;
+}
+.lang-toggle:hover { border-color: var(--coral); }
+.lang-toggle .lt-opt { padding: 3px 10px; border-radius: 999px; color: var(--ink-faint); transition: all 0.18s ease; line-height: 1.4; }
+.lang-toggle .lt-opt.active { background: var(--ink); color: var(--paper); }
+
+/* ===== TOOL LIST SPECIFIC CSS ===== */
+.tl-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 100px 24px 120px;
+}
+
+.tl-header {
+  text-align: left;
+  margin-bottom: 80px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 40px;
+}
+.tl-header h1 {
+  font-family: var(--sans);
+  font-size: clamp(44px, 6vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 24px;
+  line-height: 1.05;
+}
+.tl-header p {
+  font-family: var(--body);
+  font-size: 20px;
+  color: var(--ink-soft);
+  max-width: 38ch;
+  line-height: 1.5;
+}
+
+.tl-section {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: 48px;
+  border-bottom: 1px solid var(--line-faint);
+  padding: 60px 0;
+}
+.tl-section:last-child {
+  border-bottom: none;
+}
+.tl-category h2 {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  position: sticky;
+  top: 100px; /* Sticky positioning for category labels */
+}
+
+.tl-item {
+  margin-bottom: 48px;
+}
+.tl-item:last-child {
+  margin-bottom: 0;
+}
+.tl-item-name {
+  font-family: var(--sans);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.tl-item-name .badge {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-mute);
+  background: rgba(21, 20, 15, 0.04);
+  border: 1px solid var(--line-soft);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+.tl-item-desc {
+  font-family: var(--body);
+  font-size: 16.5px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 52ch;
+}
+.tl-item-desc a {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  transition: all 0.2s ease;
+}
+.tl-item-desc a:hover {
+  color: var(--coral);
+  border-bottom-color: var(--coral);
+}
+
+/* Footers Base */
+footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60px; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+.foot-brand .brand { margin-bottom: 18px; display: inline-flex; align-items: center; gap: 10px; font-family: var(--sans); font-weight: 700; color: var(--ink); text-decoration: none; }
+.foot-brand .brand .mh-mark { width: 24px; height: 24px; font-size: 12px; }
+.foot-brand p { font-family: var(--body); font-size: 13.5px; color: var(--ink-mute); line-height: 1.55; max-width: 38ch; }
+.foot-col h5 { font-family: var(--sans); font-size: 11px; color: var(--ink); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; font-weight: 700; }
+.foot-col ul { list-style: none; }
+.foot-col li { margin-bottom: 10px; }
+.foot-col a { font-family: var(--body); font-size: 13.5px; color: var(--ink-soft); text-decoration: none; transition: color 0.18s ease; }
+.foot-col a:hover { color: var(--coral); }
+.foot-bottom { border-top: 1px solid var(--line); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; font-family: var(--sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
+.foot-bottom .right { display: inline-flex; gap: 24px; align-items: center; }
+
+/* Animations */
+[data-reveal] {
+  opacity: 0;
+  translate: 0 24px;
+  transition: opacity 800ms cubic-bezier(0.22, 1, 0.36, 1), translate 800ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+[data-reveal][data-revealed='true'] { opacity: 1; translate: 0 0; }
+
+@media (max-width: 900px) {
+  .tl-section { grid-template-columns: 1fr 2fr; gap: 32px; }
+  .foot-grid { grid-template-columns: 2fr 1fr 1fr; }
+  .foot-col:nth-child(4), .foot-col:nth-child(5) { display: none; }
+}
+
+@media (max-width: 640px) {
+  .tl-header h1 { font-size: 42px; }
+  .tl-header p { font-size: 18px; }
+  .tl-section { grid-template-columns: 1fr; padding: 48px 0; }
+  .tl-category h2 { position: static; margin-bottom: 24px; color: var(--coral); }
+  .tl-item { margin-bottom: 40px; }
+  .mh-nav { display: none; }
+  .container { padding: 0 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- Masthead -->
+  <header class="masthead container">
+    <a href="index.html" class="mh-brand">
+      <span class="mh-mark">M</span>
+      Musu
+    </a>
+    <ul class="mh-nav">
+      <li><a href="index.html#about"><span data-len>About</span><span data-lzh>关于</span></a></li>
+      <li><a href="index.html#skills" style="color:var(--coral);">
+        <span data-len>Skills / Uses</span><span data-lzh>技能 / 工具清单</span>
+      </a></li>
+      <li><a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a></li>
+      <li><a href="index.html#blog"><span data-len>Blog</span><span data-lzh>博客</span></a></li>
+    </ul>
+    <div class="mh-actions">
+      <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+        <span class="lt-opt" data-lang="en">EN</span>
+        <span class="lt-opt" data-lang="zh">中文</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="tl-container">
+    
+    <header class="tl-header" data-reveal>
+      <h1 data-len>What I use.</h1>
+      <h1 data-lzh>工具清单</h1>
+      <p data-len>A living document of the hardware, AI tools, notes, and basic tech stack I use while learning product through prototypes.</p>
+      <p data-lzh>这是一份实时更新的清单，记录我在通过原型学习产品时使用的设备、AI 工具、笔记工具和基础技术栈。</p>
+    </header>
+
+    <div class="tl-list">
+      
+      <!-- Section 1: Hardware -->
+      <section id="hardware" class="tl-section" data-reveal>
+        <div class="tl-category">
+          <h2 data-len>Hardware</h2>
+          <h2 data-lzh>硬件设备</h2>
+        </div>
+        <div class="tl-items">
+          <div class="tl-item">
+            <h3 class="tl-item-name">Windows Laptop <span class="badge">Daily Driver</span></h3>
+            <p class="tl-item-desc" data-len>My main machine for research, writing, AI-assisted prototyping, and local project work.</p>
+            <p class="tl-item-desc" data-lzh>我的主力设备，用来做研究、写东西、用 AI 辅助做原型，以及处理本地项目。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">iPad <span class="badge">Reading</span></h3>
+            <p class="tl-item-desc" data-len>I use it for reading, sketching rough flows, and collecting references away from the laptop.</p>
+            <p class="tl-item-desc" data-lzh>我用它阅读资料、简单画流程，也在离开电脑时收集一些参考。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">External Monitor <span class="badge">Workspace</span></h3>
+            <p class="tl-item-desc" data-len>A larger workspace helps when comparing references, writing notes, and keeping a prototype open beside source material.</p>
+            <p class="tl-item-desc" data-lzh>更大的工作空间适合对比参考、整理笔记，也方便把原型和资料并排打开。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Software -->
+      <section id="software" class="tl-section" data-reveal>
+        <div class="tl-category">
+          <h2 data-len>Software & Editor</h2>
+          <h2 data-lzh>软件与编辑器</h2>
+        </div>
+        <div class="tl-items">
+          <div class="tl-item">
+            <h3 class="tl-item-name">Codex <span class="badge">Agent</span></h3>
+            <p class="tl-item-desc" data-len>My main coding agent for turning rough ideas, page drafts, and product experiments into working prototypes.</p>
+            <p class="tl-item-desc" data-lzh>我常用的编码 Agent，用来把粗略想法、页面草稿和产品实验推进成可以运行的原型。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">Obsidian <span class="badge">Notes</span></h3>
+            <p class="tl-item-desc" data-len>Where I keep product notes, learning records, references, and early ideas before they become prototypes.</p>
+            <p class="tl-item-desc" data-lzh>我用它存放产品笔记、学习记录、参考资料，以及变成原型之前的早期想法。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">Open Design <span class="badge">Design</span></h3>
+            <p class="tl-item-desc" data-len>A visual companion for checking designs, marking changes, and keeping the prototype close to the intended look.</p>
+            <p class="tl-item-desc" data-lzh>我用它检查设计、标注修改点，并尽量让原型接近想要的视觉效果。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">Claude Code <span class="badge">Coding</span></h3>
+            <p class="tl-item-desc" data-len>Another AI coding tool I use to explore implementations, compare approaches, and learn from generated code.</p>
+            <p class="tl-item-desc" data-lzh>另一个我会使用的 AI 编码工具，用来探索实现方式、比较方案，也从生成的代码里学习。</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Tech Stack -->
+      <section id="tech-stack" class="tl-section" data-reveal>
+        <div class="tl-category">
+          <h2 data-len>Tech Stack</h2>
+          <h2 data-lzh>技术栈</h2>
+        </div>
+        <div class="tl-items">
+          <div class="tl-item">
+            <h3 class="tl-item-name">Python <span class="badge">Language</span></h3>
+            <p class="tl-item-desc" data-len>Python is the language I know best right now. I use it as a base for understanding logic, scripts, and AI-related experiments.</p>
+            <p class="tl-item-desc" data-lzh>Python 是我目前最熟悉的语言。我用它作为理解逻辑、脚本和 AI 相关实验的基础。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">JavaScript <span class="badge">Frontend</span></h3>
+            <p class="tl-item-desc" data-len>I'm learning enough JavaScript to understand interactive pages, browser extensions, and prototype behavior.</p>
+            <p class="tl-item-desc" data-lzh>我正在学习足够的 JavaScript，用来理解交互页面、浏览器扩展和原型行为。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">React <span class="badge">UI</span></h3>
+            <p class="tl-item-desc" data-len>React helps me understand how interfaces are structured and how product ideas can become reusable UI pieces.</p>
+            <p class="tl-item-desc" data-lzh>React 帮助我理解界面如何被组织，也理解产品想法如何变成可复用的 UI 片段。</p>
+          </div>
+          <div class="tl-item">
+            <h3 class="tl-item-name">Next.js <span class="badge">Framework</span></h3>
+            <p class="tl-item-desc" data-len>I'm learning enough frontend to turn ideas into usable prototypes and to understand how modern web products are put together.</p>
+            <p class="tl-item-desc" data-lzh>我也在学习足够的前端知识，把想法做成可以试用的原型，并理解现代 Web 产品是如何组织起来的。</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- footer -->
+  <footer>
+    <div class="container">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a href="index.html" class="brand">
+            <span class="mh-mark">M</span>
+            Musu
+          </a>
+          <p data-len>Personal homepage of Musu — learning to become an AI product manager through prototypes, notes, and practice.</p>
+          <p data-lzh>牧晚吟 / Musu 的个人主页 —— 通过原型、笔记和实践，学习成为一名 AI 产品经理。</p>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Navigate</h5><h5 data-lzh>导航</h5>
+          <ul>
+            <li><a href="index.html#about"><span data-len>About</span><span data-lzh>关于</span></a></li>
+            <li><a href="index.html#skills"><span data-len>Skills</span><span data-lzh>技能</span></a></li>
+            <li><a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Connect</h5><h5 data-lzh>连接</h5>
+          <ul>
+            <li><a href="https://github.com/Musu6856" target="_blank" rel="noreferrer noopener">GitHub</a></li>
+            <li><a href="index.html#contact">WeChat</a></li>
+            <li><a href="mailto:1803162257@qq.com">Email</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Projects</h5><h5 data-lzh>项目</h5>
+          <ul>
+            <li><a href="projects/paperforge"><span data-len>PaperForge</span><span data-lzh>PaperForge</span></a></li>
+            <li><a href="projects/weblearnboost"><span data-len>WebLearnBoost</span><span data-lzh>WebLearnBoost</span></a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Blog</h5><h5 data-lzh>博客</h5>
+          <ul>
+            <li><a href="blog-post.html"><span data-len>AI Product Notes</span><span data-lzh>AI 产品笔记</span></a></li>
+            <li><a href="index.html#blog"><span data-len>All Notes</span><span data-lzh>全部笔记</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span><span class="pulse"></span> Musu &nbsp;·&nbsp; MMXXVI</span>
+        <span class="right">
+          <span data-len>Learn · Prototype · Share</span>
+          <span data-lzh>学习 · 原型 · 分享</span>
+          <span>XI'AN</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Language Toggle
+    const toggle = document.getElementById('lang-toggle');
+    if (toggle) {
+      const opts = toggle.querySelectorAll('.lt-opt');
+      const html = document.documentElement;
+      
+      const updateToggle = () => {
+        const currentLang = html.getAttribute('lang');
+        opts.forEach(opt => opt.classList.toggle('active', opt.dataset.lang === currentLang));
+      };
+      
+      updateToggle();
+      
+      toggle.addEventListener('click', () => {
+        html.setAttribute('lang', html.getAttribute('lang') === 'en' ? 'zh' : 'en');
+        updateToggle();
+      });
+    }
+
+    // Scroll Reveal
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.setAttribute('data-revealed', 'true');
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+    
+    reveals.forEach(r => observer.observe(r));
+  });
+</script>
+
+</body>
+</html>

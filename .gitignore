@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+dist
+.env*
+*.log
+.playwright-cli
+*.tsbuildinfo
+coverage
+.vercel
+.DS_Store
+Thumbs.db

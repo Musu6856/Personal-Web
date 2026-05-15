@@ -1,0 +1,721 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PaperForge — Project Detail</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+/* ===== Atelier Zero — canonical stylesheet (Reused Base) ===== */
+:root {
+  --paper: #efe7d2;
+  --paper-warm: #ece4cf;
+  --paper-dark: #ddd2b6;
+  --ink: #15140f;
+  --ink-soft: #2a2620;
+  --ink-mute: #5a5448;
+  --ink-faint: #8b8676;
+  --coral: #ed6f5c;
+  --coral-soft: #f08e7c;
+  --mustard: #e9b94a;
+  --olive: #6e7448;
+  --bone: #f7f1de;
+  --line: rgba(21, 20, 15, 0.16);
+  --line-soft: rgba(21, 20, 15, 0.08);
+  --line-faint: rgba(21, 20, 15, 0.05);
+  --shadow: 0 30px 60px -30px rgba(21, 20, 15, 0.18);
+  --serif: 'Playfair Display', 'Times New Roman', serif;
+  --sans: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --body: 'Inter', -apple-system, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); }
+body {
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  position: relative;
+}
+
+html[lang="en"] [data-lzh],
+html[lang="zh"] [data-len] { display: none !important; }
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(106, 92, 56, 0.07) 0, transparent 28%),
+    radial-gradient(circle at 88% 72%, rgba(106, 92, 56, 0.06) 0, transparent 32%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.18  0 0 0 0 0.16  0 0 0 0 0.12  0 0 0 0.06 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  background-size: auto, auto, 240px 240px;
+  mix-blend-mode: multiply;
+  opacity: 0.92;
+}
+
+.shell { position: relative; z-index: 2; }
+.container {
+  max-width: 1360px;
+  padding: 0 64px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Nav & Topbar Structure */
+.side-rail {
+  position: fixed;
+  top: 0; bottom: 0;
+  width: 36px;
+  z-index: 3;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.side-rail.right { right: 0; border-left: 1px solid var(--line-faint); }
+.side-rail.left  { left: 0;  border-right: 1px solid var(--line-faint); }
+.side-rail .rail-text {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+.side-rail.left .rail-text  { writing-mode: vertical-rl; transform: none; }
+.side-rail.right .rail-text[data-lzh] { transform: none; }
+
+.topbar {
+  border-bottom: 1px solid var(--line);
+  padding: 10px 0;
+  background: var(--paper);
+  position: relative;
+  z-index: 4;
+}
+.topbar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  font-family: var(--sans);
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.topbar-inner b { color: var(--ink); font-weight: 600; }
+.topbar-inner .coral { color: var(--coral); }
+.topbar-inner .mid { display: inline-flex; gap: 26px; }
+.topbar-inner .right { display: inline-flex; gap: 18px; align-items: center; }
+.topbar .pulse {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--coral);
+  display: inline-block;
+  margin-right: 6px;
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  cursor: pointer;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px;
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: border-color 0.18s ease;
+  flex-shrink: 0;
+}
+.lang-toggle:hover { border-color: var(--coral); }
+.lang-toggle .lt-opt { padding: 3px 10px; border-radius: 999px; color: var(--ink-faint); transition: all 0.18s ease; line-height: 1.4; }
+.lang-toggle .lt-opt.active { background: var(--ink); color: var(--paper); }
+
+.nav {
+  padding: 22px 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--paper);
+  border-bottom: 1px solid transparent;
+}
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  font-family: var(--sans);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 18px;
+}
+.brand-mark {
+  width: 36px; height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 17px;
+  color: var(--ink);
+}
+.brand-meta {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  line-height: 1.3;
+  margin-left: 4px;
+  border-left: 1px solid var(--line);
+  padding-left: 14px;
+}
+.brand-meta b { display: block; color: var(--ink); font-weight: 600; }
+
+.nav-links { display: flex; gap: 38px; list-style: none; }
+.nav-links a {
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.18s ease;
+  position: relative;
+}
+.nav-links a:hover { color: var(--coral); }
+.nav-links a .num {
+  display: none;
+}
+.nav-side { display: inline-flex; align-items: center; gap: 18px; }
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.nav-cta::after { content: '★'; color: var(--mustard); font-size: 11px; }
+
+/* Footers Base */
+footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60px; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 60px; }
+.foot-brand .brand { margin-bottom: 18px; }
+.foot-brand p { font-family: var(--body); font-size: 13.5px; color: var(--ink-mute); line-height: 1.55; max-width: 38ch; }
+.foot-col h5 { font-family: var(--sans); font-size: 11px; color: var(--ink); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; font-weight: 700; }
+.foot-col ul { list-style: none; }
+.foot-col li { margin-bottom: 10px; }
+.foot-col a { font-family: var(--body); font-size: 13.5px; color: var(--ink-soft); text-decoration: none; transition: color 0.18s ease; }
+.foot-col a:hover { color: var(--coral); }
+.foot-bottom { border-top: 1px solid var(--line); padding-top: 22px; display: flex; justify-content: space-between; align-items: center; font-family: var(--sans); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-faint); }
+.foot-bottom .right { display: inline-flex; gap: 24px; align-items: center; }
+.foot-bottom .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); display: inline-block; margin-right: 6px; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid rgba(21, 20, 15, 0.2);
+  transition: background 0.18s ease;
+  cursor: pointer;
+}
+.btn-ghost:hover { background: rgba(21, 20, 15, 0.04); }
+.btn-ghost .arrow svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+
+/* ===== PROJECT DETAIL CUSTOM CSS ===== */
+.pt-hero {
+  padding: 100px 0 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.pt-breadcrumb {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.pt-breadcrumb a { color: inherit; text-decoration: none; transition: color 0.18s ease; }
+.pt-breadcrumb a:hover { color: var(--coral); }
+.pt-breadcrumb .sep { color: var(--line); }
+
+.pt-title {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: clamp(40px, 5.5vw, 76px);
+  line-height: 1.05;
+  letter-spacing: -0.024em;
+  color: var(--ink);
+  margin-bottom: 48px;
+}
+.pt-title em { font-family: var(--serif); font-style: italic; font-weight: 500; }
+.pt-title .dot { color: var(--coral); }
+
+.pt-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.meta-col .mlabel {
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--ink-faint);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  display: block;
+}
+.meta-col .mval {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.pt-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  background: var(--bone);
+  border: 1px solid var(--line-faint);
+  margin-bottom: 90px;
+  box-shadow: var(--shadow);
+}
+.pt-cover img { width: 100%; height: 100%; object-fit: cover; }
+.pt-cover .badge {
+  position: absolute;
+  top: 20px; left: 20px;
+  background: rgba(239, 231, 210, 0.9);
+  color: var(--ink);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  backdrop-filter: blur(2px);
+}
+
+.pt-body {
+  max-width: 680px;
+  margin: 0 auto 120px;
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.pt-body p { margin-bottom: 1.8em; }
+.pt-body h3 {
+  font-family: var(--sans);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 2.5em 0 1em;
+}
+.pt-body blockquote {
+  font-family: var(--serif);
+  font-size: 28px;
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--coral);
+  margin: 2.5em -15% 2.5em 0;
+  padding-left: 32px;
+  border-left: 2px solid var(--coral);
+}
+
+.pt-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin: 4em 0;
+  width: calc(100% + 240px);
+  margin-left: -120px;
+}
+.pt-gallery figure { margin: 0; position: relative; }
+.pt-gallery img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border: 1px solid var(--line-faint); }
+.pt-gallery figcaption {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-faint);
+  margin-top: 12px;
+  letter-spacing: 0.05em;
+  text-align: right;
+}
+
+.pt-full-img {
+  width: 100%;
+  margin: 5em 0;
+  border: 1px solid var(--line-faint);
+  background: var(--bone);
+}
+.pt-full-img img { width: 100%; display: block; object-fit: cover; }
+
+.pt-next {
+  border-top: 1px dashed var(--line);
+  padding: 80px 0;
+  text-align: center;
+}
+.pt-next .n-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: block;
+}
+.pt-next h2 {
+  font-family: var(--sans);
+  font-size: clamp(36px, 4.5vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+
+/* Animations */
+[data-reveal] {
+  opacity: 0;
+  translate: 0 28px;
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    translate 900ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    scale 900ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
+  will-change: opacity, translate, scale;
+}
+[data-reveal='rise-lg'] { translate: 0 64px; scale: 0.985; }
+[data-reveal][data-revealed='true'] { opacity: 1; translate: 0 0; scale: 1; }
+
+@media (max-width: 1280px) { .container { padding: 0 44px; } .side-rail { display: none; } }
+@media (max-width: 1180px) { .nav-inner { gap: 18px; } .brand-meta { display: none; } .nav-links { gap: 28px; } }
+@media (max-width: 1080px) {
+  .container { padding: 0 32px; }
+  .pt-gallery { width: 100%; margin-left: 0; }
+  .pt-body blockquote { margin-right: 0; }
+  .pt-meta { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .foot-grid { grid-template-columns: 2fr 1fr 1fr; }
+  .foot-col:nth-child(4), .foot-col:nth-child(5) { display: none; }
+}
+@media (max-width: 880px) { .container { padding: 0 24px; } .nav-links, .brand-meta, .nav-cta { display: none; } }
+@media (max-width: 640px) {
+  .pt-gallery { grid-template-columns: 1fr; }
+  .pt-meta { grid-template-columns: 1fr; gap: 20px; }
+  .pt-body blockquote { font-size: 22px; padding-left: 20px; margin-left: -5%; }
+}
+@media (max-width: 560px) { .container { padding: 0 16px; } .topbar-inner { font-size: 9px; } }
+</style>
+</head>
+<body>
+
+<!-- side rails -->
+<div class="side-rail left">
+  <span class="rail-text" data-len>Learn · Prototype · Share · Repeat</span>
+  <span class="rail-text" data-lzh>学习 · 原型 · 分享 · 重复</span>
+</div>
+<div class="side-rail right">
+  <span class="rail-text" data-len>Musu — Personal Page · MMXXVI</span>
+  <span class="rail-text" data-lzh>Musu — 个人主页 · MMXXVI</span>
+</div>
+
+<div class="shell">
+
+  <!-- top metadata strip -->
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <span data-len><b>Musu</b> &nbsp;·&nbsp; Personal</span>
+        <span data-lzh><b>Musu</b> &nbsp;·&nbsp; 个人主页</span>
+        <span class="mid">
+        <span data-len>Filed under <span class="coral">AI Product · Prototypes · Notes</span></span>
+        <span data-lzh>归档于 <span class="coral">AI 产品 · 原型 · 笔记</span></span>
+          <span>Edition <b>MMXXVI</b></span>
+        </span>
+        <span class="right">
+          <span data-len><span class="pulse"></span> Open to collaborate</span>
+          <span data-lzh><span class="pulse"></span> 欢迎合作</span>
+          <button class="lang-toggle" id="lang-toggle" aria-label="Switch language">
+            <span class="lt-opt" data-lang="en">EN</span>
+            <span class="lt-opt" data-lang="zh">中文</span>
+          </button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- nav -->
+  <header class="nav" id="nav">
+    <div class="container">
+      <div class="nav-inner">
+        <a href="index.html" class="brand">
+          <span class="brand-mark">M</span>
+          Musu
+        </a>
+        <span class="brand-meta">
+          <b data-len>Personal Page</b><b data-lzh>个人主页</b>
+          <span data-len>Learn · Prototype · Share</span>
+          <span data-lzh>学习 · 原型 · 分享</span>
+        </span>
+        <ul class="nav-links">
+          <li><a href="index.html#about"><span data-len>About</span><span data-lzh>关于</span></a></li>
+          <li><a href="index.html#skills"><span data-len>Skills</span><span data-lzh>技能</span></a></li>
+          <li><a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a></li>
+          <li><a href="index.html#blog"><span data-len>Blog</span><span data-lzh>博客</span></a></li>
+        </ul>
+        <div class="nav-side">
+          <a href="index.html#contact" class="nav-cta">
+            <span data-len>Get in touch</span>
+            <span data-lzh>取得联系</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    
+    <!-- Hero Header -->
+    <div class="pt-hero" data-reveal>
+      <div class="pt-breadcrumb">
+        <a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a>
+        <span class="sep">/</span>
+        <span data-len>AI Tool</span><span data-lzh>AI 工具</span>
+        <span class="sep">/</span>
+        <span>01</span>
+      </div>
+      
+      <h1 class="pt-title">
+        <span data-len>PaperForge: An AI writing workspace for research <em>model setup</em><span class="dot">.</span></span>
+        <span data-lzh>PaperForge：面向研究<em>模型设定</em>的 AI 写作工作台<span class="dot">。</span></span>
+      </h1>
+      
+      <div class="pt-meta">
+        <div class="meta-col">
+          <span class="mlabel" data-len>Role</span><span class="mlabel" data-lzh>角色</span>
+          <span class="mval" data-len>Product & Prototype</span><span class="mval" data-lzh>产品与原型</span>
+        </div>
+        <div class="meta-col">
+          <span class="mlabel" data-len>Context</span><span class="mlabel" data-lzh>背景</span>
+          <span class="mval" data-len>AI Product Exploration</span><span class="mval" data-lzh>AI 产品探索</span>
+        </div>
+        <div class="meta-col">
+          <span class="mlabel" data-len>Year</span><span class="mlabel" data-lzh>年份</span>
+          <span class="mval">2026</span>
+        </div>
+        <div class="meta-col">
+          <span class="mlabel" data-len>Live Link</span><span class="mlabel" data-lzh>线上地址</span>
+          <a href="https://paperforge-sable.vercel.app/" target="_blank" rel="noreferrer noopener" class="mval" style="color:var(--coral);text-decoration:none;">paperforge-sable.vercel.app ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Cover -->
+    <div class="pt-cover" data-reveal="rise-lg">
+      <img src="assets/lab-1.png" alt="PaperForge Preview" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'675\'><rect width=\'1200\' height=\'675\' fill=\'%23f7f1de\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'serif\' font-style=\'italic\' font-size=\'24\' fill=\'%238b8676\'>PaperForge Preview</text></svg>'">
+      <span class="badge">FIG 01.</span>
+    </div>
+
+    <!-- Editorial Body -->
+    <div class="pt-body" data-reveal>
+      <p data-len>PaperForge is an AI academic writing tool for game theory and platform economics research. It helps turn rough research ideas into structured model elements such as players, strategies, payoff functions, and assumptions.</p>
+      <p data-lzh>PaperForge 是一个面向博弈论与平台经济研究的 AI 学术写作工具。它帮助用户把粗略研究想法整理成参与者、策略、收益函数和假设条件等结构化模型要素。</p>
+
+      <h3 data-len>From idea to model setup</h3>
+      <h3 data-lzh>从想法到模型设定</h3>
+      
+      <p data-len>The prototype guides users through the early research setup process: clarifying the scene, identifying participants, describing strategies, and drafting a LaTeX-style Model Setup section that can be refined later.</p>
+      <p data-lzh>这个原型会引导用户完成早期研究设定过程：明确研究场景、识别参与者、描述策略，并生成一段后续可以继续修改的 LaTeX 风格 Model Setup 草稿。</p>
+
+      <blockquote data-len>
+        "The goal is not to let AI write the whole paper. The goal is to help rough research intent become a clearer model that can be questioned, revised, and improved."
+      </blockquote>
+      <blockquote data-lzh>
+        "目标不是让 AI 写完整篇论文，而是帮助粗略的研究意图变成一个更清晰、可质疑、可修改、可继续完善的模型。"
+      </blockquote>
+
+      <p data-len>The current version is built with Next.js, React, TypeScript, Clerk, Neon, Drizzle ORM, KaTeX, react-markdown, and Vercel. The stack is less important than the product question: how can AI support academic structure without hiding the user's thinking?</p>
+      <p data-lzh>当前版本使用 Next.js、React、TypeScript、Clerk、Neon、Drizzle ORM、KaTeX、react-markdown 和 Vercel 构建。技术栈本身不是重点，真正的问题是：AI 如何支持学术结构化，同时不遮蔽用户自己的思考？</p>
+      
+      <div class="pt-gallery">
+        <figure>
+          <img src="assets/pt-1.png" alt="Light mode" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'450\'><rect width=\'600\' height=\'450\' fill=\'%23efe7d2\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Light Mode Grid</text></svg>'">
+          <figcaption data-len>FIG 02. Structuring research elements before writing.</figcaption>
+          <figcaption data-lzh>图 02. 在写作之前先结构化研究要素。</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/pt-2.png" alt="Dark mode" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'450\'><rect width=\'600\' height=\'450\' fill=\'%2315140f\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Dark Mode Stats</text></svg>'">
+          <figcaption data-len>FIG 03. Drafting model setup text for later refinement.</figcaption>
+          <figcaption data-lzh>图 03. 生成可继续修改的模型设定草稿。</figcaption>
+        </figure>
+      </div>
+
+      <h3 data-len>Why this matters</h3>
+      <h3 data-lzh>为什么做这个</h3>
+      
+      <p data-len>For me, PaperForge is also a product-learning project. It is a way to practice turning a specific workflow into a usable interface, while learning where AI helps and where human judgment still needs to stay visible.</p>
+      <p data-lzh>对我来说，PaperForge 也是一个产品学习项目。它让我练习如何把一个具体工作流变成可以使用的界面，同时观察 AI 在哪里有帮助、哪里仍然需要保留人的判断。</p>
+
+    </div>
+    
+    <div class="pt-full-img" data-reveal>
+      <img src="assets/pt-wide.png" alt="Full Width View" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1400\' height=\'600\'><rect width=\'1400\' height=\'600\' fill=\'%23ece4cf\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'18\' fill=\'%238b8676\'>Full Width Analytics View</text></svg>'">
+    </div>
+
+    <!-- Next Project -->
+    <div class="pt-next" data-reveal>
+      <span class="n-label" data-len>Up Next</span>
+      <span class="n-label" data-lzh>下一个项目</span>
+      <h2 data-len>WebLearnBoost</h2>
+      <h2 data-lzh>WebLearnBoost</h2>
+      <a href="projects/weblearnboost" class="btn-ghost">
+        <span data-len>View Project</span><span data-lzh>查看项目</span>
+        <span class="arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
+      </a>
+    </div>
+
+  </main>
+
+  <!-- footer -->
+  <footer>
+    <div class="container">
+      <div class="foot-grid">
+        <div class="foot-brand">
+          <a href="index.html" class="brand"><span class="brand-mark">M</span>Musu</a>
+          <p data-len>Personal homepage of Musu — learning to become an AI product manager through prototypes, notes, and practice.</p>
+          <p data-lzh>牧晚吟 / Musu 的个人主页 —— 通过原型、笔记和实践，学习成为一名 AI 产品经理。</p>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Navigate</h5><h5 data-lzh>导航</h5>
+          <ul>
+            <li><a href="index.html#about"><span data-len>About</span><span data-lzh>关于</span></a></li>
+            <li><a href="index.html#skills"><span data-len>Skills</span><span data-lzh>技能</span></a></li>
+            <li><a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Connect</h5><h5 data-lzh>连接</h5>
+          <ul>
+            <li><a href="https://github.com/Musu6856" target="_blank" rel="noreferrer noopener">GitHub</a></li>
+            <li><a href="index.html#contact">WeChat</a></li>
+            <li><a href="mailto:1803162257@qq.com">Email</a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Projects</h5><h5 data-lzh>项目</h5>
+          <ul>
+            <li><a href="projects/paperforge"><span data-len>PaperForge</span><span data-lzh>PaperForge</span></a></li>
+            <li><a href="projects/weblearnboost"><span data-len>WebLearnBoost</span><span data-lzh>WebLearnBoost</span></a></li>
+          </ul>
+        </div>
+        <div class="foot-col">
+          <h5 data-len>Blog</h5><h5 data-lzh>博客</h5>
+          <ul>
+            <li><a href="blog-post.html"><span data-len>AI Product Notes</span><span data-lzh>AI 产品笔记</span></a></li>
+            <li><a href="index.html#blog"><span data-len>All Notes</span><span data-lzh>全部笔记</span></a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="foot-bottom">
+        <span><span class="pulse"></span> Musu &nbsp;·&nbsp; MMXXVI</span>
+        <span class="right">
+          <span data-len>Learn · Prototype · Share</span>
+          <span data-lzh>学习 · 原型 · 分享</span>
+          <span>XI'AN</span>
+        </span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Language Toggle
+    const toggle = document.getElementById('lang-toggle');
+    if (toggle) {
+      const opts = toggle.querySelectorAll('.lt-opt');
+      const html = document.documentElement;
+      
+      const updateToggle = () => {
+        const currentLang = html.getAttribute('lang');
+        opts.forEach(opt => opt.classList.toggle('active', opt.dataset.lang === currentLang));
+      };
+      
+      // Initialize states
+      updateToggle();
+      
+      toggle.addEventListener('click', () => {
+        html.setAttribute('lang', html.getAttribute('lang') === 'en' ? 'zh' : 'en');
+        updateToggle();
+      });
+    }
+
+    // Scroll Reveal 
+    const reveals = document.querySelectorAll('[data-reveal]');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.setAttribute('data-revealed', 'true');
+        }
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+    
+    reveals.forEach(r => observer.observe(r));
+  });
+</script>
+
+</body>
+</html>
