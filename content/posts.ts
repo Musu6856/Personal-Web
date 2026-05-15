@@ -1,3 +1,4 @@
+import { assets } from "./assets";
 import type { Post } from "./types";
 
 export const posts: Post[] = [
@@ -13,7 +14,7 @@ export const posts: Post[] = [
     kindZh: "学习记录",
     metaLabel: "NOTE",
     metaLabelZh: "笔记",
-    image: "assets/work-1.png",
+    image: assets.posts.learningAiProductsByMakingPrototypes.cover,
     readTime: "6 min read",
     excerpt: {
       en: "Notes on turning product ideas, AI workflows, and interface references into concrete product attempts.",
@@ -39,7 +40,7 @@ export const posts: Post[] = [
     kindZh: "工具观察",
     metaLabel: "OBSERVATION",
     metaLabelZh: "观察",
-    image: "assets/work-2.png",
+    image: assets.posts.noticingAiTools.cover,
     readTime: "5 min read",
     excerpt: {
       en: "Short reflections on Codex, Obsidian, Open Design, Claude Code, and how these tools change the way ideas become prototypes.",
@@ -65,7 +66,7 @@ export const posts: Post[] = [
     kindZh: "项目复盘",
     metaLabel: "REFLECTION",
     metaLabelZh: "复盘",
-    image: "assets/work-3.png",
+    image: assets.posts.paperforgeAsProductExercise.cover,
     readTime: "4 min read",
     excerpt: {
       en: "A note on using PaperForge to practice turning a research workflow into a usable product surface.",

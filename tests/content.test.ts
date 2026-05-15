@@ -1,13 +1,16 @@
 import { describe, expect, it } from "vitest";
+import fs from "node:fs";
+import path from "node:path";
+import { assets } from "@/content/assets";
 import { posts } from "@/content/posts";
 import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
-import { escapeHtml, replaceAllPairs, replaceOnce } from "@/lib/html-utils";
+import { escapeHtml, replaceAllPairs, replaceOnce, replaceRequiredBetween } from "@/lib/html-utils";
 import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { prototypeHtml } from "@/lib/prototype-html";
-import { renderHomeContent } from "@/lib/site-renderers";
+import { renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage } from "@/lib/slug-pages";
 import { renderProjectSlugPage } from "@/lib/slug-pages";
 
@@ -23,6 +26,12 @@ function relatedSection(html: string) {
   expect(end).toBeGreaterThan(start);
 
   return html.slice(start, end);
+}
+
+function collectAssetPaths(value: unknown): string[] {
+  if (typeof value === "string") return value.startsWith("assets/") ? [value] : [];
+  if (!value || typeof value !== "object") return [];
+  return Object.values(value).flatMap(collectAssetPaths);
 }
 
 describe("site content model", () => {
@@ -63,15 +72,26 @@ describe("site content model", () => {
   it("normalizes prototype links into app routes", () => {
     expect(
       normalizePrototypeLinks(
-        '<a href="index.html">Home</a><a href="index.html#projects">Projects</a><a href="tool-list.html">Uses</a><a href="blog-post.html">Blog</a><a href="projects/paperforge">PaperForge</a><img src="assets/work-1.png">',
+        '<a href="index.html">Home</a><a href="index.html#projects">Projects</a><a href="tool-list.html">Uses</a><a href="blog-post.html">Blog</a><a href="projects/paperforge">PaperForge</a><img src="assets/posts/learning-ai-products-by-making-prototypes/cover.png">',
       ),
-    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/learning-ai-products-by-making-prototypes">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/work-1.png">');
+    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/learning-ai-products-by-making-prototypes">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
   });
 
   it("keeps HTML replacement utilities predictable", () => {
     expect(escapeHtml('<span title="Musu & AI">')).toBe("&lt;span title=&quot;Musu &amp; AI&quot;&gt;");
     expect(replaceAllPairs("one two one", [["one", "1"], ["two", "2"]])).toBe("1 2 1");
     expect(replaceOnce("card card", "card", "tile")).toBe("tile card");
+    expect(replaceRequiredBetween("<main>[slot]</main>", "[", "]", "ok", "test.slot")).toBe("<main>[\nok\n    ]</main>");
+    expect(() => replaceRequiredBetween("<main></main>", "[", "]", "ok", "missing.slot")).toThrow("missing.slot");
+  });
+
+  it("keeps semantic asset paths backed by files", () => {
+    const assetPaths = collectAssetPaths(assets);
+
+    expect(assetPaths.length).toBeGreaterThan(0);
+    for (const asset of assetPaths) {
+      expect(fs.existsSync(path.join(process.cwd(), "public", asset))).toBe(true);
+    }
   });
 
   it("uses the detail masthead and highlights projects on project pages", async () => {
@@ -116,11 +136,22 @@ describe("site content model", () => {
     expect(hrefs.slice(0, 3)).toEqual(posts.slice(0, 3).map((post) => `/blog/${post.slug}`));
   });
 
+  it("renders the tool list from structured content", async () => {
+    const html = normalizePrototypeLinks(renderToolListContent(await prototypeHtml("tool-list.html")));
+
+    for (const section of toolSections) {
+      expect(html).toContain(`id="${section.slug}"`);
+      for (const item of section.items) {
+        expect(html).toContain(escapeHtml(item.name));
+      }
+    }
+  });
+
   it("uses root asset paths on blog slug pages", async () => {
     const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[0].slug));
 
-    expect(html).toContain('src="/assets/work-1.png"');
-    expect(html).toContain('src="/assets/pt-wide.png"');
+    expect(html).toContain('src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png"');
+    expect(html).toContain('src="/assets/shared/workflow-map.png"');
     expect(html).not.toContain('src="assets/');
   });
 
@@ -128,13 +159,13 @@ describe("site content model", () => {
     const paperforgeHtml = await renderProjectSlugPage("paperforge");
     const weblearnboostHtml = await renderProjectSlugPage("weblearnboost");
 
-    expect(paperforgeHtml).toContain('src="/assets/paperforge-1.png"');
-    expect(paperforgeHtml).toContain('src="/assets/paperforge-2.png"');
-    expect(paperforgeHtml).toContain('src="/assets/paperforge-3.png"');
-    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-1.png"');
-    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-2.png"');
-    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-3.png"');
-    expect(weblearnboostHtml).toContain('src="/assets/weblearnboost-4.png"');
+    expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/cover.png"');
+    expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/model-setup.png"');
+    expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/editor-state.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/cover.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/wide.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/learning-map.png"');
+    expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/question-flow.png"');
     expect(weblearnboostHtml).not.toContain('src="assets/');
   });
 });

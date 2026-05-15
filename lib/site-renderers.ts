@@ -3,7 +3,8 @@ import { profile } from "@/content/profile";
 import { projects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import type { Project, ToolSection } from "@/content/types";
-import { escapeHtml, replaceAllPairs } from "@/lib/html-utils";
+import { assets } from "@/content/assets";
+import { escapeHtml, replaceRequiredBetween, replaceRequiredPairs } from "@/lib/html-utils";
 
 const projectTags: Record<string, { tag: string; labelEn: string; labelZh: string }> = {
   "AI Tool": { tag: "ai", labelEn: "AI", labelZh: "AI" },
@@ -39,7 +40,7 @@ function projectCard(project: Project, index: number) {
   return `
       <a href="/projects/${project.slug}" class="lab" data-reveal data-tag="${meta.tag}">
         <div class="lab-img">
-          <img src="${assetPath(project.image ?? `assets/lab-${index + 1}.png`)}" alt="Project ${number}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'320\\' height=\\'400\\'><rect width=\\'320\\' height=\\'400\\' fill=\\'%23${color}\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'serif\\' font-style=\\'italic\\' font-size=\\'18\\' fill=\\'%238b8676\\'>Project ${number}</text></svg>'">
+          <img src="${assetPath(project.image ?? assets.projects.paperforge.card)}" alt="Project ${number}" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'320\\' height=\\'400\\'><rect width=\\'320\\' height=\\'400\\' fill=\\'%23${color}\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'serif\\' font-style=\\'italic\\' font-size=\\'18\\' fill=\\'%238b8676\\'>Project ${number}</text></svg>'">
           <span class="badge" data-len>${escapeHtml(meta.labelEn)}</span><span class="badge" data-lzh>${escapeHtml(meta.labelZh)}</span>
         </div>
         <div class="num-row"><span>Nº ${number}</span><span>${escapeHtml(projectStatus(project))}</span></div>
@@ -53,21 +54,6 @@ function projectCard(project: Project, index: number) {
 
 function projectGridHtml() {
   return projects.map(projectCard).join("\n\n");
-}
-
-function replaceBetween(html: string, start: string, end: string, replacement: string) {
-  const startIndex = html.indexOf(start);
-  if (startIndex === -1) return html;
-  const contentStart = startIndex + start.length;
-  let endMarker = end;
-  let endIndex = html.indexOf(endMarker, contentStart);
-  if (endIndex === -1 && end.includes("\n")) {
-    endMarker = end.replaceAll("\n", "\r\n");
-    endIndex = html.indexOf(endMarker, contentStart);
-  }
-  if (endIndex === -1) return html;
-  const newline = endMarker.includes("\r\n") ? "\r\n" : "\n";
-  return html.slice(0, contentStart) + newline + replacement + newline + "    " + html.slice(endIndex);
 }
 
 function toolItem(item: ToolSection["items"][number]) {
@@ -168,11 +154,12 @@ export function renderBlogRelatedSection(html: string, currentSlug: string) {
     .map((postIndex, position) => blogRelatedCard(posts[postIndex] ?? posts[0], postIndex, position === 1))
     .join("\n");
 
-  return replaceBetween(
+  return replaceRequiredBetween(
     html,
     '<div class="bp-related-grid">',
     '\n      </div>\n    </section>',
     relatedHtml,
+    "blog.related",
   );
 }
 
@@ -184,7 +171,7 @@ function restoreBlogLabel(html: string) {
 }
 
 function renderProfileContent(html: string) {
-  return replaceAllPairs(html, [
+  return replaceRequiredPairs(html, [
     [
       "I'm Musu — learning toward becoming an AI product manager. I use prototypes to learn and explore AI products: understanding how AI changes workflows, and turning vague ideas into things people can actually try. This is where I share projects, notes, and things I'm learning.",
       escapeHtml(profile.intro.en),
@@ -237,18 +224,20 @@ function renderProfileContent(html: string) {
 export function renderHomeContent(html: string) {
   let rendered = renderProfileContent(html);
 
-  rendered = replaceBetween(
+  rendered = replaceRequiredBetween(
     rendered,
     '<div class="labs-grid" id="projects-grid">',
     '\n    </div>\n\n    <div class="projects-foot">',
     projectGridHtml(),
+    "home.projects",
   );
 
-  rendered = replaceBetween(
+  rendered = replaceRequiredBetween(
     rendered,
     '<div class="work-deck" id="blog-deck" data-reveal="scale" aria-live="polite">',
     '\n      </div>\n    </div>\n\n    <div class="work-arrows">',
     blogDeckHtml(),
+    "home.blogDeck",
   );
 
   rendered = rendered.replace(
@@ -260,17 +249,18 @@ export function renderHomeContent(html: string) {
 }
 
 export function renderToolListContent(html: string) {
-  return replaceBetween(
+  return replaceRequiredBetween(
     html,
     '<div class="tl-list">',
-    '\n\n  </main>',
+    '\n  </main>',
     toolListHtml(),
+    "tools.list",
   );
 }
 
 export function renderBlogPostContent(html: string, slug?: string) {
   const post = posts.find((item) => item.slug === slug) ?? posts[0];
-  const postImage = assetPath(post.image ?? "assets/work-1.png");
+  const postImage = assetPath(post.image ?? "assets/posts/learning-ai-products-by-making-prototypes/cover.png");
   const rendered = html
     .replace("<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`)
     .replace(
@@ -286,7 +276,7 @@ export function renderBlogPostContent(html: string, slug?: string) {
       "<span data-lzh>记录如何把产品想法、AI 工作流和界面参考变成一次次具体尝试。</span>",
       `<span data-lzh>${escapeHtml(post.excerpt.zh)}</span>`,
     )
-    .replace('src="assets/work-1.png"', `src="${postImage}"`)
+    .replace('src="assets/posts/learning-ai-products-by-making-prototypes/cover.png"', `src="${postImage}"`)
     .replace("May 14, 2026", post.dateDisplay ?? post.date);
 
   return renderBlogRelatedSection(rendered, post.slug);
