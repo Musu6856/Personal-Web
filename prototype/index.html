@@ -1,6 +1,6 @@
 ﻿
 <!DOCTYPE html>
-<html lang='en'>
+<html lang='zh'>
 <head>
 <meta charset='utf-8' />
 <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -2273,7 +2273,7 @@ function filterProjects(tag, btn) {
 
   var saved = null;
   try { saved = localStorage.getItem('musu-lang'); } catch(e) {}
-  setLang(saved || 'en');
+  setLang(saved || 'zh');
 
   toggle.addEventListener('click', function() {
     var next = html.getAttribute('lang') === 'en' ? 'zh' : 'en';

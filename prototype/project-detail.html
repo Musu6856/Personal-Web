@@ -1,6 +1,6 @@
 ﻿
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -689,17 +689,23 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
       const opts = toggle.querySelectorAll('.lt-opt');
       const html = document.documentElement;
       
+      const setLang = (lang) => {
+        html.setAttribute('lang', lang);
+        try { localStorage.setItem('musu-lang', lang); } catch(e) {}
+        updateToggle();
+      };
+
       const updateToggle = () => {
-        const currentLang = html.getAttribute('lang');
+        const currentLang = html.getAttribute('lang') || 'zh';
         opts.forEach(opt => opt.classList.toggle('active', opt.dataset.lang === currentLang));
       };
-      
-      // Initialize states
-      updateToggle();
+
+      let saved = null;
+      try { saved = localStorage.getItem('musu-lang'); } catch(e) {}
+      setLang(saved || 'zh');
       
       toggle.addEventListener('click', () => {
-        html.setAttribute('lang', html.getAttribute('lang') === 'en' ? 'zh' : 'en');
-        updateToggle();
+        setLang(html.getAttribute('lang') === 'en' ? 'zh' : 'en');
       });
     }
 
