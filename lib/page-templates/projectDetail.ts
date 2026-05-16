@@ -377,16 +377,13 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
 .pt-cover .badge {
   position: absolute;
   top: 20px; left: 20px;
-  background: rgba(239, 231, 210, 0.9);
-  color: var(--ink);
-  padding: 6px 10px;
-  border-radius: 4px;
+  color: rgba(21, 20, 15, 0.72);
   font-family: var(--sans);
   font-size: 9.5px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  backdrop-filter: blur(2px);
+  text-shadow: 0 1px 8px rgba(21, 20, 15, 0.38);
 }
 
 .pt-body {

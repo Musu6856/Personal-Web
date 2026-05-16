@@ -229,6 +229,16 @@ describe("site content model", () => {
     expect(html).toContain(".pt-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }");
   });
 
+  it("renders project detail figure labels as direct image text", async () => {
+    const html = pageTemplate("projectDetail");
+
+    expect(html).not.toContain("background: rgba(239, 231, 210, 0.9);");
+    expect(html).not.toContain("padding: 6px 10px;");
+    expect(html).not.toContain("border-radius: 4px;");
+    expect(html).not.toContain("backdrop-filter: blur(2px);");
+    expect(html).toContain("text-shadow: 0 1px 8px rgba(21, 20, 15, 0.38);");
+  });
+
   it("centers the current blog post between previous and next related posts", async () => {
     const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[1].slug));
     const relatedHtml = relatedSection(html);
