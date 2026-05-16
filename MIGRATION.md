@@ -1,32 +1,250 @@
-# Next.js Migration Guardrails
+# 个人网站维护说明
 
-当前阶段的目标不是重画网站，而是用 Next.js 承载并逐步迁移现有 HTML 原型。
+这个项目已经过了“直接加载 HTML 原型”的阶段。现在它是一个 Next.js 网站：保留原始 HTML 原型作为视觉参考，但正式运行时由 `app/` 路由、`lib/page-templates/` 模板、`content/` 内容文件和 `public/assets/` 图片资源共同渲染。
 
-## 视觉真源
+## 当前状态
 
-- `prototype/index.html`
-- `prototype/project-detail.html`
-- `prototype/blog-post.html`
-- `prototype/tool-list.html`
+- 正式网站运行时不再读取 `prototype/` 里的 HTML 文件。
+- 原始 HTML 原型已经迁入 `lib/page-templates/`。
+- 页面路由在 `app/`。
+- 大部分可维护内容在 `content/`。
+- 项目详情页的大段正文目前在 `lib/project-detail-renderer.ts`。
+- 正式图片资源在 `public/assets/`。
+- `prototype/` 现在是视觉对照档案，不是生产源码。
 
-这些文件是视觉、布局、动效、hover、语言切换、滚动 reveal、项目筛选等交互的唯一标准。
+## 本地运行
 
-## 当前实现
+在项目根目录运行：
 
-Next.js 通过 route handlers 直接返回 `prototype/` 里的 HTML：
+```powershell
+npm test
+npm run build
+npm run start -- -p 3002
+```
 
-- `/` -> `prototype/index.html`
-- `/index.html` -> `prototype/index.html`
-- `/tool-list.html` 和 `/uses` -> `prototype/tool-list.html`
-- `/project-detail.html` 和 `/projects/*` -> `prototype/project-detail.html`
-- `/blog-post.html` 和 `/blog/*` -> `prototype/blog-post.html`
+本地预览地址：
 
-这样做的目的是先保证视觉和交互不丢，再逐块迁移到 React。
+```text
+http://127.0.0.1:3002/
+```
 
-## 后续迁移规则
+## 页面路由
 
-1. 每次只迁移一个页面或一个模块。
-2. React 组件必须保留原 HTML 的 class、层级、文案结构和脚本行为。
-3. 迁移前后必须用浏览器截图对照。
-4. 未完成对照前，不删除 `prototype/` 原文件。
-5. 内容数据化只能改变数据来源，不能改变视觉结果。
+- `/`：首页。
+- `/uses` 和 `/tool-list.html`：工具清单页。
+- `/blog` 和 `/blog-post.html`：默认博客详情页。
+- `/blog/[slug]`：单篇博客详情页。
+- `/projects`：项目入口页，目前复用首页项目区的页面形态。
+- `/project-detail.html`：默认项目详情页。
+- `/projects/[slug]`：单个项目详情页。
+
+保留 `.html` 路由是为了兼容原型里的旧链接。
+
+## 内容在哪里改
+
+### 个人信息和首页文案
+
+主要改这里：
+
+```text
+content/profile.ts
+```
+
+这里适合维护：
+
+- 首页介绍
+- 关于我文案
+- 联系方式
+- footer 简介
+- 地址
+- 邮箱
+- GitHub
+- 微信号
+
+首页的视觉结构仍然来自：
+
+```text
+lib/page-templates/home.ts
+```
+
+只有在要改布局、class、动画、滚动 reveal、页面结构时，才动这个模板。
+
+### 项目卡片和项目列表信息
+
+改这里：
+
+```text
+content/projects.ts
+```
+
+这里适合维护：
+
+- 项目 slug
+- 项目标题
+- 项目分类
+- 年份和状态
+- 项目卡片图片
+- 项目短描述
+- 技术栈
+- 是否首页重点展示
+
+### 项目详情页正文
+
+目前改这里：
+
+```text
+lib/project-detail-renderer.ts
+```
+
+这里适合维护：
+
+- 项目详情页标题
+- 项目详情 intro
+- 中间说明段落
+- 引用文案
+- 图片说明
+- 最后一段总结
+- 下一个项目链接和名称
+
+项目详情页模板在：
+
+```text
+lib/page-templates/projectDetail.ts
+```
+
+里面有很多 `data-slot` 标记。不要随便删掉或改名，除非同步更新 `lib/project-detail-renderer.ts` 和测试。
+
+### 博客文章
+
+改这里：
+
+```text
+content/posts.ts
+```
+
+这里适合维护：
+
+- 博客 slug
+- 标题
+- 日期
+- 类型标签
+- 封面图
+- 阅读时间
+- 摘要
+- 正文内容
+
+博客详情页的视觉模板在：
+
+```text
+lib/page-templates/blogPost.ts
+```
+
+底部“延伸阅读”根据 `content/posts.ts` 里的文章顺序生成。
+
+### 工具清单
+
+改这里：
+
+```text
+content/tools.ts
+```
+
+这里适合维护：
+
+- 硬件设备
+- 软件和编辑器
+- 技术栈
+- 每个工具的名称、徽标和描述
+
+工具页现在刻意贴近原版 HTML。渲染器不会输出分类编号和分类介绍段落，因为原版工具页没有这些内容。
+
+### 图片资源
+
+图片路径集中在：
+
+```text
+content/assets.ts
+```
+
+实际图片文件放在：
+
+```text
+public/assets/
+```
+
+常用目录：
+
+- `public/assets/site/`：首页各区块图片。
+- `public/assets/projects/`：项目卡片图和项目详情图。
+- `public/assets/posts/`：博客封面图。
+- `public/assets/shared/`：多个页面共用的图片。
+
+如果在 `content/assets.ts` 里新增图片路径，要确保对应文件真的放在 `public/` 下。测试会检查这些路径。
+
+## 模板和渲染文件关系
+
+- `components/prototype/PrototypeDocument.tsx`：渲染迁入后的模板 body、内联 style 和脚本。
+- `lib/prototype-page.ts`：把 HTML 模板拆成 title、head links、styles、body、scripts。
+- `lib/prototype-links.ts`：把原型里的旧链接转成 Next 路由。
+- `lib/site-renderers.ts`：把首页、工具页、博客页的结构化内容注入模板。
+- `lib/project-detail-renderer.ts`：把项目详情内容注入项目详情模板的 `data-slot`。
+- `lib/slug-pages.ts`：处理 `/blog/[slug]` 和 `/projects/[slug]`。
+- `lib/page-factories.tsx`：把模板、渲染器和页面组件串起来。
+
+## prototype 文件夹怎么处理
+
+暂时保留：
+
+```text
+prototype/
+```
+
+它现在的作用是：
+
+- 对照原版视觉。
+- 检查原版布局。
+- 检查原版动效和交互。
+- 当页面看起来不一致时，用来判断是不是迁移后跑偏。
+
+不要恢复运行时代码去读取 `prototype/`。正式运行应该继续使用 `lib/page-templates/`、`content/` 和 `public/assets/`。
+
+## 改视觉结构前的规则
+
+视觉相关改动要保守处理。
+
+1. 先确认用户看到的具体问题。
+2. 对照当前页面和 `prototype/` 原版。
+3. 优先修具体元素，不要先动全局布局或滚动容器。
+4. 改完后必须回到用户发现问题的同一个页面和视口检查。
+5. 桌面端确认后，再至少检查一个手机宽度。
+
+## 验证清单
+
+改完代码后至少运行：
+
+```powershell
+npm test
+npm run build
+```
+
+涉及视觉、图片、链接、路由时，还要打开本地预览：
+
+```text
+http://127.0.0.1:3002/
+```
+
+建议检查这些页面：
+
+- `/`
+- `/tool-list.html`
+- `/blog/learning-ai-products-by-making-prototypes`
+- `/blog/noticing-ai-tools`
+- `/blog/paperforge-as-product-exercise`
+- `/projects/paperforge`
+- `/projects/weblearnboost`
+
+## 当前已知的后续清理项
+
+- 部分内容源文件里的中文在终端里可能显示成乱码。判断页面是否正确时，以浏览器渲染效果为准。
+- `prototype/` 可以等全站视觉验收完成后再归档，不建议现在删除。
+- 如果后面继续提高可维护性，可以把 `lib/project-detail-renderer.ts` 里的项目详情正文再拆到 `content/`。
