@@ -236,7 +236,7 @@ describe("site content model", () => {
     expect(html).not.toContain("padding: 6px 10px;");
     expect(html).not.toContain("border-radius: 4px;");
     expect(html).not.toContain("backdrop-filter: blur(2px);");
-    expect(html).toContain("text-shadow: 0 1px 8px rgba(21, 20, 15, 0.38);");
+    expect(html).not.toContain("text-shadow:");
   });
 
   it("centers the current blog post between previous and next related posts", async () => {

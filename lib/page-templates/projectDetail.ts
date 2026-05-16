@@ -383,7 +383,6 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  text-shadow: 0 1px 8px rgba(21, 20, 15, 0.38);
 }
 
 .pt-body {
