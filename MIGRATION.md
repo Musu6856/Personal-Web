@@ -71,7 +71,16 @@ published: false
 - `personal-web`
 - `prototype-gallery`
 
-当前三篇博客都是隐藏状态。以后要发布博客时，先确认正文、封面图和延伸阅读都是真实内容，再把对应文章改成 `published: true`。
+当前公开博客：
+
+- `noticing-ai-tools`
+- `paperforge-as-product-exercise`
+
+当前隐藏博客：
+
+- `learning-ai-products-by-making-prototypes`
+
+以后要隐藏博客时，把对应文章改成 `published: false`；要重新发布时，确认正文、封面图和延伸阅读都是真实内容，再改回 `published: true`。
 
 ### 个人信息和首页文案
 
@@ -280,8 +289,8 @@ http://127.0.0.1:3002/
 - `/tool-list.html`
 - `/projects/paperforge`
 - `/projects/weblearnboost`
-
-当前博客全部隐藏，所以不要把 `/blog/learning-ai-products-by-making-prototypes`、`/blog/noticing-ai-tools`、`/blog/paperforge-as-product-exercise` 当成公开页面验收；它们应该不可公开访问。
+- `/blog/noticing-ai-tools`
+- `/blog/paperforge-as-product-exercise`
 
 ## 当前已知的后续清理项
 

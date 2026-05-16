@@ -1162,6 +1162,9 @@ section.tight { padding: 90px 0; }
   padding-top: 14px;
 }
 .work-card .year { color: var(--coral); font-weight: 600; }
+.work-card.is-single {
+  width: min(620px, 100%);
+}
 .work-arrows {
   position: absolute;
   right: 64px;
@@ -1457,6 +1460,9 @@ footer {
   .work-card.is-exit-right {
     left: 48%;
     width: 58%;
+  }
+  .work-card.is-single {
+    width: 100%;
   }
   .work-arrows { right: 24px; bottom: 20px; }
   .nav-links, .brand-meta, .nav-cta { display: none; }
@@ -2157,10 +2163,16 @@ footer {
   var cards = Array.prototype.slice.call(deck.querySelectorAll('[data-blog-card]'));
   var prevBtn = document.querySelector('[data-blog-prev]');
   var nextBtn = document.querySelector('[data-blog-next]');
-  var states = ['is-primary', 'is-secondary', 'is-hidden-right', 'is-hidden-left', 'is-exit-left', 'is-exit-right'];
+  var arrows = document.querySelector('.work-arrows');
+  var states = ['is-primary', 'is-secondary', 'is-hidden-right', 'is-hidden-left', 'is-exit-left', 'is-exit-right', 'is-single'];
   var active = 0;
   var locked = false;
   var duration = 680;
+
+  if (cards.length === 0) {
+    if (arrows) arrows.hidden = true;
+    return;
+  }
 
   function wrap(index) {
     return (index + cards.length) % cards.length;
@@ -2175,6 +2187,14 @@ footer {
   }
 
   function settle() {
+    if (cards.length === 1) {
+      setState(cards[0], 'is-single');
+      if (arrows) arrows.hidden = true;
+      return;
+    }
+
+    if (arrows) arrows.hidden = false;
+
     cards.forEach(function(card, i) {
       if (i === active) {
         setState(card, 'is-primary');
@@ -2193,12 +2213,21 @@ footer {
   }
 
   function next() {
-    if (locked || cards.length < 3) return;
+    if (locked || cards.length < 2) return;
     locked = true;
     markButton(nextBtn);
 
     var current = cards[active];
     var secondary = cards[wrap(active + 1)];
+
+    if (cards.length === 2) {
+      setState(current, 'is-secondary');
+      setState(secondary, 'is-primary');
+      active = wrap(active + 1);
+      window.setTimeout(function() { locked = false; }, duration);
+      return;
+    }
+
     var incoming = cards[wrap(active + 2)];
 
     setState(incoming, 'is-hidden-right');
@@ -2216,13 +2245,21 @@ footer {
   }
 
   function prev() {
-    if (locked || cards.length < 3) return;
+    if (locked || cards.length < 2) return;
     locked = true;
     markButton(prevBtn);
 
     var current = cards[active];
     var secondary = cards[wrap(active + 1)];
     var incoming = cards[wrap(active - 1)];
+
+    if (cards.length === 2) {
+      setState(current, 'is-secondary');
+      setState(incoming, 'is-primary');
+      active = wrap(active - 1);
+      window.setTimeout(function() { locked = false; }, duration);
+      return;
+    }
 
     setState(incoming, 'is-hidden-left');
     incoming.getBoundingClientRect();

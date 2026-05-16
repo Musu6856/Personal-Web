@@ -87,6 +87,11 @@ const projectDetailSlots = [
 ];
 
 describe("site content model", () => {
+  const blogSlugs = [
+    "noticing-ai-tools",
+    "paperforge-as-product-exercise",
+  ];
+
   it("keeps project and post slugs unique for generated routes", () => {
     expect(unique(projects.map((project) => project.slug))).toBe(true);
     expect(unique(posts.map((post) => post.slug))).toBe(true);
@@ -101,9 +106,9 @@ describe("site content model", () => {
     expect(projects.filter((project) => project.featured).length).toBeGreaterThanOrEqual(2);
   });
 
-  it("keeps draft projects and posts out of the public site", () => {
+  it("keeps draft projects out while publishing homepage blog posts", () => {
     expect(publicProjects.map((project) => project.slug)).toEqual(["paperforge", "weblearnboost"]);
-    expect(publicPosts).toEqual([]);
+    expect(publicPosts.map((post) => post.slug)).toEqual(blogSlugs);
     expect(getProject("promptcase")).toBeUndefined();
     expect(getProject("personal-web")).toBeUndefined();
     expect(getPost("learning-ai-products-by-making-prototypes")).toBeUndefined();
@@ -180,7 +185,7 @@ describe("site content model", () => {
       normalizePrototypeLinks(
         '<a href="index.html">Home</a><a href="index.html#projects">Projects</a><a href="tool-list.html">Uses</a><a href="blog-post.html">Blog</a><a href="projects/paperforge">PaperForge</a><img src="assets/posts/learning-ai-products-by-making-prototypes/cover.png">',
       ),
-    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/#blog">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
+    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/noticing-ai-tools">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
   });
 
   it("reads prototype titles even when the title tag carries render metadata", () => {
@@ -251,16 +256,17 @@ describe("site content model", () => {
     expect(() => renderProjectSlugPage("missing-project")).toThrow("Unknown project slug");
   });
 
-  it("rejects draft blog and project slugs instead of rendering hidden pages", () => {
+  it("renders public blog slugs while rejecting draft project slugs", () => {
     expect(() => renderBlogSlugPage("learning-ai-products-by-making-prototypes")).toThrow("Unknown blog post slug");
+    expect(renderBlogSlugPage("noticing-ai-tools")).toContain("What I notice while using AI tools");
     expect(() => renderProjectSlugPage("promptcase")).toThrow("Unknown project slug");
-    expect(() => blogPostTitle()).toThrow("Unknown blog post slug");
+    expect(blogPostTitle()).toBe("What I notice while using AI tools — Musu");
   });
 
-  it("keeps the legacy blog entry pointed at the homepage while no posts are public", () => {
+  it("points the legacy blog entry at the first public blog post", () => {
     expect(
       normalizePrototypeLinks('<a href="blog-post.html">Blog</a><a href="index.html#blog">Archive</a>'),
-    ).toBe('<a href="/#blog">Blog</a><a href="/#blog">Archive</a>');
+    ).toBe('<a href="/blog/noticing-ai-tools">Blog</a><a href="/#blog">Archive</a>');
   });
 
   it("renders only public project links on the homepage", async () => {
@@ -281,7 +287,7 @@ describe("site content model", () => {
     expect(html).not.toContain("/projects/prototype-gallery");
   });
 
-  it("renders no homepage blog cards while all posts are drafts", async () => {
+  it("renders public blog cards on the homepage", async () => {
     const html = normalizePrototypeLinks(renderHomeContent(pageTemplate("home")));
     const deckStart = html.indexOf('<div class="work-deck" id="blog-deck"');
 
@@ -290,8 +296,12 @@ describe("site content model", () => {
     const deckHtml = html.slice(deckStart);
     const hrefs = [...deckHtml.matchAll(/<a href="([^"]+)" class="work-card/g)].map((match) => match[1]);
 
-    expect(hrefs).toEqual([]);
+    expect(hrefs).toEqual(blogSlugs.map((slug) => `/blog/${slug}`));
+    expect(new Set(hrefs).size).toBe(hrefs.length);
+    expect(deckHtml).not.toContain("Learning AI products by making prototypes");
     expect(deckHtml).not.toContain("/blog/learning-ai-products-by-making-prototypes");
+    expect(deckHtml).toContain("What I notice while using AI tools");
+    expect(deckHtml).toContain("PaperForge as a product exercise");
   });
 
   it("keeps public project detail pages from linking to draft content", async () => {

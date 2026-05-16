@@ -85,12 +85,9 @@ function blogImageFallback(number: string, fill: string) {
   return `this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'400\\' height=\\'300\\'><rect width=\\'400\\' height=\\'300\\' fill=\\'%23${fill}\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'serif\\' font-style=\\'italic\\' font-size=\\'18\\' fill=\\'%238b8676\\'>Blog ${number}</text></svg>'`;
 }
 
-function blogDeckCard(postIndex: number, state: string) {
-  const post = publicPosts[postIndex % publicPosts.length];
-
-  if (!post) return "";
-
+function blogDeckCard(post: (typeof publicPosts)[number], postIndex: number, state: string) {
   const number = itemNumber(postIndex);
+  const total = String(publicPosts.length).padStart(2, "0");
   const fallback = ["work-1.png", "work-2.png", "work-3.png"][postIndex % 3];
   const fallbackFill = ["ddd2b6", "ece4cf", "ddd2b6"][postIndex % 3];
   const label = post.kind;
@@ -100,7 +97,7 @@ function blogDeckCard(postIndex: number, state: string) {
           <div class="label-row">
             <span class="small-label" data-len>${escapeHtml(label)}</span>
             <span class="small-label" data-lzh>${escapeHtml(post.kindZh ?? label)}</span>
-            <span class="index">${number} / 03</span>
+            <span class="index">${number} / ${total}</span>
           </div>
           <div class="img">
             <img src="${assetPath(post.image ?? `assets/${fallback}`)}" alt="Blog ${number}" onerror="${blogImageFallback(number, fallbackFill)}">
@@ -119,8 +116,8 @@ function blogDeckCard(postIndex: number, state: string) {
 function blogDeckHtml() {
   if (publicPosts.length === 0) return "";
 
-  return [blogDeckCard(0, "is-primary"), blogDeckCard(1, "is-secondary"), blogDeckCard(2, "is-hidden-right")]
-    .filter(Boolean)
+  return publicPosts
+    .map((post, index) => blogDeckCard(post, index, index === 0 ? "is-primary" : index === 1 ? "is-secondary" : "is-hidden-right"))
     .join("\n");
 }
 

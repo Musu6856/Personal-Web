@@ -53,7 +53,7 @@ export const posts: Post[] = [
         zh: "我在记录不同 AI 工具如何影响原型制作的速度、形状和阻力。",
       },
     ],
-    published: false,
+    published: true,
     featured: true,
   },
   {
@@ -80,7 +80,7 @@ export const posts: Post[] = [
         zh: "PaperForge 对我有用，是因为它让产品问题变得具体：AI 应该生成什么、哪些内容需要可编辑、用户应该在哪里保留控制权？",
       },
     ],
-    published: false,
+    published: true,
     featured: false,
   },
 ];
