@@ -192,6 +192,13 @@ describe("site content model", () => {
     expect(hrefs.slice(0, 3)).toEqual(posts.slice(0, 3).map((post) => `/blog/${post.slug}`));
   });
 
+  it("reveals the homepage hero image from above", async () => {
+    const html = await prototypeHtml("index.html");
+
+    expect(html).toContain('<div class="hero-art" data-reveal="drop">');
+    expect(html).toContain("[data-reveal='drop'] { translate: 0 -48px; scale: 0.985; }");
+  });
+
   it("renders the tool list from structured content", async () => {
     const html = normalizePrototypeLinks(renderToolListContent(await prototypeHtml("tool-list.html")));
 

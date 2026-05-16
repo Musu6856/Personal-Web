@@ -1372,6 +1372,7 @@ footer {
 [data-reveal='right'] { translate: 36px 0; }
 [data-reveal='scale'] { translate: 0 0; scale: 0.96; }
 [data-reveal='rise-lg'] { translate: 0 64px; scale: 0.985; }
+[data-reveal='drop'] { translate: 0 -48px; scale: 0.985; }
 [data-reveal][data-revealed='true'] {
   opacity: 1;
   translate: 0 0;
@@ -1396,6 +1397,7 @@ footer {
 .hero-copy > [data-reveal]:nth-of-type(4) { --reveal-delay: 240ms; }
 .hero-copy > [data-reveal]:nth-of-type(5) { --reveal-delay: 320ms; }
 .hero-copy > [data-reveal]:nth-of-type(6) { --reveal-delay: 400ms; }
+.hero-art[data-reveal='drop'] { --reveal-delay: 180ms; }
 
 @media (prefers-reduced-motion: reduce) {
   [data-reveal] {
@@ -1590,7 +1592,7 @@ footer {
       </div>
     </div>
 
-    <div class="hero-art">
+    <div class="hero-art" data-reveal="drop">
       <img src="assets/site/hero.png" alt="Hero Collage" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'860\'><rect width=\'800\' height=\'860\' fill=\'%23efe7d2\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'serif\' font-style=\'italic\' font-size=\'24\' fill=\'%238b8676\'>Awaiting Generation</text></svg>'">
       <span class="annot annot-tl">FIG. 01 / MU-26</span>
       <span class="annot annot-tr">Plate Nº 01</span>
