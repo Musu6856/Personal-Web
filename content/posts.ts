@@ -26,6 +26,7 @@ export const posts: Post[] = [
         zh: "原型真正有用的地方，不是证明一个想法已经完成，而是让这个想法更容易被追问。",
       },
     ],
+    published: false,
     featured: true,
   },
   {
@@ -52,6 +53,7 @@ export const posts: Post[] = [
         zh: "我在记录不同 AI 工具如何影响原型制作的速度、形状和阻力。",
       },
     ],
+    published: false,
     featured: true,
   },
   {
@@ -78,10 +80,13 @@ export const posts: Post[] = [
         zh: "PaperForge 对我有用，是因为它让产品问题变得具体：AI 应该生成什么、哪些内容需要可编辑、用户应该在哪里保留控制权？",
       },
     ],
+    published: false,
     featured: false,
   },
 ];
 
+export const publicPosts = posts.filter((post) => post.published);
+
 export function getPost(slug: string) {
-  return posts.find((post) => post.slug === slug);
+  return publicPosts.find((post) => post.slug === slug);
 }

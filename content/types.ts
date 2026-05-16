@@ -19,6 +19,7 @@ export type Project = {
   summary: LocalizedText;
   description: LocalizedText[];
   stack: string[];
+  published: boolean;
   featured: boolean;
 };
 
@@ -35,6 +36,7 @@ export type Post = {
   readTime: string;
   excerpt: LocalizedText;
   body: LocalizedText[];
+  published: boolean;
   featured: boolean;
 };
 

@@ -1,10 +1,11 @@
-import { posts } from "@/content/posts";
+import { getPost, publicPosts } from "@/content/posts";
 import { profile } from "@/content/profile";
-import { projects } from "@/content/projects";
+import { publicProjects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import type { Project, ToolSection } from "@/content/types";
 import { assets } from "@/content/assets";
 import { escapeHtml, replaceRequiredBetween, replaceRequiredPairs } from "@/lib/html-utils";
+import { renderPublicFooterContent } from "@/lib/public-navigation";
 
 const projectTags: Record<string, { tag: string; labelEn: string; labelZh: string }> = {
   "AI Tool": { tag: "ai", labelEn: "AI", labelZh: "AI" },
@@ -53,7 +54,7 @@ function projectCard(project: Project, index: number) {
 }
 
 function projectGridHtml() {
-  return projects.map(projectCard).join("\n\n");
+  return publicProjects.map(projectCard).join("\n\n");
 }
 
 function toolItem(item: ToolSection["items"][number]) {
@@ -85,7 +86,10 @@ function blogImageFallback(number: string, fill: string) {
 }
 
 function blogDeckCard(postIndex: number, state: string) {
-  const post = posts[postIndex % posts.length] ?? posts[0];
+  const post = publicPosts[postIndex % publicPosts.length];
+
+  if (!post) return "";
+
   const number = itemNumber(postIndex);
   const fallback = ["work-1.png", "work-2.png", "work-3.png"][postIndex % 3];
   const fallbackFill = ["ddd2b6", "ece4cf", "ddd2b6"][postIndex % 3];
@@ -113,10 +117,14 @@ function blogDeckCard(postIndex: number, state: string) {
 }
 
 function blogDeckHtml() {
-  return [blogDeckCard(0, "is-primary"), blogDeckCard(1, "is-secondary"), blogDeckCard(2, "is-hidden-right")].join("\n");
+  if (publicPosts.length === 0) return "";
+
+  return [blogDeckCard(0, "is-primary"), blogDeckCard(1, "is-secondary"), blogDeckCard(2, "is-hidden-right")]
+    .filter(Boolean)
+    .join("\n");
 }
 
-function blogRelatedCard(post: (typeof posts)[number], postIndex: number, isCurrent = false) {
+function blogRelatedCard(post: (typeof publicPosts)[number], postIndex: number, isCurrent = false) {
   const number = itemNumber(postIndex);
   const fallback = ["work-1.png", "work-2.png", "work-3.png"][postIndex % 3];
   const fallbackFill = ["ddd2b6", "ece4cf", "ddd2b6"][postIndex % 3];
@@ -140,19 +148,29 @@ function blogRelatedCard(post: (typeof posts)[number], postIndex: number, isCurr
 }
 
 export function renderBlogRelatedSection(html: string, currentSlug: string) {
-  const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
+  const currentIndex = publicPosts.findIndex((post) => post.slug === currentSlug);
 
   if (currentIndex === -1) {
     throw new Error(`Unknown blog post slug: ${currentSlug}`);
   }
 
+  if (publicPosts.length === 1) {
+    return replaceRequiredBetween(
+      html,
+      '<div class="bp-related-grid">',
+      '\n      </div>\n    </section>',
+      blogRelatedCard(publicPosts[currentIndex]!, currentIndex, true),
+      "blog.related",
+    );
+  }
+
   const relatedIndexes = [
-    (currentIndex - 1 + posts.length) % posts.length,
+    (currentIndex - 1 + publicPosts.length) % publicPosts.length,
     currentIndex,
-    (currentIndex + 1) % posts.length,
+    (currentIndex + 1) % publicPosts.length,
   ];
   const relatedHtml = relatedIndexes
-    .map((postIndex, position) => blogRelatedCard(posts[postIndex] ?? posts[0], postIndex, position === 1))
+    .map((postIndex, position) => blogRelatedCard(publicPosts[postIndex]!, postIndex, position === 1))
     .join("\n");
 
   return replaceRequiredBetween(
@@ -224,6 +242,7 @@ function renderProfileContent(html: string) {
 
 export function renderHomeContent(html: string) {
   let rendered = renderProfileContent(html);
+  rendered = renderPublicFooterContent(rendered);
 
   rendered = replaceRequiredBetween(
     rendered,
@@ -243,31 +262,39 @@ export function renderHomeContent(html: string) {
 
   rendered = rendered.replace(
     '<a href="blog-post.html" class="work-link">',
-    `<a href="/blog/${posts[0]?.slug ?? "learning-ai-products-by-making-prototypes"}" class="work-link">`,
+    publicPosts[0]
+      ? `<a href="/blog/${publicPosts[0].slug}" class="work-link">`
+      : '<a href="#blog" class="work-link" aria-disabled="true">',
   );
 
   return restoreBlogLabel(rendered);
 }
 
 export function renderToolListContent(html: string) {
-  return replaceRequiredBetween(
-    html,
+  let rendered = renderPublicFooterContent(html, "            ");
+
+  rendered = replaceRequiredBetween(
+    rendered,
     '<div class="tl-list">',
     '\n    </div>\n  </main>',
     toolListHtml(),
     "tools.list",
   );
+
+  return rendered;
 }
 
 export function renderBlogPostContent(html: string, slug?: string) {
-  const post = slug ? posts.find((item) => item.slug === slug) : posts[0];
+  const post = slug ? getPost(slug) : publicPosts[0];
 
   if (!post) {
     throw new Error(`Unknown blog post slug: ${slug ?? "(default)"}`);
   }
 
   const postImage = assetPath(post.image ?? "assets/posts/learning-ai-products-by-making-prototypes/cover.png");
-  const rendered = html
+  let rendered = renderPublicFooterContent(html, "            ");
+
+  rendered = rendered
     .replace("<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`)
     .replace(
       "<span data-len>Learning AI products by making prototypes</span>",

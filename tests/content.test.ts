@@ -2,14 +2,14 @@ import { describe, expect, it } from "vitest";
 import fs from "node:fs";
 import path from "node:path";
 import { assets } from "@/content/assets";
-import { posts } from "@/content/posts";
+import { getPost, posts, publicPosts } from "@/content/posts";
 import { profile } from "@/content/profile";
 import { projectDetails } from "@/content/project-details";
-import { projects } from "@/content/projects";
+import { getProject, projects, publicProjects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import { escapeHtml, replaceAllPairs, replaceOnce, replaceRequiredBetween } from "@/lib/html-utils";
 import { renderProjectDetailHtml } from "@/lib/project-detail-renderer";
-import { projectDetailTitle } from "@/lib/page-factories";
+import { blogPostTitle, projectDetailTitle } from "@/lib/page-factories";
 import { pageTemplate } from "@/lib/page-template-registry";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { splitPrototypeHtml } from "@/lib/prototype-page";
@@ -99,7 +99,14 @@ describe("site content model", () => {
     expect(profile.heroLocationLine.zh).toContain("西安");
     expect(profile.contactIntro.zh).toContain("AI 产品");
     expect(projects.filter((project) => project.featured).length).toBeGreaterThanOrEqual(2);
-    expect(posts.filter((post) => post.featured).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("keeps draft projects and posts out of the public site", () => {
+    expect(publicProjects.map((project) => project.slug)).toEqual(["paperforge", "weblearnboost"]);
+    expect(publicPosts).toEqual([]);
+    expect(getProject("promptcase")).toBeUndefined();
+    expect(getProject("personal-web")).toBeUndefined();
+    expect(getPost("learning-ai-products-by-making-prototypes")).toBeUndefined();
   });
 
   it("keeps tools addressable from the homepage cards", () => {
@@ -173,7 +180,7 @@ describe("site content model", () => {
       normalizePrototypeLinks(
         '<a href="index.html">Home</a><a href="index.html#projects">Projects</a><a href="tool-list.html">Uses</a><a href="blog-post.html">Blog</a><a href="projects/paperforge">PaperForge</a><img src="assets/posts/learning-ai-products-by-making-prototypes/cover.png">',
       ),
-    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/learning-ai-products-by-making-prototypes">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
+    ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/#blog">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
   });
 
   it("reads prototype titles even when the title tag carries render metadata", () => {
@@ -239,33 +246,42 @@ describe("site content model", () => {
     expect(html).not.toContain("text-shadow:");
   });
 
-  it("centers the current blog post between previous and next related posts", async () => {
-    const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[1].slug));
-    const relatedHtml = relatedSection(html);
-    const relatedHrefs = [...relatedHtml.matchAll(/<a href="([^"]+)" class="bp-related-card[^"]*"/g)].map(
-      (match) => match[1],
-    );
-
-    expect(relatedHrefs).toEqual([
-      `/blog/${posts[0].slug}`,
-      `/blog/${posts[1].slug}`,
-      `/blog/${posts[2].slug}`,
-    ]);
-    expect(relatedHtml).toContain('class="bp-related-card is-current"');
-    expect(relatedHtml).toContain('aria-current="page"');
-    expect(relatedHtml).toContain("正在阅读");
-    expect(relatedHtml).toContain(">Blog 01<");
-    expect(relatedHtml).toContain(">Blog 02<");
-    expect(relatedHtml).toContain(">Blog 03<");
-    expect(relatedHtml).not.toContain('href="/projects/');
-  });
-
   it("rejects unknown blog and project slugs instead of falling back to another page", () => {
     expect(() => renderBlogSlugPage("missing-post")).toThrow("Unknown blog post slug");
     expect(() => renderProjectSlugPage("missing-project")).toThrow("Unknown project slug");
   });
 
-  it("renders the homepage blog cards as three distinct post links", async () => {
+  it("rejects draft blog and project slugs instead of rendering hidden pages", () => {
+    expect(() => renderBlogSlugPage("learning-ai-products-by-making-prototypes")).toThrow("Unknown blog post slug");
+    expect(() => renderProjectSlugPage("promptcase")).toThrow("Unknown project slug");
+    expect(() => blogPostTitle()).toThrow("Unknown blog post slug");
+  });
+
+  it("keeps the legacy blog entry pointed at the homepage while no posts are public", () => {
+    expect(
+      normalizePrototypeLinks('<a href="blog-post.html">Blog</a><a href="index.html#blog">Archive</a>'),
+    ).toBe('<a href="/#blog">Blog</a><a href="/#blog">Archive</a>');
+  });
+
+  it("renders only public project links on the homepage", async () => {
+    const html = normalizePrototypeLinks(renderHomeContent(pageTemplate("home")));
+    const projectsStart = html.indexOf('<div class="labs-grid" id="projects-grid"');
+
+    expect(projectsStart).toBeGreaterThanOrEqual(0);
+
+    const projectsHtml = html.slice(projectsStart, html.indexOf('<div class="projects-foot">', projectsStart));
+
+    expect(projectsHtml).toContain('href="/projects/paperforge"');
+    expect(projectsHtml).toContain('href="/projects/weblearnboost"');
+    expect(projectsHtml).not.toContain("promptcase");
+    expect(projectsHtml).not.toContain("personal-web");
+    expect(projectsHtml).not.toContain("prototype-gallery");
+    expect(html).not.toContain("/projects/promptcase");
+    expect(html).not.toContain("/projects/personal-web");
+    expect(html).not.toContain("/projects/prototype-gallery");
+  });
+
+  it("renders no homepage blog cards while all posts are drafts", async () => {
     const html = normalizePrototypeLinks(renderHomeContent(pageTemplate("home")));
     const deckStart = html.indexOf('<div class="work-deck" id="blog-deck"');
 
@@ -274,7 +290,23 @@ describe("site content model", () => {
     const deckHtml = html.slice(deckStart);
     const hrefs = [...deckHtml.matchAll(/<a href="([^"]+)" class="work-card/g)].map((match) => match[1]);
 
-    expect(hrefs.slice(0, 3)).toEqual(posts.slice(0, 3).map((post) => `/blog/${post.slug}`));
+    expect(hrefs).toEqual([]);
+    expect(deckHtml).not.toContain("/blog/learning-ai-products-by-making-prototypes");
+  });
+
+  it("keeps public project detail pages from linking to draft content", async () => {
+    const paperforgeHtml = normalizePrototypeLinks(await renderProjectSlugPage("paperforge"));
+    const weblearnboostHtml = normalizePrototypeLinks(await renderProjectSlugPage("weblearnboost"));
+
+    expect(paperforgeHtml).toContain('href="/projects/weblearnboost"');
+    expect(weblearnboostHtml).toContain('href="/projects/paperforge"');
+
+    for (const html of [paperforgeHtml, weblearnboostHtml]) {
+      expect(html).not.toContain("/projects/promptcase");
+      expect(html).not.toContain("/projects/personal-web");
+      expect(html).not.toContain("/projects/prototype-gallery");
+      expect(html).not.toContain("/blog/learning-ai-products-by-making-prototypes");
+    }
   });
 
   it("reveals the homepage hero image from above", async () => {
@@ -297,14 +329,6 @@ describe("site content model", () => {
     expect(html).toContain('Next.js <span class="badge">Framework</span>');
     expect(html).not.toContain('<span class="num">');
     expect(html).not.toContain("The everyday devices I use for prototypes");
-  });
-
-  it("uses root asset paths on blog slug pages", async () => {
-    const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[0].slug));
-
-    expect(html).toContain('src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png"');
-    expect(html).toContain('src="/assets/shared/workflow-map.png"');
-    expect(html).not.toContain('src="assets/');
   });
 
   it("uses real project screenshots on project detail pages", async () => {

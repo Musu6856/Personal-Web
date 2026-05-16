@@ -21,6 +21,7 @@ export const projects: Project[] = [
       },
     ],
     stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS", "Clerk", "Neon", "Drizzle ORM", "KaTeX", "Vercel"],
+    published: true,
     featured: true,
   },
   {
@@ -42,6 +43,7 @@ export const projects: Project[] = [
       },
     ],
     stack: ["React", "TypeScript", "Vite", "Chrome Extension MV3", "Side Panel API", "Vitest", "Testing Library"],
+    published: true,
     featured: true,
   },
   {
@@ -62,6 +64,7 @@ export const projects: Project[] = [
       },
     ],
     stack: ["Python", "JavaScript", "React"],
+    published: false,
     featured: false,
   },
   {
@@ -82,6 +85,7 @@ export const projects: Project[] = [
       },
     ],
     stack: ["HTML", "CSS", "Next.js", "Prototype"],
+    published: false,
     featured: false,
   },
   {
@@ -102,10 +106,13 @@ export const projects: Project[] = [
       },
     ],
     stack: ["JavaScript", "React", "Next.js"],
+    published: false,
     featured: false,
   },
 ];
 
+export const publicProjects = projects.filter((project) => project.published);
+
 export function getProject(slug: string) {
-  return projects.find((project) => project.slug === slug);
+  return publicProjects.find((project) => project.slug === slug);
 }

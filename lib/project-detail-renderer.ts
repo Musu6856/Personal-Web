@@ -1,6 +1,8 @@
 import { projectDetails, type ProjectDetail } from "@/content/project-details";
+import { publicProjects } from "@/content/projects";
 import { escapeHtml } from "@/lib/html-utils";
 import { pageTemplate } from "@/lib/page-template-registry";
+import { publicProjectHref, renderPublicFooterContent } from "@/lib/public-navigation";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 
 export type ProjectDetailImages = {
@@ -51,6 +53,14 @@ const contentSlots: Array<[string, (detail: ProjectDetail) => string]> = [
   ["project.next.en", (detail) => escapeHtml(detail.nextEn)],
   ["project.next.zh", (detail) => escapeHtml(detail.nextZh)],
 ];
+
+function nextPublicProject(detail: ProjectDetail) {
+  const slug = detail.nextHref.replace(/^\/?projects\//, "");
+  const configured = publicProjects.find((project) => project.slug === slug);
+  const fallback = publicProjects.find((project) => project.title.en !== detail.nextEn) ?? publicProjects[0];
+
+  return configured ?? fallback;
+}
 
 function assetPath(path: string) {
   return path.startsWith("/") ? path : `/${path}`;
@@ -156,15 +166,21 @@ export function renderProjectDetailHtml(
   detail: ProjectDetail,
   images: ProjectDetailImages = defaultImages,
 ) {
-  let html = template;
+  const nextProject = nextPublicProject(detail);
+  let html = renderPublicFooterContent(template, "            ");
 
   for (const [slot, resolve] of contentSlots) {
     html = replaceSlotHtml(html, slot, resolve(detail));
   }
 
+  if (nextProject) {
+    html = replaceSlotHtml(html, "project.next.en", escapeHtml(nextProject.title.en));
+    html = replaceSlotHtml(html, "project.next.zh", escapeHtml(nextProject.title.zh));
+  }
+
   html = replaceSlotHtml(html, "project.link", escapeHtml(detail.linkText));
   html = replaceSlotAttribute(html, "project.link", "href", detail.linkHref);
-  html = replaceSlotAttribute(html, "project.nextLink", "href", detail.nextHref);
+  html = replaceSlotAttribute(html, "project.nextLink", "href", nextProject ? publicProjectHref(nextProject.slug) : "/#projects");
 
   html = replaceSlotImage(html, "project.image.cover", images.cover, detail.coverAlt, detail.coverFallback);
   html = replaceSlotImage(html, "project.image.galleryOne", images.galleryOne, detail.captionOneEn, detail.captionOneEn);

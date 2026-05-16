@@ -42,6 +42,37 @@ http://127.0.0.1:3002/
 
 ## 内容在哪里改
 
+### 发布和隐藏内容
+
+项目和博客都有两个容易混淆但用途不同的字段：
+
+```ts
+published: true | false
+featured: true | false
+```
+
+- `published` 是公开开关。设为 `false` 后，内容仍保留在代码里，但不会出现在首页、footer、公开列表、详情页路由和延伸阅读里。
+- `featured` 是重点展示标记。它不负责公开或隐藏；`featured: true` 但 `published: false` 的内容仍然不会公开。
+
+上线前如果某个项目或博客还是虚构、占位、计划中、没有真实截图或没有真实正文，就把它设为：
+
+```ts
+published: false
+```
+
+当前公开项目：
+
+- `paperforge`
+- `weblearnboost`
+
+当前隐藏项目：
+
+- `promptcase`
+- `personal-web`
+- `prototype-gallery`
+
+当前三篇博客都是隐藏状态。以后要发布博客时，先确认正文、封面图和延伸阅读都是真实内容，再把对应文章改成 `published: true`。
+
 ### 个人信息和首页文案
 
 主要改这里：
@@ -86,7 +117,8 @@ content/projects.ts
 - 项目卡片图片
 - 项目短描述
 - 技术栈
-- 是否首页重点展示
+- 是否公开展示：`published`
+- 是否重点展示：`featured`
 
 ### 项目详情页正文
 
@@ -138,6 +170,8 @@ content/posts.ts
 - 阅读时间
 - 摘要
 - 正文内容
+- 是否公开展示：`published`
+- 是否重点展示：`featured`
 
 博客详情页的视觉模板在：
 
@@ -244,11 +278,10 @@ http://127.0.0.1:3002/
 
 - `/`
 - `/tool-list.html`
-- `/blog/learning-ai-products-by-making-prototypes`
-- `/blog/noticing-ai-tools`
-- `/blog/paperforge-as-product-exercise`
 - `/projects/paperforge`
 - `/projects/weblearnboost`
+
+当前博客全部隐藏，所以不要把 `/blog/learning-ai-products-by-making-prototypes`、`/blog/noticing-ai-tools`、`/blog/paperforge-as-product-exercise` 当成公开页面验收；它们应该不可公开访问。
 
 ## 当前已知的后续清理项
 

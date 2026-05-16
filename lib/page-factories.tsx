@@ -1,5 +1,5 @@
 import { PrototypeDocument } from "@/components/prototype/PrototypeDocument";
-import { posts } from "@/content/posts";
+import { getPost, publicPosts } from "@/content/posts";
 import { pageTemplate } from "@/lib/page-template-registry";
 import { normalizePrototypeLinks, splitPrototypeHtml } from "@/lib/prototype-page";
 import { renderBlogPostContent, renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
@@ -35,7 +35,7 @@ export function projectDetailTitle(slug: string) {
 }
 
 export function blogPostTitle(slug?: string) {
-  const post = slug ? posts.find((item) => item.slug === slug) : posts[0];
+  const post = slug ? getPost(slug) : publicPosts[0];
 
   if (!post) {
     throw new Error(`Unknown blog post slug: ${slug ?? "(default)"}`);
