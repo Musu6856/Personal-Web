@@ -136,6 +136,32 @@ describe("site content model", () => {
     }
   });
 
+  it("preserves prototype head font links for every embedded page template", () => {
+    for (const key of ["home", "blogPost", "projectDetail", "toolList"] as const) {
+      const page = splitPrototypeHtml(pageTemplate(key));
+
+      expect(page.headLinks, key).toContainEqual(
+        expect.objectContaining({
+          rel: "preconnect",
+          href: "https://fonts.googleapis.com",
+        }),
+      );
+      expect(page.headLinks, key).toContainEqual(
+        expect.objectContaining({
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossOrigin: "",
+        }),
+      );
+      expect(page.headLinks, key).toContainEqual(
+        expect.objectContaining({
+          rel: "stylesheet",
+          href: expect.stringContaining("family=Inter+Tight"),
+        }),
+      );
+    }
+  });
+
   it("keeps homepage carousel content available", () => {
     expect(posts.length).toBeGreaterThanOrEqual(3);
     expect(posts.every((post) => post.kindZh && post.metaLabel && post.metaLabelZh)).toBe(true);
@@ -241,15 +267,19 @@ describe("site content model", () => {
     expect(html).toContain("[data-reveal='drop'] { translate: 0 -48px; scale: 0.985; }");
   });
 
-  it("renders the tool list from structured content", async () => {
+  it("keeps the tool list structure aligned with the original prototype", async () => {
     const html = normalizePrototypeLinks(renderToolListContent(pageTemplate("toolList")));
 
     for (const section of toolSections) {
       expect(html).toContain(`id="${section.slug}"`);
-      for (const item of section.items) {
-        expect(html).toContain(escapeHtml(item.name));
-      }
     }
+
+    expect(html).toContain('<h2 data-len>Software &amp; Editor</h2>');
+    expect(html).toContain('Windows Laptop <span class="badge">Daily Driver</span>');
+    expect(html).toContain('JavaScript <span class="badge">Frontend</span>');
+    expect(html).toContain('Next.js <span class="badge">Framework</span>');
+    expect(html).not.toContain('<span class="num">');
+    expect(html).not.toContain("The everyday devices I use for prototypes");
   });
 
   it("uses root asset paths on blog slug pages", async () => {

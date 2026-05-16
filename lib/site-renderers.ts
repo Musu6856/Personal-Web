@@ -65,15 +65,11 @@ function toolItem(item: ToolSection["items"][number]) {
           </div>`;
 }
 
-function toolSection(section: ToolSection, index: number) {
-  const number = itemNumber(index);
-
+function toolSection(section: ToolSection) {
   return `
       <section id="${section.slug}" class="tl-section" data-reveal>
         <div class="tl-category">
-          <span class="num">${number}</span>
           <h2 data-len>${escapeHtml(section.label.en)}</h2><h2 data-lzh>${escapeHtml(section.label.zh)}</h2>
-          <p data-len>${escapeHtml(section.intro.en)}</p><p data-lzh>${escapeHtml(section.intro.zh)}</p>
         </div>
         <div class="tl-items">${section.items.map(toolItem).join("")}
         </div>
@@ -257,7 +253,7 @@ export function renderToolListContent(html: string) {
   return replaceRequiredBetween(
     html,
     '<div class="tl-list">',
-    '\n  </main>',
+    '\n    </div>\n  </main>',
     toolListHtml(),
     "tools.list",
   );
