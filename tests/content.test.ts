@@ -15,6 +15,7 @@ import { splitPrototypeHtml } from "@/lib/prototype-page";
 import { renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage } from "@/lib/slug-pages";
 import { renderProjectSlugPage } from "@/lib/slug-pages";
+import RootLayout from "@/app/layout";
 
 function unique(values: string[]) {
   return new Set(values).size === values.length;
@@ -160,6 +161,14 @@ describe("site content model", () => {
         }),
       );
     }
+  });
+
+  it("keeps the root document from exposing prototype off-canvas elements as horizontal scroll", () => {
+    const layout = RootLayout({ children: "content" });
+
+    expect(layout.props.children[0].type).toBe("head");
+    expect(layout.props.children[1].type).toBe("body");
+    expect(layout.props.style).toMatchObject({ overflowX: "hidden" });
   });
 
   it("keeps homepage carousel content available", () => {
