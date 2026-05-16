@@ -1,4 +1,3 @@
-import { prototypeHtml } from "@/lib/prototype-html";
 export { normalizePrototypeLinks } from "@/lib/prototype-links";
 
 export type PrototypePage = {
@@ -25,8 +24,4 @@ export function splitPrototypeHtml(html: string): PrototypePage {
     body: bodyWithoutScripts,
     scripts,
   };
-}
-
-export async function getPrototypePage(fileName: string) {
-  return splitPrototypeHtml(await prototypeHtml(fileName));
 }

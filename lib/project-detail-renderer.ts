@@ -1,5 +1,5 @@
 import { escapeHtml } from "@/lib/html-utils";
-import { prototypeHtml } from "@/lib/prototype-html";
+import { pageTemplate } from "@/lib/page-template-registry";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 
 type ProjectDetail = {
@@ -397,8 +397,12 @@ export function renderProjectDetailHtml(
   return normalizePrototypeLinks(html);
 }
 
-export async function projectDetailHtml(slug: string) {
-  const detail = projectDetails[slug] ?? projectDetails.paperforge;
-  const template = await prototypeHtml("project-detail.html");
-  return renderProjectDetailHtml(template, detail);
+export function projectDetailHtml(slug: string, images: ProjectDetailImages = defaultImages) {
+  const detail = projectDetails[slug];
+
+  if (!detail) {
+    throw new Error(`Unknown project slug: ${slug}`);
+  }
+
+  return renderProjectDetailHtml(pageTemplate("projectDetail"), detail, images);
 }

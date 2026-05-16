@@ -144,7 +144,12 @@ function blogRelatedCard(post: (typeof posts)[number], postIndex: number, isCurr
 }
 
 export function renderBlogRelatedSection(html: string, currentSlug: string) {
-  const currentIndex = Math.max(posts.findIndex((post) => post.slug === currentSlug), 0);
+  const currentIndex = posts.findIndex((post) => post.slug === currentSlug);
+
+  if (currentIndex === -1) {
+    throw new Error(`Unknown blog post slug: ${currentSlug}`);
+  }
+
   const relatedIndexes = [
     (currentIndex - 1 + posts.length) % posts.length,
     currentIndex,
@@ -259,7 +264,12 @@ export function renderToolListContent(html: string) {
 }
 
 export function renderBlogPostContent(html: string, slug?: string) {
-  const post = posts.find((item) => item.slug === slug) ?? posts[0];
+  const post = slug ? posts.find((item) => item.slug === slug) : posts[0];
+
+  if (!post) {
+    throw new Error(`Unknown blog post slug: ${slug ?? "(default)"}`);
+  }
+
   const postImage = assetPath(post.image ?? "assets/posts/learning-ai-products-by-making-prototypes/cover.png");
   const rendered = html
     .replace("<title>Learning AI products by making prototypes — Musu</title>", `<title>${escapeHtml(post.title.en)} — Musu</title>`)

@@ -1,9 +1,9 @@
-import { prototypeTitle, toolListPage } from "@/lib/page-factories";
+import { toolListPage, toolListTitle } from "@/lib/page-factories";
 
 export async function generateMetadata() {
-  return { title: await prototypeTitle("tool-list.html") };
+  return { title: toolListTitle };
 }
 
-export default async function UsesPage() {
+export default function UsesPage() {
   return toolListPage();
 }

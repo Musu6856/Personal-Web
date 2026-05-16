@@ -1,44 +1,48 @@
 import { PrototypeDocument } from "@/components/prototype/PrototypeDocument";
-import { prototypeHtml } from "@/lib/prototype-html";
-import { getPrototypePage, normalizePrototypeLinks, splitPrototypeHtml } from "@/lib/prototype-page";
+import { posts } from "@/content/posts";
+import { pageTemplate } from "@/lib/page-template-registry";
+import { normalizePrototypeLinks, splitPrototypeHtml } from "@/lib/prototype-page";
 import { renderBlogPostContent, renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage, renderProjectSlugPage } from "@/lib/slug-pages";
 
-export async function prototypePage(fileName: string) {
-  const page = await getPrototypePage(fileName);
-  page.body = normalizePrototypeLinks(page.body);
-  return <PrototypeDocument page={page} />;
-}
-
-export async function homePage() {
-  const page = await getPrototypePage("index.html");
+export function homePage() {
+  const page = splitPrototypeHtml(pageTemplate("home"));
   page.body = normalizePrototypeLinks(renderHomeContent(page.body));
   return <PrototypeDocument page={page} />;
 }
 
-export async function toolListPage() {
-  const page = await getPrototypePage("tool-list.html");
+export function toolListPage() {
+  const page = splitPrototypeHtml(pageTemplate("toolList"));
   page.body = normalizePrototypeLinks(renderToolListContent(page.body));
   return <PrototypeDocument page={page} />;
 }
 
-export async function blogPostPage(slug?: string) {
-  const html = slug ? await renderBlogSlugPage(slug) : renderBlogPostContent(await prototypeHtml("blog-post.html"), slug);
+export function blogPostPage(slug?: string) {
+  const html = slug ? renderBlogSlugPage(slug) : renderBlogPostContent(pageTemplate("blogPost"), slug);
   const page = splitPrototypeHtml(html);
   page.body = normalizePrototypeLinks(page.body);
   return <PrototypeDocument page={page} />;
 }
 
-export async function projectDetailPage(slug: string) {
-  const html = await renderProjectSlugPage(slug);
+export function projectDetailPage(slug: string) {
+  const html = renderProjectSlugPage(slug);
   const page = splitPrototypeHtml(html);
   return <PrototypeDocument page={page} />;
 }
 
-export async function prototypeTitle(fileName: string) {
-  return (await getPrototypePage(fileName)).title;
+export function projectDetailTitle(slug: string) {
+  return splitPrototypeHtml(renderProjectSlugPage(slug)).title;
 }
 
-export async function projectDetailTitle(slug: string) {
-  return splitPrototypeHtml(await renderProjectSlugPage(slug)).title;
+export function blogPostTitle(slug?: string) {
+  const post = slug ? posts.find((item) => item.slug === slug) : posts[0];
+
+  if (!post) {
+    throw new Error(`Unknown blog post slug: ${slug ?? "(default)"}`);
+  }
+
+  return `${post.title.en} — Musu`;
 }
+
+export const homeTitle = splitPrototypeHtml(pageTemplate("home")).title;
+export const toolListTitle = splitPrototypeHtml(pageTemplate("toolList")).title;

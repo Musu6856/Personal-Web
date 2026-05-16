@@ -8,9 +8,10 @@ import { projects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import { escapeHtml, replaceAllPairs, replaceOnce, replaceRequiredBetween } from "@/lib/html-utils";
 import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
+import { projectDetailTitle } from "@/lib/page-factories";
+import { pageTemplate } from "@/lib/page-template-registry";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { splitPrototypeHtml } from "@/lib/prototype-page";
-import { prototypeHtml } from "@/lib/prototype-html";
 import { renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage } from "@/lib/slug-pages";
 import { renderProjectSlugPage } from "@/lib/slug-pages";
@@ -33,6 +34,14 @@ function collectAssetPaths(value: unknown): string[] {
   if (typeof value === "string") return value.startsWith("assets/") ? [value] : [];
   if (!value || typeof value !== "object") return [];
   return Object.values(value).flatMap(collectAssetPaths);
+}
+
+function runtimeSourceFiles(dir: string): string[] {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) return runtimeSourceFiles(fullPath);
+    return /\.(ts|tsx)$/.test(entry.name) ? [fullPath] : [];
+  });
 }
 
 const projectDetailSlots = [
@@ -106,6 +115,27 @@ describe("site content model", () => {
     );
   });
 
+  it("does not read prototype templates from app runtime code", () => {
+    const runtimeFiles = [...runtimeSourceFiles("app"), ...runtimeSourceFiles("components"), ...runtimeSourceFiles("lib")]
+      .filter((file) => !file.includes(path.join("lib", "page-templates") + path.sep));
+
+    for (const file of runtimeFiles) {
+      const source = fs.readFileSync(file, "utf8");
+
+      expect(source, file).not.toMatch(/prototypeHtml|getPrototypePage|prototypePage|prototypeTitle|prototypeResponse/);
+      expect(source, file).not.toMatch(/["']prototype["']/);
+    }
+  });
+
+  it("keeps embedded page templates parseable and free of BOM markers", () => {
+    for (const key of ["home", "blogPost", "projectDetail", "toolList"] as const) {
+      const html = pageTemplate(key);
+
+      expect(html.charCodeAt(0), key).not.toBe(0xfeff);
+      expect(splitPrototypeHtml(html).body, key).toBeTruthy();
+    }
+  });
+
   it("keeps homepage carousel content available", () => {
     expect(posts.length).toBeGreaterThanOrEqual(3);
     expect(posts.every((post) => post.kindZh && post.metaLabel && post.metaLabelZh)).toBe(true);
@@ -143,7 +173,7 @@ describe("site content model", () => {
   });
 
   it("uses the detail masthead and highlights projects on project pages", async () => {
-    const html = renderProjectDetailHtml(await prototypeHtml("project-detail.html"), projectDetails.paperforge);
+    const html = renderProjectDetailHtml(pageTemplate("projectDetail"), projectDetails.paperforge);
 
     expect(html).toContain('<header class="masthead container">');
     expect(html).toContain('<a href="/#projects" style="color:var(--coral);">');
@@ -151,8 +181,15 @@ describe("site content model", () => {
     expect(html).not.toContain('<header class="nav" id="nav">');
   });
 
+  it("returns project detail metadata titles synchronously", () => {
+    const title = projectDetailTitle("paperforge");
+
+    expect(typeof title).toBe("string");
+    expect(title).toContain("PaperForge");
+  });
+
   it("marks project detail content with stable render slots", async () => {
-    const html = await prototypeHtml("project-detail.html");
+    const html = pageTemplate("projectDetail");
 
     for (const slot of projectDetailSlots) {
       expect(html).toContain(`data-slot="${slot}"`);
@@ -180,8 +217,13 @@ describe("site content model", () => {
     expect(relatedHtml).not.toContain('href="/projects/');
   });
 
+  it("rejects unknown blog and project slugs instead of falling back to another page", () => {
+    expect(() => renderBlogSlugPage("missing-post")).toThrow("Unknown blog post slug");
+    expect(() => renderProjectSlugPage("missing-project")).toThrow("Unknown project slug");
+  });
+
   it("renders the homepage blog cards as three distinct post links", async () => {
-    const html = normalizePrototypeLinks(renderHomeContent(await prototypeHtml("index.html")));
+    const html = normalizePrototypeLinks(renderHomeContent(pageTemplate("home")));
     const deckStart = html.indexOf('<div class="work-deck" id="blog-deck"');
 
     expect(deckStart).toBeGreaterThanOrEqual(0);
@@ -193,14 +235,14 @@ describe("site content model", () => {
   });
 
   it("reveals the homepage hero image from above", async () => {
-    const html = await prototypeHtml("index.html");
+    const html = pageTemplate("home");
 
     expect(html).toContain('<div class="hero-art" data-reveal="drop">');
     expect(html).toContain("[data-reveal='drop'] { translate: 0 -48px; scale: 0.985; }");
   });
 
   it("renders the tool list from structured content", async () => {
-    const html = normalizePrototypeLinks(renderToolListContent(await prototypeHtml("tool-list.html")));
+    const html = normalizePrototypeLinks(renderToolListContent(pageTemplate("toolList")));
 
     for (const section of toolSections) {
       expect(html).toContain(`id="${section.slug}"`);
