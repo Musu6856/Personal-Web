@@ -240,6 +240,7 @@ function renderProfileContent(html: string) {
 export function renderHomeContent(html: string) {
   let rendered = renderProfileContent(html);
   rendered = renderPublicFooterContent(rendered);
+  const blogDeckClass = publicPosts.length === 2 ? "work-deck is-pair" : "work-deck";
 
   rendered = replaceRequiredBetween(
     rendered,
@@ -255,6 +256,11 @@ export function renderHomeContent(html: string) {
     '\n      </div>\n    </div>\n\n    <div class="work-arrows">',
     blogDeckHtml(),
     "home.blogDeck",
+  );
+
+  rendered = rendered.replace(
+    '<div class="work-deck" id="blog-deck" data-reveal="scale" aria-live="polite">',
+    `<div class="${blogDeckClass}" id="blog-deck" data-reveal="scale" aria-live="polite">`,
   );
 
   rendered = rendered.replace(

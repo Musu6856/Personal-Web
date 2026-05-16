@@ -21,16 +21,6 @@ function unique(values: string[]) {
   return new Set(values).size === values.length;
 }
 
-function relatedSection(html: string) {
-  const start = html.indexOf('<section class="bp-related"');
-  const end = html.indexOf("</section>", start);
-
-  expect(start).toBeGreaterThanOrEqual(0);
-  expect(end).toBeGreaterThan(start);
-
-  return html.slice(start, end);
-}
-
 function collectAssetPaths(value: unknown): string[] {
   if (typeof value === "string") return value.startsWith("assets/") ? [value] : [];
   if (!value || typeof value !== "object") return [];
@@ -289,19 +279,40 @@ describe("site content model", () => {
 
   it("renders public blog cards on the homepage", async () => {
     const html = normalizePrototypeLinks(renderHomeContent(pageTemplate("home")));
-    const deckStart = html.indexOf('<div class="work-deck" id="blog-deck"');
+    const deckStart = html.indexOf('id="blog-deck"');
 
     expect(deckStart).toBeGreaterThanOrEqual(0);
 
-    const deckHtml = html.slice(deckStart);
+    const deckOpenStart = html.lastIndexOf("<div", deckStart);
+    const deckOpen = html.slice(deckOpenStart, html.indexOf(">", deckStart) + 1);
+    const deckHtml = html.slice(deckOpenStart);
     const hrefs = [...deckHtml.matchAll(/<a href="([^"]+)" class="work-card/g)].map((match) => match[1]);
 
+    expect(deckOpen).toContain('class="work-deck is-pair"');
     expect(hrefs).toEqual(blogSlugs.map((slug) => `/blog/${slug}`));
     expect(new Set(hrefs).size).toBe(hrefs.length);
     expect(deckHtml).not.toContain("Learning AI products by making prototypes");
     expect(deckHtml).not.toContain("/blog/learning-ai-products-by-making-prototypes");
     expect(deckHtml).toContain("What I notice while using AI tools");
     expect(deckHtml).toContain("PaperForge as a product exercise");
+  });
+
+  it("keeps the mobile blog deck to a single visible card", () => {
+    const html = pageTemplate("home");
+    const mobileMediaStart = html.indexOf("@media (max-width: 560px)");
+
+    expect(mobileMediaStart).toBeGreaterThanOrEqual(0);
+
+    const mobileMediaEnd = html.indexOf("</style>", mobileMediaStart);
+    const mobileCss = html.slice(mobileMediaStart, mobileMediaEnd);
+
+    expect(mobileCss).toContain(".work-card.is-primary");
+    expect(mobileCss).toContain(".work-card.is-secondary");
+    expect(mobileCss).toContain(".work-card.is-hidden-right");
+    expect(mobileCss).toContain("visibility: visible");
+    expect(mobileCss).toContain("visibility: hidden");
+    expect(mobileCss).toContain("opacity: 0");
+    expect(mobileCss).toContain("pointer-events: none");
   });
 
   it("keeps public project detail pages from linking to draft content", async () => {

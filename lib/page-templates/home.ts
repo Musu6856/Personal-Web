@@ -1461,6 +1461,15 @@ footer {
     left: 48%;
     width: 58%;
   }
+  .work-deck.is-pair .work-card.is-secondary {
+    left: 68%;
+    width: 44%;
+    padding: 24px 20px;
+    transform: rotate(2.4deg) translateY(26px);
+  }
+  .work-deck.is-pair .work-card.is-secondary:hover {
+    transform: rotate(2.4deg) translateY(22px);
+  }
   .work-card.is-single {
     width: 100%;
   }
@@ -1475,6 +1484,40 @@ footer {
   .pills { justify-content: flex-start; }
   section { padding: 80px 0; }
   .topbar-inner { font-size: 9px; }
+  .work-deck {
+    min-height: 540px;
+    overflow: hidden;
+  }
+  .work-card {
+    transition:
+      left 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      width 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      padding 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 280ms ease;
+  }
+  .work-card.is-primary,
+  .work-card.is-single {
+    left: 0;
+    width: 100%;
+    padding: 28px 24px;
+    opacity: 1;
+    visibility: visible;
+    z-index: 3;
+    pointer-events: auto;
+  }
+  .work-deck.is-pair .work-card.is-secondary,
+  .work-card.is-secondary,
+  .work-card.is-hidden-right,
+  .work-card.is-hidden-left,
+  .work-card.is-exit-left,
+  .work-card.is-exit-right {
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 </style>
 </head>

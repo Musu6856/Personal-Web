@@ -8,5 +8,8 @@ dist
 *.tsbuildinfo
 coverage
 .vercel
+.superpowers/
+image-drafts/
+tmp/
 .DS_Store
 Thumbs.db
