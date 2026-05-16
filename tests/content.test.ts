@@ -9,6 +9,7 @@ import { toolSections } from "@/content/tools";
 import { escapeHtml, replaceAllPairs, replaceOnce, replaceRequiredBetween } from "@/lib/html-utils";
 import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
+import { splitPrototypeHtml } from "@/lib/prototype-page";
 import { prototypeHtml } from "@/lib/prototype-html";
 import { renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage } from "@/lib/slug-pages";
@@ -33,6 +34,47 @@ function collectAssetPaths(value: unknown): string[] {
   if (!value || typeof value !== "object") return [];
   return Object.values(value).flatMap(collectAssetPaths);
 }
+
+const projectDetailSlots = [
+  "project.titleTag",
+  "project.category.en",
+  "project.category.zh",
+  "project.index",
+  "project.title.en",
+  "project.title.zh",
+  "project.role.en",
+  "project.role.zh",
+  "project.context.en",
+  "project.context.zh",
+  "project.linkLabel.en",
+  "project.linkLabel.zh",
+  "project.link",
+  "project.image.cover",
+  "project.intro.en",
+  "project.intro.zh",
+  "project.sectionTitle.en",
+  "project.sectionTitle.zh",
+  "project.sectionBody.en",
+  "project.sectionBody.zh",
+  "project.quote.en",
+  "project.quote.zh",
+  "project.stack.en",
+  "project.stack.zh",
+  "project.image.galleryOne",
+  "project.captionOne.en",
+  "project.captionOne.zh",
+  "project.image.galleryTwo",
+  "project.captionTwo.en",
+  "project.captionTwo.zh",
+  "project.finalTitle.en",
+  "project.finalTitle.zh",
+  "project.finalBody.en",
+  "project.finalBody.zh",
+  "project.image.wide",
+  "project.next.en",
+  "project.next.zh",
+  "project.nextLink",
+];
 
 describe("site content model", () => {
   it("keeps project and post slugs unique for generated routes", () => {
@@ -77,6 +119,12 @@ describe("site content model", () => {
     ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/learning-ai-products-by-making-prototypes">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
   });
 
+  it("reads prototype titles even when the title tag carries render metadata", () => {
+    expect(splitPrototypeHtml('<title data-slot="project.titleTag">PaperForge — Project Detail</title>').title).toBe(
+      "PaperForge — Project Detail",
+    );
+  });
+
   it("keeps HTML replacement utilities predictable", () => {
     expect(escapeHtml('<span title="Musu & AI">')).toBe("&lt;span title=&quot;Musu &amp; AI&quot;&gt;");
     expect(replaceAllPairs("one two one", [["one", "1"], ["two", "2"]])).toBe("1 2 1");
@@ -101,6 +149,14 @@ describe("site content model", () => {
     expect(html).toContain('<a href="/#projects" style="color:var(--coral);">');
     expect(html).not.toContain('<div class="topbar">');
     expect(html).not.toContain('<header class="nav" id="nav">');
+  });
+
+  it("marks project detail content with stable render slots", async () => {
+    const html = await prototypeHtml("project-detail.html");
+
+    for (const slot of projectDetailSlots) {
+      expect(html).toContain(`data-slot="${slot}"`);
+    }
   });
 
   it("centers the current blog post between previous and next related posts", async () => {

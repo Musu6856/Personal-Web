@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PaperForge — Project Detail</title>
+<title data-slot="project.titleTag">PaperForge — Project Detail</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -540,95 +540,95 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
       <div class="pt-breadcrumb">
         <a href="index.html#projects"><span data-len>Projects</span><span data-lzh>项目</span></a>
         <span class="sep">/</span>
-        <span data-len>AI Tool</span><span data-lzh>AI 工具</span>
+        <span data-slot="project.category.en" data-len>AI Tool</span><span data-slot="project.category.zh" data-lzh>AI 工具</span>
         <span class="sep">/</span>
-        <span>01</span>
+        <span data-slot="project.index">01</span>
       </div>
       
       <h1 class="pt-title">
-        <span data-len>PaperForge: An AI writing workspace for research <em>model setup</em><span class="dot">.</span></span>
-        <span data-lzh>PaperForge：面向研究<em>模型设定</em>的 AI 写作工作台<span class="dot">。</span></span>
+        <span data-slot="project.title.en" data-len>PaperForge: An AI writing workspace for research <em>model setup</em><span class="dot">.</span></span>
+        <span data-slot="project.title.zh" data-lzh>PaperForge：面向研究<em>模型设定</em>的 AI 写作工作台<span class="dot">。</span></span>
       </h1>
       
       <div class="pt-meta">
         <div class="meta-col">
           <span class="mlabel" data-len>Role</span><span class="mlabel" data-lzh>角色</span>
-          <span class="mval" data-len>Product & Prototype</span><span class="mval" data-lzh>产品与原型</span>
+          <span class="mval" data-slot="project.role.en" data-len>Product & Prototype</span><span class="mval" data-slot="project.role.zh" data-lzh>产品与原型</span>
         </div>
         <div class="meta-col">
           <span class="mlabel" data-len>Context</span><span class="mlabel" data-lzh>背景</span>
-          <span class="mval" data-len>AI Product Exploration</span><span class="mval" data-lzh>AI 产品探索</span>
+          <span class="mval" data-slot="project.context.en" data-len>AI Product Exploration</span><span class="mval" data-slot="project.context.zh" data-lzh>AI 产品探索</span>
         </div>
         <div class="meta-col">
           <span class="mlabel" data-len>Year</span><span class="mlabel" data-lzh>年份</span>
           <span class="mval">2026</span>
         </div>
         <div class="meta-col">
-          <span class="mlabel" data-len>Live Link</span><span class="mlabel" data-lzh>线上地址</span>
-          <a href="https://paperforge-sable.vercel.app/" target="_blank" rel="noreferrer noopener" class="mval" style="color:var(--coral);text-decoration:none;">paperforge-sable.vercel.app ↗</a>
+          <span class="mlabel" data-slot="project.linkLabel.en" data-len>Live Link</span><span class="mlabel" data-slot="project.linkLabel.zh" data-lzh>线上地址</span>
+          <a data-slot="project.link" href="https://paperforge-sable.vercel.app/" target="_blank" rel="noreferrer noopener" class="mval" style="color:var(--coral);text-decoration:none;">paperforge-sable.vercel.app ↗</a>
         </div>
       </div>
     </div>
 
     <!-- Hero Cover -->
     <div class="pt-cover" data-reveal="rise-lg">
-      <img src="assets/projects/paperforge/card.png" alt="PaperForge Preview" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'675\'><rect width=\'1200\' height=\'675\' fill=\'%23f7f1de\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'serif\' font-style=\'italic\' font-size=\'24\' fill=\'%238b8676\'>PaperForge Preview</text></svg>'">
+      <img data-slot="project.image.cover" src="assets/projects/paperforge/card.png" alt="PaperForge Preview" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1200\' height=\'675\'><rect width=\'1200\' height=\'675\' fill=\'%23f7f1de\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'serif\' font-style=\'italic\' font-size=\'24\' fill=\'%238b8676\'>PaperForge Preview</text></svg>'">
       <span class="badge">FIG 01.</span>
     </div>
 
     <!-- Editorial Body -->
     <div class="pt-body" data-reveal>
-      <p data-len>PaperForge is an AI academic writing tool for game theory and platform economics research. It helps turn rough research ideas into structured model elements such as players, strategies, payoff functions, and assumptions.</p>
-      <p data-lzh>PaperForge 是一个面向博弈论与平台经济研究的 AI 学术写作工具。它帮助用户把粗略研究想法整理成参与者、策略、收益函数和假设条件等结构化模型要素。</p>
+      <p data-slot="project.intro.en" data-len>PaperForge is an AI academic writing tool for game theory and platform economics research. It helps turn rough research ideas into structured model elements such as players, strategies, payoff functions, and assumptions.</p>
+      <p data-slot="project.intro.zh" data-lzh>PaperForge 是一个面向博弈论与平台经济研究的 AI 学术写作工具。它帮助用户把粗略研究想法整理成参与者、策略、收益函数和假设条件等结构化模型要素。</p>
 
-      <h3 data-len>From idea to model setup</h3>
-      <h3 data-lzh>从想法到模型设定</h3>
+      <h3 data-slot="project.sectionTitle.en" data-len>From idea to model setup</h3>
+      <h3 data-slot="project.sectionTitle.zh" data-lzh>从想法到模型设定</h3>
       
-      <p data-len>The prototype guides users through the early research setup process: clarifying the scene, identifying participants, describing strategies, and drafting a LaTeX-style Model Setup section that can be refined later.</p>
-      <p data-lzh>这个原型会引导用户完成早期研究设定过程：明确研究场景、识别参与者、描述策略，并生成一段后续可以继续修改的 LaTeX 风格 Model Setup 草稿。</p>
+      <p data-slot="project.sectionBody.en" data-len>The prototype guides users through the early research setup process: clarifying the scene, identifying participants, describing strategies, and drafting a LaTeX-style Model Setup section that can be refined later.</p>
+      <p data-slot="project.sectionBody.zh" data-lzh>这个原型会引导用户完成早期研究设定过程：明确研究场景、识别参与者、描述策略，并生成一段后续可以继续修改的 LaTeX 风格 Model Setup 草稿。</p>
 
-      <blockquote data-len>
+      <blockquote data-slot="project.quote.en" data-len>
         "The goal is not to let AI write the whole paper. The goal is to help rough research intent become a clearer model that can be questioned, revised, and improved."
       </blockquote>
-      <blockquote data-lzh>
+      <blockquote data-slot="project.quote.zh" data-lzh>
         "目标不是让 AI 写完整篇论文，而是帮助粗略的研究意图变成一个更清晰、可质疑、可修改、可继续完善的模型。"
       </blockquote>
 
-      <p data-len>The current version is built with Next.js, React, TypeScript, Clerk, Neon, Drizzle ORM, KaTeX, react-markdown, and Vercel. The stack is less important than the product question: how can AI support academic structure without hiding the user's thinking?</p>
-      <p data-lzh>当前版本使用 Next.js、React、TypeScript、Clerk、Neon、Drizzle ORM、KaTeX、react-markdown 和 Vercel 构建。技术栈本身不是重点，真正的问题是：AI 如何支持学术结构化，同时不遮蔽用户自己的思考？</p>
+      <p data-slot="project.stack.en" data-len>The current version is built with Next.js, React, TypeScript, Clerk, Neon, Drizzle ORM, KaTeX, react-markdown, and Vercel. The stack is less important than the product question: how can AI support academic structure without hiding the user's thinking?</p>
+      <p data-slot="project.stack.zh" data-lzh>当前版本使用 Next.js、React、TypeScript、Clerk、Neon、Drizzle ORM、KaTeX、react-markdown 和 Vercel 构建。技术栈本身不是重点，真正的问题是：AI 如何支持学术结构化，同时不遮蔽用户自己的思考？</p>
       
       <div class="pt-gallery">
         <figure>
-          <img src="assets/shared/legacy-project-light.png" alt="Light mode" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'450\'><rect width=\'600\' height=\'450\' fill=\'%23efe7d2\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Light Mode Grid</text></svg>'">
-          <figcaption data-len>FIG 02. Structuring research elements before writing.</figcaption>
-          <figcaption data-lzh>图 02. 在写作之前先结构化研究要素。</figcaption>
+          <img data-slot="project.image.galleryOne" src="assets/shared/legacy-project-light.png" alt="Light mode" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'450\'><rect width=\'600\' height=\'450\' fill=\'%23efe7d2\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Light Mode Grid</text></svg>'">
+          <figcaption data-slot="project.captionOne.en" data-len>FIG 02. Structuring research elements before writing.</figcaption>
+          <figcaption data-slot="project.captionOne.zh" data-lzh>图 02. 在写作之前先结构化研究要素。</figcaption>
         </figure>
         <figure>
-          <img src="assets/shared/legacy-project-dark.png" alt="Dark mode" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'450\'><rect width=\'600\' height=\'450\' fill=\'%2315140f\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Dark Mode Stats</text></svg>'">
-          <figcaption data-len>FIG 03. Drafting model setup text for later refinement.</figcaption>
-          <figcaption data-lzh>图 03. 生成可继续修改的模型设定草稿。</figcaption>
+          <img data-slot="project.image.galleryTwo" src="assets/shared/legacy-project-dark.png" alt="Dark mode" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'450\'><rect width=\'600\' height=\'450\' fill=\'%2315140f\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Dark Mode Stats</text></svg>'">
+          <figcaption data-slot="project.captionTwo.en" data-len>FIG 03. Drafting model setup text for later refinement.</figcaption>
+          <figcaption data-slot="project.captionTwo.zh" data-lzh>图 03. 生成可继续修改的模型设定草稿。</figcaption>
         </figure>
       </div>
 
-      <h3 data-len>Why this matters</h3>
-      <h3 data-lzh>为什么做这个</h3>
+      <h3 data-slot="project.finalTitle.en" data-len>Why this matters</h3>
+      <h3 data-slot="project.finalTitle.zh" data-lzh>为什么做这个</h3>
       
-      <p data-len>For me, PaperForge is also a product-learning project. It is a way to practice turning a specific workflow into a usable interface, while learning where AI helps and where human judgment still needs to stay visible.</p>
-      <p data-lzh>对我来说，PaperForge 也是一个产品学习项目。它让我练习如何把一个具体工作流变成可以使用的界面，同时观察 AI 在哪里有帮助、哪里仍然需要保留人的判断。</p>
+      <p data-slot="project.finalBody.en" data-len>For me, PaperForge is also a product-learning project. It is a way to practice turning a specific workflow into a usable interface, while learning where AI helps and where human judgment still needs to stay visible.</p>
+      <p data-slot="project.finalBody.zh" data-lzh>对我来说，PaperForge 也是一个产品学习项目。它让我练习如何把一个具体工作流变成可以使用的界面，同时观察 AI 在哪里有帮助、哪里仍然需要保留人的判断。</p>
 
     </div>
     
     <div class="pt-full-img" data-reveal>
-      <img src="assets/shared/workflow-map.png" alt="Full Width View" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1400\' height=\'600\'><rect width=\'1400\' height=\'600\' fill=\'%23ece4cf\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'18\' fill=\'%238b8676\'>Full Width Analytics View</text></svg>'">
+      <img data-slot="project.image.wide" src="assets/shared/workflow-map.png" alt="Full Width View" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'1400\' height=\'600\'><rect width=\'1400\' height=\'600\' fill=\'%23ece4cf\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'18\' fill=\'%238b8676\'>Full Width Analytics View</text></svg>'">
     </div>
 
     <!-- Next Project -->
     <div class="pt-next" data-reveal>
       <span class="n-label" data-len>Up Next</span>
       <span class="n-label" data-lzh>下一个项目</span>
-      <h2 data-len>WebLearnBoost</h2>
-      <h2 data-lzh>WebLearnBoost</h2>
-      <a href="projects/weblearnboost" class="btn-ghost">
+      <h2 data-slot="project.next.en" data-len>WebLearnBoost</h2>
+      <h2 data-slot="project.next.zh" data-lzh>WebLearnBoost</h2>
+      <a data-slot="project.nextLink" href="projects/weblearnboost" class="btn-ghost">
         <span data-len>View Project</span><span data-lzh>查看项目</span>
         <span class="arrow"><svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 6 19 12 13 18"/></svg></span>
       </a>

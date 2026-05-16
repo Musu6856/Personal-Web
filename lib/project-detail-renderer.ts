@@ -1,4 +1,4 @@
-import { replaceOnce } from "@/lib/html-utils";
+import { escapeHtml } from "@/lib/html-utils";
 import { prototypeHtml } from "@/lib/prototype-html";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 
@@ -41,6 +41,13 @@ type ProjectDetail = {
   nextHref: string;
   nextEn: string;
   nextZh: string;
+};
+
+export type ProjectDetailImages = {
+  cover: string;
+  galleryOne: string;
+  galleryTwo: string;
+  wide: string;
 };
 
 const base: ProjectDetail = {
@@ -226,49 +233,166 @@ function placeholderDetail(input: {
   };
 }
 
-const replacements: Array<[string, (detail: ProjectDetail) => string]> = [
-  ["<title>PaperForge — Project Detail</title>", (detail) => `<title>${detail.titleTag}</title>`],
-  ["<span data-len>AI Tool</span><span data-lzh>AI 工具</span>", (detail) => `<span data-len>${detail.categoryEn}</span><span data-lzh>${detail.categoryZh}</span>`],
-  ["        <span>01</span>", (detail) => `        <span>${detail.index}</span>`],
-  ["<span data-len>PaperForge: An AI writing workspace for research <em>model setup</em><span class=\"dot\">.</span></span>", (detail) => `<span data-len>${detail.titleEn}</span>`],
-  ["<span data-lzh>PaperForge：面向研究<em>模型设定</em>的 AI 写作工作台<span class=\"dot\">。</span></span>", (detail) => `<span data-lzh>${detail.titleZh}</span>`],
-  ["<span class=\"mval\" data-len>Product & Prototype</span><span class=\"mval\" data-lzh>产品与原型</span>", (detail) => `<span class="mval" data-len>${detail.roleEn}</span><span class="mval" data-lzh>${detail.roleZh}</span>`],
-  ["<span class=\"mval\" data-len>AI Product Exploration</span><span class=\"mval\" data-lzh>AI 产品探索</span>", (detail) => `<span class="mval" data-len>${detail.contextEn}</span><span class="mval" data-lzh>${detail.contextZh}</span>`],
-  ["<span class=\"mlabel\" data-len>Live Link</span><span class=\"mlabel\" data-lzh>线上地址</span>", (detail) => `<span class="mlabel" data-len>${detail.linkLabelEn}</span><span class="mlabel" data-lzh>${detail.linkLabelZh}</span>`],
-  ["href=\"https://paperforge-sable.vercel.app/\"", (detail) => `href="${detail.linkHref}"`],
-  ["paperforge-sable.vercel.app ↗", (detail) => detail.linkText],
-  ["PaperForge Preview", (detail) => detail.coverAlt],
-  ["PaperForge Preview", (detail) => detail.coverFallback],
-  [base.introEn, (detail) => detail.introEn],
-  [base.introZh, (detail) => detail.introZh],
-  ["From idea to model setup", (detail) => detail.sectionTitleEn],
-  ["从想法到模型设定", (detail) => detail.sectionTitleZh],
-  [base.sectionBodyEn, (detail) => detail.sectionBodyEn],
-  [base.sectionBodyZh, (detail) => detail.sectionBodyZh],
-  [base.quoteEn, (detail) => detail.quoteEn],
-  [base.quoteZh, (detail) => detail.quoteZh],
-  [base.stackEn, (detail) => detail.stackEn],
-  [base.stackZh, (detail) => detail.stackZh],
-  ["FIG 02. Structuring research elements before writing.", (detail) => detail.captionOneEn],
-  ["图 02. 在写作之前先结构化研究要素。", (detail) => detail.captionOneZh],
-  ["FIG 03. Drafting model setup text for later refinement.", (detail) => detail.captionTwoEn],
-  ["图 03. 生成可继续修改的模型设定草稿。", (detail) => detail.captionTwoZh],
-  ["Why this matters", (detail) => detail.finalTitleEn],
-  ["为什么做这个", (detail) => detail.finalTitleZh],
-  [base.finalBodyEn, (detail) => detail.finalBodyEn],
-  [base.finalBodyZh, (detail) => detail.finalBodyZh],
-  ["Full Width Analytics View", (detail) => detail.wideFallback],
-  ["href=\"projects/weblearnboost\"", (detail) => `href="${detail.nextHref}"`],
-  ["<h2 data-len>WebLearnBoost</h2>", (detail) => `<h2 data-len>${detail.nextEn}</h2>`],
-  ["<h2 data-lzh>WebLearnBoost</h2>", (detail) => `<h2 data-lzh>${detail.nextZh}</h2>`],
+const defaultImages: ProjectDetailImages = {
+  cover: "assets/projects/paperforge/card.png",
+  galleryOne: "assets/shared/legacy-project-light.png",
+  galleryTwo: "assets/shared/legacy-project-dark.png",
+  wide: "assets/shared/workflow-map.png",
+};
+
+const contentSlots: Array<[string, (detail: ProjectDetail) => string]> = [
+  ["project.titleTag", (detail) => escapeHtml(detail.titleTag)],
+  ["project.category.en", (detail) => escapeHtml(detail.categoryEn)],
+  ["project.category.zh", (detail) => escapeHtml(detail.categoryZh)],
+  ["project.index", (detail) => escapeHtml(detail.index)],
+  ["project.title.en", (detail) => detail.titleEn],
+  ["project.title.zh", (detail) => detail.titleZh],
+  ["project.role.en", (detail) => escapeHtml(detail.roleEn)],
+  ["project.role.zh", (detail) => escapeHtml(detail.roleZh)],
+  ["project.context.en", (detail) => escapeHtml(detail.contextEn)],
+  ["project.context.zh", (detail) => escapeHtml(detail.contextZh)],
+  ["project.linkLabel.en", (detail) => escapeHtml(detail.linkLabelEn)],
+  ["project.linkLabel.zh", (detail) => escapeHtml(detail.linkLabelZh)],
+  ["project.intro.en", (detail) => escapeHtml(detail.introEn)],
+  ["project.intro.zh", (detail) => escapeHtml(detail.introZh)],
+  ["project.sectionTitle.en", (detail) => escapeHtml(detail.sectionTitleEn)],
+  ["project.sectionTitle.zh", (detail) => escapeHtml(detail.sectionTitleZh)],
+  ["project.sectionBody.en", (detail) => escapeHtml(detail.sectionBodyEn)],
+  ["project.sectionBody.zh", (detail) => escapeHtml(detail.sectionBodyZh)],
+  ["project.quote.en", (detail) => escapeHtml(detail.quoteEn)],
+  ["project.quote.zh", (detail) => escapeHtml(detail.quoteZh)],
+  ["project.stack.en", (detail) => escapeHtml(detail.stackEn)],
+  ["project.stack.zh", (detail) => escapeHtml(detail.stackZh)],
+  ["project.captionOne.en", (detail) => escapeHtml(detail.captionOneEn)],
+  ["project.captionOne.zh", (detail) => escapeHtml(detail.captionOneZh)],
+  ["project.captionTwo.en", (detail) => escapeHtml(detail.captionTwoEn)],
+  ["project.captionTwo.zh", (detail) => escapeHtml(detail.captionTwoZh)],
+  ["project.finalTitle.en", (detail) => escapeHtml(detail.finalTitleEn)],
+  ["project.finalTitle.zh", (detail) => escapeHtml(detail.finalTitleZh)],
+  ["project.finalBody.en", (detail) => escapeHtml(detail.finalBodyEn)],
+  ["project.finalBody.zh", (detail) => escapeHtml(detail.finalBodyZh)],
+  ["project.next.en", (detail) => escapeHtml(detail.nextEn)],
+  ["project.next.zh", (detail) => escapeHtml(detail.nextZh)],
 ];
 
-export function renderProjectDetailHtml(template: string, detail: ProjectDetail) {
+function assetPath(path: string) {
+  return path.startsWith("/") ? path : `/${path}`;
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function countOccurrences(html: string, needle: string) {
+  if (!needle) return 0;
+  let count = 0;
+  let index = 0;
+
+  while (true) {
+    index = html.indexOf(needle, index);
+    if (index === -1) return count;
+    count += 1;
+    index += needle.length;
+  }
+}
+
+function assertSingleSlot(html: string, slot: string) {
+  const count = countOccurrences(html, `data-slot="${slot}"`);
+  if (count !== 1) {
+    throw new Error(`Expected one project detail slot for ${slot}, found ${count}.`);
+  }
+}
+
+function findTagEnd(html: string, startIndex: number) {
+  let quote: '"' | "'" | null = null;
+
+  for (let index = startIndex; index < html.length; index += 1) {
+    const char = html[index];
+
+    if (quote) {
+      if (char === quote) quote = null;
+      continue;
+    }
+
+    if (char === '"' || char === "'") {
+      quote = char;
+      continue;
+    }
+
+    if (char === ">") return index;
+  }
+
+  return -1;
+}
+
+function replaceSlotHtml(html: string, slot: string, content: string) {
+  assertSingleSlot(html, slot);
+
+  const pattern = new RegExp(
+    `(<([a-z0-9-]+)[^>]*data-slot="${escapeRegExp(slot)}"[^>]*>)[\\s\\S]*?(<\\/\\2>)`,
+    "i",
+  );
+
+  if (!pattern.test(html)) {
+    throw new Error(`Expected an element body for project detail slot ${slot}.`);
+  }
+
+  return html.replace(pattern, (_match, open: string, _tag: string, close: string) => `${open}${content}${close}`);
+}
+
+function replaceSlotAttribute(html: string, slot: string, attr: string, value: string) {
+  assertSingleSlot(html, slot);
+
+  const marker = `data-slot="${slot}"`;
+  const markerIndex = html.indexOf(marker);
+  const tagStart = html.lastIndexOf("<", markerIndex);
+  const tagEnd = findTagEnd(html, markerIndex);
+
+  if (tagStart === -1 || tagEnd === -1) {
+    throw new Error(`Expected an element tag for project detail slot ${slot}.`);
+  }
+
+  const tag = html.slice(tagStart, tagEnd + 1);
+  const attrPattern = new RegExp(`\\s${escapeRegExp(attr)}="[^"]*"`);
+
+  if (!attrPattern.test(tag)) {
+    throw new Error(`Expected ${attr} on project detail slot ${slot}.`);
+  }
+
+  const nextTag = tag.replace(attrPattern, ` ${attr}="${escapeHtml(value)}"`);
+  return html.slice(0, tagStart) + nextTag + html.slice(tagEnd + 1);
+}
+
+function svgFallback(width: number, height: number, fill: string, text: string) {
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="${fill}"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="serif" font-style="italic" font-size="24" fill="#8b8676">${escapeHtml(text)}</text></svg>`;
+  return `this.src='data:image/svg+xml;utf8,${encodeURIComponent(svg)}'`;
+}
+
+function replaceSlotImage(html: string, slot: string, src: string, alt: string, fallbackText: string) {
+  let rendered = replaceSlotAttribute(html, slot, "src", assetPath(src));
+  rendered = replaceSlotAttribute(rendered, slot, "alt", alt);
+  return replaceSlotAttribute(rendered, slot, "onerror", svgFallback(1200, 675, "#f7f1de", fallbackText));
+}
+
+export function renderProjectDetailHtml(
+  template: string,
+  detail: ProjectDetail,
+  images: ProjectDetailImages = defaultImages,
+) {
   let html = template;
 
-  for (const [original, resolve] of replacements) {
-    html = replaceOnce(html, original, resolve(detail));
+  for (const [slot, resolve] of contentSlots) {
+    html = replaceSlotHtml(html, slot, resolve(detail));
   }
+
+  html = replaceSlotHtml(html, "project.link", escapeHtml(detail.linkText));
+  html = replaceSlotAttribute(html, "project.link", "href", detail.linkHref);
+  html = replaceSlotAttribute(html, "project.nextLink", "href", detail.nextHref);
+
+  html = replaceSlotImage(html, "project.image.cover", images.cover, detail.coverAlt, detail.coverFallback);
+  html = replaceSlotImage(html, "project.image.galleryOne", images.galleryOne, detail.captionOneEn, detail.captionOneEn);
+  html = replaceSlotImage(html, "project.image.galleryTwo", images.galleryTwo, detail.captionTwoEn, detail.captionTwoEn);
+  html = replaceSlotImage(html, "project.image.wide", images.wide, detail.wideFallback, detail.wideFallback);
 
   return normalizePrototypeLinks(html);
 }

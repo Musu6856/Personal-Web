@@ -13,7 +13,7 @@ function matchAll(html: string, pattern: RegExp) {
 }
 
 export function splitPrototypeHtml(html: string): PrototypePage {
-  const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1] ?? "Musu";
+  const title = html.match(/<title[^>]*>([\s\S]*?)<\/title>/i)?.[1] ?? "Musu";
   const styles = matchAll(html, /<style>([\s\S]*?)<\/style>/gi);
   const body = html.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? "";
   const scripts = matchAll(body, /<script[^>]*>([\s\S]*?)<\/script>/gi);
