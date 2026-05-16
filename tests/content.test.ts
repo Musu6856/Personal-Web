@@ -223,6 +223,12 @@ describe("site content model", () => {
     }
   });
 
+  it("fills project detail cover images without inline baseline gaps", async () => {
+    const html = pageTemplate("projectDetail");
+
+    expect(html).toContain(".pt-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }");
+  });
+
   it("centers the current blog post between previous and next related posts", async () => {
     const html = normalizePrototypeLinks(await renderBlogSlugPage(posts[1].slug));
     const relatedHtml = relatedSection(html);

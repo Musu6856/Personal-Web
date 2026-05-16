@@ -373,7 +373,7 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
   margin-bottom: 90px;
   box-shadow: var(--shadow);
 }
-.pt-cover img { width: 100%; height: 100%; object-fit: cover; }
+.pt-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pt-cover .badge {
   position: absolute;
   top: 20px; left: 20px;
