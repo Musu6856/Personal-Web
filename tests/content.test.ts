@@ -4,10 +4,11 @@ import path from "node:path";
 import { assets } from "@/content/assets";
 import { posts } from "@/content/posts";
 import { profile } from "@/content/profile";
+import { projectDetails } from "@/content/project-details";
 import { projects } from "@/content/projects";
 import { toolSections } from "@/content/tools";
 import { escapeHtml, replaceAllPairs, replaceOnce, replaceRequiredBetween } from "@/lib/html-utils";
-import { projectDetails, renderProjectDetailHtml } from "@/lib/project-detail-renderer";
+import { renderProjectDetailHtml } from "@/lib/project-detail-renderer";
 import { projectDetailTitle } from "@/lib/page-factories";
 import { pageTemplate } from "@/lib/page-template-registry";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
@@ -109,7 +110,7 @@ describe("site content model", () => {
     ]);
   });
 
-  it("has renderable detail content for every project card", () => {
+  it("keeps project detail content in the content model for every project card", () => {
     expect(projects.map((project) => project.slug).sort()).toEqual(
       Object.keys(projectDetails).sort(),
     );

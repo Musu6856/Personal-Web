@@ -8,7 +8,7 @@
 - 原始 HTML 原型已经迁入 `lib/page-templates/`。
 - 页面路由在 `app/`。
 - 大部分可维护内容在 `content/`。
-- 项目详情页的大段正文目前在 `lib/project-detail-renderer.ts`。
+- 项目详情页的大段正文在 `content/project-details.ts`。
 - 正式图片资源在 `public/assets/`。
 - `prototype/` 现在是视觉对照档案，不是生产源码。
 
@@ -90,10 +90,10 @@ content/projects.ts
 
 ### 项目详情页正文
 
-目前改这里：
+改这里：
 
 ```text
-lib/project-detail-renderer.ts
+content/project-details.ts
 ```
 
 这里适合维护：
@@ -112,7 +112,13 @@ lib/project-detail-renderer.ts
 lib/page-templates/projectDetail.ts
 ```
 
-里面有很多 `data-slot` 标记。不要随便删掉或改名，除非同步更新 `lib/project-detail-renderer.ts` 和测试。
+项目详情页渲染器在：
+
+```text
+lib/project-detail-renderer.ts
+```
+
+模板里面有很多 `data-slot` 标记。不要随便删掉或改名，除非同步更新 `lib/project-detail-renderer.ts` 和测试。
 
 ### 博客文章
 
@@ -187,6 +193,7 @@ public/assets/
 - `lib/prototype-page.ts`：把 HTML 模板拆成 title、head links、styles、body、scripts。
 - `lib/prototype-links.ts`：把原型里的旧链接转成 Next 路由。
 - `lib/site-renderers.ts`：把首页、工具页、博客页的结构化内容注入模板。
+- `content/project-details.ts`：维护项目详情页正文、链接文字、图片说明和下一个项目入口。
 - `lib/project-detail-renderer.ts`：把项目详情内容注入项目详情模板的 `data-slot`。
 - `lib/slug-pages.ts`：处理 `/blog/[slug]` 和 `/projects/[slug]`。
 - `lib/page-factories.tsx`：把模板、渲染器和页面组件串起来。
@@ -247,4 +254,4 @@ http://127.0.0.1:3002/
 
 - 部分内容源文件里的中文在终端里可能显示成乱码。判断页面是否正确时，以浏览器渲染效果为准。
 - `prototype/` 可以等全站视觉验收完成后再归档，不建议现在删除。
-- 如果后面继续提高可维护性，可以把 `lib/project-detail-renderer.ts` 里的项目详情正文再拆到 `content/`。
+- 项目详情正文已经拆到 `content/project-details.ts`；后面新增或修改项目详情时优先改这个文件。
