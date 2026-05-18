@@ -456,6 +456,8 @@ describe("site content model", () => {
     expect(blogHtml).not.toContain("图 01.");
     expect(blogHtml).not.toContain("图 02.");
     expect(blogHtml).toContain('class="bp-figure"');
+    expect(blogHtml).toContain('src="assets/posts/noticing-ai-tools/body-figure.png"');
+    expect(blogHtml).not.toContain('src="assets/shared/workflow-map.png"');
     expect(blogHtml).toContain("AI 让草稿更早出现");
     expect(blogHtml).toContain("我不把 AI 工具理解成绕过产品思考的捷径");
     expect(blogHtml).toContain("先给项目一个结构，再让工具提速");
@@ -464,6 +466,8 @@ describe("site content model", () => {
     expect(blogHtml).not.toContain("我还在学习什么才是真正的 AI 产品思考");
     expect(blogHtml).not.toContain("这篇记录不像一篇完成度很高的文章");
     const paperforgeBlogHtml = renderBlogPostContent(pageTemplate("blogPost"), "paperforge-as-product-exercise");
+    expect(paperforgeBlogHtml).toContain('src="assets/posts/paperforge-as-product-exercise/body-figure.png"');
+    expect(paperforgeBlogHtml).not.toContain('src="assets/shared/workflow-map.png"');
     expect(paperforgeBlogHtml).toContain("PaperForge 最开始不是从“AI 写论文”这个大方向出发");
     expect(paperforgeBlogHtml).toContain("结构化工作台");
     expect(paperforgeBlogHtml).toContain("不要让 AI 的流畅表达替代用户的控制权");

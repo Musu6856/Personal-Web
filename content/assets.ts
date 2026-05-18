@@ -41,9 +41,11 @@ export const assets = {
     },
     noticingAiTools: {
       cover: "assets/posts/noticing-ai-tools/cover.png",
+      bodyFigure: "assets/posts/noticing-ai-tools/body-figure.png",
     },
     paperforgeAsProductExercise: {
       cover: "assets/posts/paperforge-as-product-exercise/cover.png",
+      bodyFigure: "assets/posts/paperforge-as-product-exercise/body-figure.png",
     },
   },
   shared: {

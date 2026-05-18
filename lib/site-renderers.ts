@@ -405,7 +405,7 @@ function noticingAiToolsArticleHtml() {
       </ul>
 
       <figure class="bp-figure">
-        <img src="assets/shared/workflow-map.png" alt="Architecture Diagram" ${lazyImageAttrs} onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'800\\' height=\\'400\\'><rect width=\\'800\\' height=\\'400\\' fill=\\'%23ece4cf\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'sans-serif\\' font-size=\\'16\\' fill=\\'%238b8676\\'>Architecture Diagram Placeholder</text></svg>'">
+        <img src="${assets.posts.noticingAiTools.bodyFigure}" alt="Architecture Diagram" ${lazyImageAttrs} onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'800\\' height=\\'400\\'><rect width=\\'800\\' height=\\'400\\' fill=\\'%23ece4cf\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'sans-serif\\' font-size=\\'16\\' fill=\\'%238b8676\\'>Architecture Diagram Placeholder</text></svg>'">
       </figure>
 
       <h2 data-len>Tools change my working rhythm</h2>
@@ -465,7 +465,7 @@ function paperforgeArticleHtml() {
       </ul>
 
       <figure class="bp-figure">
-        <img src="assets/shared/workflow-map.png" alt="PaperForge workflow map" ${lazyImageAttrs} onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'800\\' height=\\'400\\'><rect width=\\'800\\' height=\\'400\\' fill=\\'%23ece4cf\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'sans-serif\\' font-size=\\'16\\' fill=\\'%238b8676\\'>PaperForge Workflow</text></svg>'">
+        <img src="${assets.posts.paperforgeAsProductExercise.bodyFigure}" alt="PaperForge workflow map" ${lazyImageAttrs} onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'800\\' height=\\'400\\'><rect width=\\'800\\' height=\\'400\\' fill=\\'%23ece4cf\\'/><text x=\\'50%\\' y=\\'50%\\' text-anchor=\\'middle\\' font-family=\\'sans-serif\\' font-size=\\'16\\' fill=\\'%238b8676\\'>PaperForge Workflow</text></svg>'">
       </figure>
 
       <h2 data-len>What I practiced through PaperForge</h2>
