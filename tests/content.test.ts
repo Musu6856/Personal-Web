@@ -182,6 +182,25 @@ describe("site content model", () => {
     ).toBe('<a href="/">Home</a><a href="/#projects">Projects</a><a href="/tool-list.html">Uses</a><a href="/blog/noticing-ai-tools">Blog</a><a href="/projects/paperforge">PaperForge</a><img src="/assets/posts/learning-ai-products-by-making-prototypes/cover.png">');
   });
 
+  it("does not duplicate the GitHub Pages base path when normalizing links", () => {
+    const previousBasePath = process.env.NEXT_PUBLIC_BASE_PATH;
+    process.env.NEXT_PUBLIC_BASE_PATH = "/Personal-Web";
+
+    try {
+      expect(
+        normalizePrototypeLinks(
+          '<a href="/Personal-Web/#about">About</a><a href="/blog/noticing-ai-tools">Blog</a><img src="/Personal-Web/assets/posts/noticing-ai-tools/cover.png"><img src="/assets/site/hero.jpg">',
+        ),
+      ).toBe('<a href="/Personal-Web/#about">About</a><a href="/Personal-Web/blog/noticing-ai-tools">Blog</a><img src="/Personal-Web/assets/posts/noticing-ai-tools/cover.png"><img src="/Personal-Web/assets/site/hero.jpg">');
+    } finally {
+      if (previousBasePath === undefined) {
+        delete process.env.NEXT_PUBLIC_BASE_PATH;
+      } else {
+        process.env.NEXT_PUBLIC_BASE_PATH = previousBasePath;
+      }
+    }
+  });
+
   it("reads prototype titles even when the title tag carries render metadata", () => {
     expect(splitPrototypeHtml('<title data-slot="project.titleTag">PaperForge — Project Detail</title>').title).toBe(
       "PaperForge — Project Detail",
