@@ -249,8 +249,12 @@ body::before {
 .bp-figure {
   margin: 3.5em -12%;
   position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--line-faint);
+  background: var(--bone);
 }
-.bp-figure img { width: 100%; border: 1px solid var(--line-faint); background: var(--bone); display: block; }
+.bp-figure img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .bp-figure figcaption {
   font-family: var(--sans); font-size: 11px; color: var(--ink-faint); text-align: center; margin-top: 14px;
 }

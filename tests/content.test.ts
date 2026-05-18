@@ -396,6 +396,15 @@ describe("site content model", () => {
     }
   });
 
+  it("keeps blog body figures at a fixed display ratio", () => {
+    const html = pageTemplate("blogPost");
+
+    expect(html).toContain(".bp-figure {");
+    expect(html).toContain("aspect-ratio: 16 / 9;");
+    expect(html).toContain("overflow: hidden;");
+    expect(html).toContain(".bp-figure img { width: 100%; height: 100%; object-fit: cover;");
+  });
+
   it("reveals the homepage hero image from above", async () => {
     const html = pageTemplate("home");
 
