@@ -1,0 +1,16 @@
+.codex-dev.err
+.codex-dev.*
+*.err
+*.log
+.next/
+.superpowers/
+image-drafts/
+tmp/
+public/assets/**/old*.png
+public/assets/**/old*.jpg
+public/assets/**/old*.jpeg
+public/assets/**/old*.webp
+public/assets/**/backup*.png
+public/assets/**/backup*.jpg
+public/assets/**/backup*.jpeg
+public/assets/**/backup*.webp

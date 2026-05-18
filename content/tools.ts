@@ -5,8 +5,8 @@ export const toolSections: ToolSection[] = [
     slug: "hardware",
     label: { en: "Hardware", zh: "硬件设备" },
     intro: {
-      en: "Hardware and devices used while learning product through prototypes.",
-      zh: "通过原型学习产品时使用的硬件设备。",
+      en: "Hardware and devices used while learning product through projects and practice.",
+      zh: "通过项目和实践学习产品时使用的硬件设备。",
     },
     items: [
       {
@@ -14,7 +14,7 @@ export const toolSections: ToolSection[] = [
         badge: "Daily Driver",
         description: {
           en: "My main machine for research, writing, AI-assisted prototyping, and local project work.",
-          zh: "我的主力设备，用来做研究、写东西、用 AI 辅助做原型，以及处理本地项目。",
+          zh: "我的主力设备，用来做研究、写东西、用 AI 辅助做项目，以及处理本地工作。",
         },
       },
       {
@@ -29,8 +29,8 @@ export const toolSections: ToolSection[] = [
         name: "External Monitor",
         badge: "Workspace",
         description: {
-          en: "A larger workspace helps when comparing references, writing notes, and keeping a prototype open beside source material.",
-          zh: "更大的工作空间适合对比参考、整理笔记，也方便把原型和资料并排打开。",
+          en: "A larger workspace helps when comparing references, writing notes, and keeping a project open beside source material.",
+          zh: "更大的工作空间适合对比参考、整理笔记，也方便把项目和资料并排打开。",
         },
       },
     ],
@@ -39,32 +39,32 @@ export const toolSections: ToolSection[] = [
     slug: "software",
     label: { en: "Software & Editor", zh: "软件与编辑器" },
     intro: {
-      en: "Software, editors, and AI coding tools used to make prototypes.",
-      zh: "用来制作原型的软件、编辑器和 AI 编码工具。",
+      en: "Software, editors, and AI coding tools used to build small product projects.",
+      zh: "用来推进小产品项目的软件、编辑器和 AI 编码工具。",
     },
     items: [
       {
         name: "Codex",
         badge: "Agent",
         description: {
-          en: "My main coding agent for turning rough ideas, page drafts, and product experiments into working prototypes.",
-          zh: "我常用的编码 Agent，用来把粗略想法、页面草稿和产品实验推进成可以运行的原型。",
+          en: "My main coding agent for turning rough ideas, page drafts, and product experiments into working builds.",
+          zh: "我常用的编码 Agent，用来把粗略想法、页面草稿和产品实验推进成可以运行的小项目。",
         },
       },
       {
         name: "Obsidian",
         badge: "Notes",
         description: {
-          en: "Where I keep product notes, learning records, references, and early ideas before they become prototypes.",
-          zh: "我用它存放产品笔记、学习记录、参考资料，以及变成原型之前的早期想法。",
+          en: "Where I keep product notes, learning records, references, and early ideas before they become projects.",
+          zh: "我用它存放产品笔记、学习记录、参考资料，以及变成项目之前的早期想法。",
         },
       },
       {
         name: "Open Design",
         badge: "Design",
         description: {
-          en: "A visual companion for checking designs, marking changes, and keeping the prototype close to the intended look.",
-          zh: "我用它检查设计、标注修改点，并尽量让原型接近想要的视觉效果。",
+          en: "A visual companion for checking designs, marking changes, and keeping the project close to the intended look.",
+          zh: "我用它检查设计、标注修改点，并尽量让项目接近想要的视觉效果。",
         },
       },
       {
@@ -81,8 +81,8 @@ export const toolSections: ToolSection[] = [
     slug: "tech-stack",
     label: { en: "Tech Stack", zh: "技术栈" },
     intro: {
-      en: "Basic technology stack I am learning while turning ideas into usable prototypes.",
-      zh: "把想法做成可试用原型时正在学习的基础技术栈。",
+      en: "Basic technology stack I am learning while turning ideas into usable product projects.",
+      zh: "把想法做成可试用小产品时正在学习的基础技术栈。",
     },
     items: [
       {
@@ -97,8 +97,8 @@ export const toolSections: ToolSection[] = [
         name: "JavaScript",
         badge: "Frontend",
         description: {
-          en: "I'm learning enough JavaScript to understand interactive pages, browser extensions, and prototype behavior.",
-          zh: "我正在学习足够的 JavaScript，用来理解交互页面、浏览器扩展和原型行为。",
+          en: "I'm learning enough JavaScript to understand interactive pages, browser extensions, and product behavior.",
+          zh: "我正在学习足够的 JavaScript，用来理解交互页面、浏览器扩展和产品行为。",
         },
       },
       {
@@ -113,8 +113,8 @@ export const toolSections: ToolSection[] = [
         name: "Next.js",
         badge: "Framework",
         description: {
-          en: "I'm learning enough frontend to turn ideas into usable prototypes and to understand how modern web products are put together.",
-          zh: "我也在学习足够的前端知识，把想法做成可以试用的原型，并理解现代 Web 产品是如何组织起来的。",
+          en: "I'm learning enough frontend to turn ideas into usable projects and to understand how modern web products are put together.",
+          zh: "我也在学习足够的前端知识，把想法做成可以试用的项目，并理解现代 Web 产品是如何组织起来的。",
         },
       },
     ],

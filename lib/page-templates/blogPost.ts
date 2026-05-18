@@ -450,58 +450,73 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
         <img src="assets/posts/learning-ai-products-by-making-prototypes/cover.png" alt="Hero Illustration" onerror="this.style.display='none'">
       </div>
       <figcaption>
-        <span data-len>FIG 01. Turning rough product thoughts into visible experiments.</span>
-        <span data-lzh>图 01. 把粗略的产品想法变成可见的具体尝试。</span>
+        <span data-len>FIG 01. Moving a product idea into a visible draft.</span>
+        <span data-lzh>图 01. 把一个产品想法推进到可见草稿。</span>
       </figcaption>
     </figure>
 
     <!-- Editorial Body -->
     <article class="bp-body" data-reveal data-od-id="body">
       
-      <p data-len>I am still learning what it means to think like an AI product manager. For now, the most useful path is simple: notice a workflow, make a small prototype, use it, and then ask what changed.</p>
-      <p data-lzh>我还在学习什么才是真正的 AI 产品思考。对现在的我来说，最有用的方法很朴素：观察一个工作流，做一个小原型，自己试着用，再回头问它到底改变了什么。</p>
+      <p data-len>After using Codex, Claude Code, Open Design, and Obsidian for a while, my strongest feeling is not simply that AI makes building faster. The real change is that an idea can enter a visible, editable state much earlier.</p>
+      <p data-lzh>这段时间用 Codex、Claude Code、Open Design 和 Obsidian 做项目，我最大的感受不是“AI 让开发变快”这么简单。真正的变化是：一个想法可以更早进入可见、可编辑、可验证的状态。</p>
 
-      <h2 data-len>Start from a real workflow</h2>
-      <h2 data-lzh>从真实工作流开始</h2>
+      <p data-len>But speed itself is not a product ability. If I only keep asking the tool to generate more screens and more code, the project may look busy while the actual problem remains vague. So the question I care about is: how do I use AI to move faster without losing product judgment?</p>
+      <p data-lzh>但速度本身不是产品能力。如果只是不断让工具生成更多页面、更多代码，项目看起来会很热闹，真正的问题却可能还是模糊的。所以我更在意的是：怎么借助 AI 提速，同时不丢掉产品判断。</p>
 
-      <p data-len>A good prototype does not have to start from a big feature list. It can start from a small moment: opening a paper, saving a useful paragraph, trying to explain a concept, or turning a vague research idea into a structured draft.</p>
-      <p data-lzh>一个好的原型不一定要从很大的功能清单开始。它可以从一个很小的时刻开始：打开一篇论文、保存一段有用文字、尝试解释一个概念，或者把一个模糊的研究想法整理成结构化草稿。</p>
+      <h2 data-len>AI makes the draft appear earlier</h2>
+      <h2 data-lzh>AI 让草稿更早出现</h2>
+
+      <p data-len>Before these tools, many ideas would stay in notes for a long time. I might write a few requirements, collect several references, and then stop at the point where implementation felt too expensive. Now I can push an idea into a demo much earlier, even if the first version is still rough.</p>
+      <p data-lzh>以前很多想法会在笔记里停很久：写一点需求，找一些参考，然后卡在“真正做出来成本太高”的地方。现在不一样了，我可以更早把一个想法推进到 demo 阶段，哪怕第一版还很粗糙。</p>
 
       <blockquote class="bp-pull-quote" data-od-id="pull-quote">
-        <span data-len>"A prototype is useful when it makes an idea easier to question, not when it pretends the idea is already finished."</span>
-        <span data-lzh>"原型真正有用的地方，不是证明一个想法已经完成，而是让这个想法更容易被追问。"</span>
+        <span data-len>"The value of a demo is not that it proves the idea is right. It gives me something concrete enough to question."</span>
+        <span data-lzh>"demo 的价值不是证明一个想法是对的，而是让我终于有东西可以追问。"</span>
       </blockquote>
 
-      <p data-len>When I look at an AI product idea, I try to separate it into three questions:</p>
-      <p data-lzh>当我看一个 AI 产品想法时，我会先把它拆成三个问题：</p>
+      <p data-len>That is why I do not see AI tools as a shortcut around product thinking. I see them as a way to expose product questions earlier. Once something is on the screen, I can immediately ask whether the flow makes sense, whether the page gives enough control, and whether the output is actually useful.</p>
+      <p data-lzh>所以我不把 AI 工具理解成绕过产品思考的捷径。它更像是把产品问题提前暴露出来的方法。只要东西出现在界面上，我就能马上追问：这个流程顺不顺？页面有没有给用户足够的控制感？生成结果到底有没有用？</p>
+
+      <h2 data-len>Fast can still be structured</h2>
+      <h2 data-lzh>快，也需要有结构</h2>
+
+      <p data-len>The easiest mistake is treating AI building as a stream of prompts. Ask once, get a page. Ask again, get a component. Keep going, and suddenly the project has many pieces but no clear center. I have stepped into that state before, so now I try to give the work a shape before I ask the tools to move fast.</p>
+      <p data-lzh>最容易犯的错误，是把 AI 辅助做项目变成一串 prompt：问一次，生成一个页面；再问一次，生成一个组件。继续做下去，东西越来越多，但中心越来越不清楚。我自己也踩过这个坑，所以现在会先给项目一个结构，再让工具提速。</p>
+
+      <p data-len>For a small product project, I usually force myself to clarify three things first:</p>
+      <p data-lzh>对一个小项目来说，我通常会先逼自己想清楚三件事：</p>
 
       <ul>
-        <li><span data-len><b>Workflow:</b> What is the user already trying to do?</span><span data-lzh><b>工作流：</b>用户本来就在尝试完成什么事情？</span></li>
-        <li><span data-len><b>Interface:</b> What does the AI need to make visible, editable, and trustworthy?</span><span data-lzh><b>界面：</b>AI 生成的东西，哪些需要可见、可编辑、可信任？</span></li>
-        <li><span data-len><b>Judgment:</b> Where should the person stay in control?</span><span data-lzh><b>判断：</b>哪些地方仍然必须由人来决定？</span></li>
+        <li><span data-len><b>Problem:</b> What user problem am I trying to make easier?</span><span data-lzh><b>问题：</b>我到底想让用户哪件事变得更容易？</span></li>
+        <li><span data-len><b>Scenario:</b> In what moment would this product actually be used?</span><span data-lzh><b>场景：</b>这个产品会在什么具体时刻被使用？</span></li>
+        <li><span data-len><b>Boundary:</b> What should AI do, and what should remain under the user's control?</span><span data-lzh><b>边界：</b>哪些事情交给 AI，哪些判断必须留给用户？</span></li>
       </ul>
 
       <figure class="bp-figure">
         <img src="assets/shared/workflow-map.png" alt="Architecture Diagram" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'800\' height=\'400\'><rect width=\'800\' height=\'400\' fill=\'%23ece4cf\'/><text x=\'50%\' y=\'50%\' text-anchor=\'middle\' font-family=\'sans-serif\' font-size=\'16\' fill=\'%238b8676\'>Architecture Diagram Placeholder</text></svg>'">
         <figcaption>
-          <span data-len>FIG 02. Mapping the steps before deciding what the AI should do.</span>
-          <span data-lzh>图 02. 先梳理步骤，再决定 AI 应该参与哪里。</span>
+          <span data-len>FIG 02. Mapping the workflow before deciding where AI belongs.</span>
+          <span data-lzh>图 02. 先梳理工作流，再判断 AI 应该参与哪一步。</span>
         </figcaption>
       </figure>
 
-      <h2 data-len>What I am practicing</h2>
-      <h2 data-lzh>我正在练习什么</h2>
+      <h2 data-len>Tools change my working rhythm</h2>
+      <h2 data-lzh>工具改变的是工作节奏</h2>
 
-      <p data-len>I am using projects like PaperForge and WebLearnBoost to practice product thinking. The technical stack matters, but it is not the center. The more important exercise is learning how to make an uncertain idea concrete enough to test.</p>
-      <p data-lzh>我正在借助 PaperForge 和 WebLearnBoost 这样的项目练习产品思考。技术栈当然重要，但它不是中心。更重要的是学习如何把一个不确定的想法做得足够具体，让它可以被试用和检验。</p>
+      <p data-len>Different tools sit in different parts of the process. Obsidian is where I keep scattered thoughts, references, and decisions. Open Design helps me look at pages as interfaces instead of only as code. Codex and Claude Code help me turn a direction into working files, then keep adjusting it through real feedback from the page.</p>
+      <p data-lzh>这些工具在流程里的位置不一样。Obsidian 更像是我放零散想法、参考和决策记录的地方；Open Design 帮我把页面当成界面来看，而不只是看代码；Codex 和 Claude Code 则负责把一个方向推进成真正能跑的文件，再根据页面反馈继续调整。</p>
+
+      <p data-len>What they have in common is that they shorten the distance between thinking and checking. I do not need to wait until everything is polished before seeing whether the idea works. I can make a version, look at it, dislike it, change it, and learn from that loop.</p>
+      <p data-lzh>它们共同改变的，是“想”和“验证”之间的距离。我不需要等到所有东西都很完整，才知道这个想法是不是成立。我可以先做出一个版本，看一眼，不满意，再改，然后从这个循环里学东西。</p>
 
       <div class="bp-blockquote">
-        <span data-len>Right now, I care less about having perfect answers and more about building loops where ideas can become visible, usable, and easier to improve.</span>
-        <span data-lzh>现在的我更在意的不是立刻拥有完美答案，而是建立一种循环：让想法变得可见、可用，并且更容易被改进。</span>
+        <span data-len>For me, the important ability is not prompting harder. It is knowing what to ask the tool to do, what to inspect myself, and when to stop generating and start judging.</span>
+        <span data-lzh>对我来说，重要的能力不是“更会写 prompt”，而是知道该让工具做什么、哪些地方必须自己检查，以及什么时候应该停止生成、开始判断。</span>
       </div>
 
-      <p data-len>This note is less like a finished article and more like a marker for where I am. I want this site to slowly collect those markers: prototypes, observations, small mistakes, and things I learned by actually making something.</p>
-      <p data-lzh>这篇记录不像一篇完成度很高的文章，更像是我现在所在位置的一个标记。我希望这个网站慢慢收集这些标记：原型、观察、小错误，以及真正动手之后学到的东西。</p>
+      <p data-len>So this article is not a conclusion about AI tools. It is a note from the middle of using them. I want to keep recording what each tool makes easier, what it makes messier, and how I can use these changes to build product judgment through real projects.</p>
+      <p data-lzh>所以这篇不是我对 AI 工具的结论，更像是正在使用过程中的一条记录。我想继续观察：不同工具让什么变简单了，又让什么变混乱了，以及我能不能借助这些变化，通过真实项目积累产品判断。</p>
     </article>
 
     <!-- Author Footer -->
@@ -509,8 +524,8 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
       <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='80' height='80'><rect width='80' height='80' fill='%23ddd2b6'/><text x='50%' y='50%' text-anchor='middle' dy='.3em' font-family='serif' font-size='24' fill='%2315140f'>M</text></svg>" alt="Musu Avatar">
       <div class="bio">
         <span class="bio-name">Musu</span>
-        <span data-len>Musu is learning toward becoming an AI product manager by making prototypes, studying workflows, and collecting notes along the way.</span>
-        <span data-lzh>牧晚吟 / Musu 正在通过做原型、观察工作流和整理学习记录，努力成为一名 AI 产品经理。</span>
+        <span data-len>Musu is learning toward AI product management by building projects, recording tool workflows, and using real demos to sharpen product judgment.</span>
+        <span data-lzh>王云飞 / Musu 正在通过项目实践、工具工作流记录和真实 demo，积累 AI 产品经验与产品判断。</span>
       </div>
     </div>
 
@@ -524,10 +539,10 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
           <div class="img">
             <img src="assets/posts/noticing-ai-tools/cover.png" alt="Related 01" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'200\'><rect width=\'300\' height=\'200\' fill=\'%23ece4cf\'/></svg>'">
           </div>
-          <h4 data-len>What I notice while using AI tools</h4>
+          <h4 data-len>What I notice while building with AI tools</h4>
           <h4 data-lzh>我在使用 AI 工具时观察到的事情</h4>
-          <p data-len>Short reflections on Codex, Obsidian, Open Design, Claude Code, and how ideas become prototypes.</p>
-          <p data-lzh>关于 Codex、Obsidian、Open Design、Claude Code，以及想法如何变成原型的简短观察。</p>
+          <p data-len>Notes on Codex, Obsidian, Open Design, Claude Code, and how ideas become working projects.</p>
+          <p data-lzh>关于 Codex、Obsidian、Open Design、Claude Code，以及想法如何变成可运行项目的观察。</p>
           <span class="meta">2026 · NOTES</span>
         </a>
         <a href="projects/paperforge" class="bp-related-card">
@@ -536,8 +551,8 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
           </div>
           <h4 data-len>PaperForge as a product exercise</h4>
           <h4 data-lzh>把 PaperForge 当作一次产品练习</h4>
-          <p data-len>How a research writing workflow became an AI-assisted model setup prototype.</p>
-          <p data-lzh>一个研究写作流程如何变成 AI 辅助的模型设定原型。</p>
+          <p data-len>How a research writing workflow became an AI-assisted model setup product exercise.</p>
+          <p data-lzh>一个研究写作流程如何变成 AI 辅助的模型设定产品练习。</p>
           <span class="meta">2026 · PROJECT NOTES</span>
         </a>
         <a href="projects/weblearnboost" class="bp-related-card">

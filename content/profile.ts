@@ -24,33 +24,33 @@ export const profile = {
     zh: "在动手做东西的过程中，学习 AI 产品。",
   },
   intro: {
-    en: "I'm Musu — learning toward becoming an AI product manager. I use prototypes to learn and explore AI products: understanding how AI changes workflows, and turning vague ideas into things people can actually try. This is where I share projects, notes, and things I'm learning.",
-    zh: "我是牧晚吟，也叫 Musu，正在努力成为一名 AI 产品经理。我正在通过做原型来学习和探索 AI 产品：理解 AI 如何改变工作流，也把一些模糊的想法做成可以真正试用的东西。这里是我分享项目、笔记和所学所得的地方。",
+    en: "I'm Wang Yunfei, also Musu, learning toward AI product management. Through projects and practice, I explore AI products: understanding how AI changes work, while turning vague ideas into things people can truly use. This is where I share projects, notes, and what I learn along the way.",
+    zh: "我是王云飞，也叫 Musu，正在努力成为一名 AI 产品经理。我正在通过项目和实践来学习、探索 AI 产品：理解 AI 如何改变工作，同时把一些模糊的想法做成可以真正使用的东西。这里是我分享项目、笔记和所学所得的地方。",
   },
   about: [
     {
-      en: "I care about product thinking, clear interfaces, and the way AI changes how people work.",
-      zh: "我关注产品思考、清晰的界面，以及 AI 如何改变人们的工作方式。",
+      en: "I like turning ideas into work instead of leaving them as ideas.",
+      zh: "我更喜欢把想法变成作品，而不是停在想法里。",
     },
     {
-      en: "I'm learning product by making small prototypes, studying real workflows, and turning scattered ideas into concrete interfaces.",
-      zh: "我正在通过做小原型、观察真实工作流、把零散想法变成具体界面来学习产品。",
+      en: "AI tools can make the pace faster, but product quality still comes from clear problem framing, testing habits, and iteration.",
+      zh: "AI 工具会把速度拉上来，但真正决定项目质量的，还是问题拆解、测试意识和持续迭代。",
     },
   ],
   aboutDetail: {
-    en: "I'm learning product by making small prototypes, studying real workflows, and turning scattered ideas into concrete interfaces. I may not be a full-time developer, but I like using tools, AI, and design references to make ideas visible.",
-    zh: "我正在通过做小原型、观察真实工作流、把零散想法变成具体界面来学习产品。我不算真正的开发者，但我喜欢借助工具、AI 和设计参考，把想法做得可以被看见。",
+    en: "For me, product execution does not mean building wherever the idea takes me. I first use PRDs to clarify the problem, scenario, and boundaries, then use user research and data analysis to protect the key paths. AI helps with speed; I stay responsible for judgment: whether the solution solves a real problem, and whether it is worth continuing.",
+    zh: "我理解的产品落地，不是想到哪做到哪。我的习惯是先用 PRD 把问题、场景和边界写清楚，再用用户调研和数据分析守住关键路径。AI 负责提速，我负责判断：这个方案有没有解决真实问题，值不值得继续做下去。",
   },
   processTrace: {
-    en: "This site is where I keep the traces of that process: projects, notes, tool experiments, and the lessons I collect while trying to become an AI product manager.",
-    zh: "这个网站会记录这些过程留下的痕迹：项目、笔记、工具实验，以及我在努力成为 AI 产品经理的路上收集到的经验。",
+    en: "This site collects the projects I have built or am still building, the notes I write, the tools I try, and the process of building product experience through real projects: learning fast, shipping usable versions, and sharpening product judgment through results.",
+    zh: "这个网站会记录我做过和正在做的项目、写下的笔记、用过的工具，以及我用项目积累产品经验的过程：快速学习，做出可用版本，再通过结果校准产品判断。",
   },
   contactIntro: {
-    en: "I'm open to conversations about AI products, workflow experiments, and small prototype ideas. If something here resonates with you, feel free to reach out.",
-    zh: "我很愿意聊聊 AI 产品、工作流实验和一些小原型想法。如果这里的内容让你产生了共鸣，欢迎联系我。",
+    en: "If you are also building AI products, learning tools, or similar small projects, feel free to reach out.",
+    zh: "如果你也在做 AI 产品、学习工具，或者只是想聊聊类似的项目，可以直接联系我。",
   },
   footerSummary: {
-    en: "Personal homepage of Musu — learning to become an AI product manager through prototypes, notes, and practice.",
-    zh: "牧晚吟 / Musu 的个人主页 —— 通过原型、笔记和实践，学习成为一名 AI 产品经理。",
+    en: "Personal homepage of Musu — learning to become an AI product manager through projects, notes, and practice.",
+    zh: "王云飞 / Musu 的个人主页 —— 通过项目、笔记和实践，学习成为一名 AI 产品经理。",
   },
 };

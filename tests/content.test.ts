@@ -13,7 +13,7 @@ import { blogPostTitle, projectDetailTitle } from "@/lib/page-factories";
 import { pageTemplate } from "@/lib/page-template-registry";
 import { normalizePrototypeLinks } from "@/lib/prototype-links";
 import { splitPrototypeHtml } from "@/lib/prototype-page";
-import { renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
+import { renderBlogPostContent, renderHomeContent, renderToolListContent } from "@/lib/site-renderers";
 import { renderBlogSlugPage } from "@/lib/slug-pages";
 import { renderProjectSlugPage } from "@/lib/slug-pages";
 
@@ -25,6 +25,10 @@ function collectAssetPaths(value: unknown): string[] {
   if (typeof value === "string") return value.startsWith("assets/") ? [value] : [];
   if (!value || typeof value !== "object") return [];
   return Object.values(value).flatMap(collectAssetPaths);
+}
+
+function renderedImageTags(html: string) {
+  return html.match(/<img\b[^>]*>/g) ?? [];
 }
 
 function runtimeSourceFiles(dir: string): string[] {
@@ -201,6 +205,44 @@ describe("site content model", () => {
     }
   });
 
+  it("pins dependency versions for reproducible deploy installs", () => {
+    const packageJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), "package.json"), "utf8")) as {
+      dependencies?: Record<string, string>;
+      devDependencies?: Record<string, string>;
+    };
+
+    for (const [name, version] of Object.entries({
+      ...packageJson.dependencies,
+      ...packageJson.devDependencies,
+    })) {
+      expect(version, name).not.toBe("latest");
+    }
+  });
+
+  it("lazy-loads repeated portfolio images outside primary hero media", async () => {
+    const pages = [
+      renderHomeContent(pageTemplate("home")),
+      renderBlogPostContent(pageTemplate("blogPost"), "noticing-ai-tools"),
+      renderBlogPostContent(pageTemplate("blogPost"), "paperforge-as-product-exercise"),
+      await renderProjectSlugPage("paperforge"),
+      await renderProjectSlugPage("weblearnboost"),
+    ];
+
+    const repeatedImageTags = pages
+      .flatMap(renderedImageTags)
+      .filter((tag) => tag.includes('src="/assets/'))
+      .filter((tag) => !tag.includes('/assets/site/hero.'))
+      .filter((tag) => !tag.includes('data-slot="project.image.cover"'))
+      .filter((tag) => !tag.includes('class="pt-cover"'))
+      .filter((tag) => !tag.includes('alt="Hero Illustration"'));
+
+    expect(repeatedImageTags.length).toBeGreaterThan(0);
+    for (const tag of repeatedImageTags) {
+      expect(tag).toContain('loading="lazy"');
+      expect(tag).toContain('decoding="async"');
+    }
+  });
+
   it("uses the detail masthead and highlights projects on project pages", async () => {
     const html = renderProjectDetailHtml(pageTemplate("projectDetail"), projectDetails.paperforge);
 
@@ -248,9 +290,14 @@ describe("site content model", () => {
 
   it("renders public blog slugs while rejecting draft project slugs", () => {
     expect(() => renderBlogSlugPage("learning-ai-products-by-making-prototypes")).toThrow("Unknown blog post slug");
-    expect(renderBlogSlugPage("noticing-ai-tools")).toContain("What I notice while using AI tools");
+    expect(renderBlogSlugPage("noticing-ai-tools")).toContain("What I notice while building with AI tools");
+    expect(renderBlogSlugPage("noticing-ai-tools")).toContain("我在用 AI 工具做项目时观察到的事");
+    expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("把 PaperForge 当作一次产品练习");
+    expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("问题不是生成更多文字");
+    expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("这个产品需要保护什么");
+    expect(renderBlogSlugPage("paperforge-as-product-exercise")).not.toContain("AI 让草稿更早出现");
     expect(() => renderProjectSlugPage("promptcase")).toThrow("Unknown project slug");
-    expect(blogPostTitle()).toBe("What I notice while using AI tools — Musu");
+    expect(blogPostTitle()).toBe("What I notice while building with AI tools — Musu");
   });
 
   it("points the legacy blog entry at the first public blog post", () => {
@@ -293,7 +340,7 @@ describe("site content model", () => {
     expect(new Set(hrefs).size).toBe(hrefs.length);
     expect(deckHtml).not.toContain("Learning AI products by making prototypes");
     expect(deckHtml).not.toContain("/blog/learning-ai-products-by-making-prototypes");
-    expect(deckHtml).toContain("What I notice while using AI tools");
+    expect(deckHtml).toContain("What I notice while building with AI tools");
     expect(deckHtml).toContain("PaperForge as a product exercise");
   });
 
@@ -335,6 +382,77 @@ describe("site content model", () => {
 
     expect(html).toContain('<div class="hero-art" data-reveal="drop">');
     expect(html).toContain("[data-reveal='drop'] { translate: 0 -48px; scale: 0.985; }");
+  });
+
+  it("renders homepage site images from the asset registry", async () => {
+    const html = renderHomeContent(pageTemplate("home"));
+
+    for (const path of Object.values(assets.site)) {
+      expect(html).toContain(`src="/${path}"`);
+    }
+  });
+
+  it("uses project-focused public wording instead of prototype wording", async () => {
+    const pages = [
+      renderHomeContent(pageTemplate("home")),
+      renderToolListContent(pageTemplate("toolList")),
+      renderBlogPostContent(pageTemplate("blogPost"), "noticing-ai-tools"),
+      await renderProjectSlugPage("paperforge"),
+      await renderProjectSlugPage("weblearnboost"),
+    ];
+
+    for (const html of pages) {
+      expect(html).not.toContain("Learn · Prototype");
+      expect(html).not.toContain("学习 · 原型");
+      expect(html).not.toContain("Product & Prototype");
+      expect(html).not.toContain("产品与原型");
+      expect(html).not.toContain("through prototypes");
+      expect(html).not.toContain("通过原型");
+      expect(html).not.toContain("small prototypes");
+      expect(html).not.toContain("小原型");
+    }
+  });
+
+  it("uses natural public-facing Chinese copy in reviewed sections", async () => {
+    const homeHtml = renderHomeContent(pageTemplate("home"));
+    const blogHtml = renderBlogPostContent(pageTemplate("blogPost"), "noticing-ai-tools");
+    const paperforgeHtml = await renderProjectSlugPage("paperforge");
+    const weblearnboostHtml = await renderProjectSlugPage("weblearnboost");
+
+    expect(homeHtml).toContain("理解 AI 如何改变工作，同时把一些模糊的想法做成可以真正使用的东西");
+    expect(homeHtml).toContain("把想法变成<em>作品</em>");
+    expect(homeHtml).toContain("我理解的产品落地，不是想到哪做到哪");
+    expect(homeHtml).toContain("先用 PRD 把问题、场景和边界写清楚");
+    expect(homeHtml).toContain("再用用户调研和数据分析守住关键路径");
+    expect(homeHtml).toContain("这个方案有没有解决真实问题");
+    expect(homeHtml).toContain("用项目积累产品经验");
+    expect(homeHtml).toContain("通过结果校准产品判断");
+    expect(homeHtml).toContain("下面这些，是我最近用得比较多、也想继续深入的方向。");
+    expect(homeHtml).toContain("一些我做过和正在做的");
+    expect(homeHtml).toContain("如果你也在做 AI 产品、学习工具");
+    expect(homeHtml).toContain("重点是把早期想法整理成可继续修改的模型设定");
+    expect(homeHtml).not.toContain("我关注产品思考");
+    expect(homeHtml).not.toContain("活档案");
+    expect(homeHtml).not.toContain("产生了共鸣");
+    expect(blogHtml).not.toContain("图 01.");
+    expect(blogHtml).not.toContain("图 02.");
+    expect(blogHtml).toContain('class="bp-figure"');
+    expect(blogHtml).toContain("AI 让草稿更早出现");
+    expect(blogHtml).toContain("我不把 AI 工具理解成绕过产品思考的捷径");
+    expect(blogHtml).toContain("先给项目一个结构，再让工具提速");
+    expect(blogHtml).toContain("这些工具在流程里的位置不一样");
+    expect(blogHtml).toContain("我可以先做出一个版本，看一眼，不满意，再改");
+    expect(blogHtml).not.toContain("我还在学习什么才是真正的 AI 产品思考");
+    expect(blogHtml).not.toContain("这篇记录不像一篇完成度很高的文章");
+    const paperforgeBlogHtml = renderBlogPostContent(pageTemplate("blogPost"), "paperforge-as-product-exercise");
+    expect(paperforgeBlogHtml).toContain("PaperForge 最开始不是从“AI 写论文”这个大方向出发");
+    expect(paperforgeBlogHtml).toContain("结构化工作台");
+    expect(paperforgeBlogHtml).toContain("不要让 AI 的流畅表达替代用户的控制权");
+    expect(paperforgeBlogHtml).not.toContain("这些工具在流程里的位置不一样");
+    expect(paperforgeHtml).toContain("还没完全成型的研究想法");
+    expect(paperforgeHtml).toContain("不替代用户自己的判断");
+    expect(paperforgeHtml).toContain("真实可操作的页面");
+    expect(weblearnboostHtml).toContain("把网页内容整理成学习材料的尝试");
   });
 
   it("keeps the tool list structure aligned with the original prototype", async () => {

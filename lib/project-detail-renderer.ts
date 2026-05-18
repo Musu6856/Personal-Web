@@ -150,15 +150,50 @@ function replaceSlotAttribute(html: string, slot: string, attr: string, value: s
   return html.slice(0, tagStart) + nextTag + html.slice(tagEnd + 1);
 }
 
+function upsertSlotAttribute(html: string, slot: string, attr: string, value: string) {
+  assertSingleSlot(html, slot);
+
+  const marker = `data-slot="${slot}"`;
+  const markerIndex = html.indexOf(marker);
+  const tagStart = html.lastIndexOf("<", markerIndex);
+  const tagEnd = findTagEnd(html, markerIndex);
+
+  if (tagStart === -1 || tagEnd === -1) {
+    throw new Error(`Expected an element tag for project detail slot ${slot}.`);
+  }
+
+  const tag = html.slice(tagStart, tagEnd + 1);
+  const attrPattern = new RegExp(`\\s${escapeRegExp(attr)}="[^"]*"`);
+  const nextTag = attrPattern.test(tag)
+    ? tag.replace(attrPattern, ` ${attr}="${escapeHtml(value)}"`)
+    : tag.replace(/\s*>$/, ` ${attr}="${escapeHtml(value)}">`);
+
+  return html.slice(0, tagStart) + nextTag + html.slice(tagEnd + 1);
+}
+
 function svgFallback(width: number, height: number, fill: string, text: string) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><rect width="${width}" height="${height}" fill="${fill}"/><text x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="serif" font-style="italic" font-size="24" fill="#8b8676">${escapeHtml(text)}</text></svg>`;
   return `this.src='data:image/svg+xml;utf8,${encodeURIComponent(svg)}'`;
 }
 
-function replaceSlotImage(html: string, slot: string, src: string, alt: string, fallbackText: string) {
+function replaceSlotImage(html: string, slot: string, src: string, alt: string, fallbackText: string, lazy = true) {
   let rendered = replaceSlotAttribute(html, slot, "src", assetPath(src));
   rendered = replaceSlotAttribute(rendered, slot, "alt", alt);
+  rendered = upsertSlotAttribute(rendered, slot, "decoding", "async");
+  if (lazy) {
+    rendered = upsertSlotAttribute(rendered, slot, "loading", "lazy");
+  }
   return replaceSlotAttribute(rendered, slot, "onerror", svgFallback(1200, 675, "#f7f1de", fallbackText));
+}
+
+function renderProjectWording(html: string) {
+  return html
+    .replaceAll("Learn · Prototype · Share · Repeat", "Learn · Build · Share · Repeat")
+    .replaceAll("学习 · 原型 · 分享 · 重复", "学习 · 项目 · 分享 · 重复")
+    .replaceAll("Learn · Prototype · Share", "Learn · Build · Share")
+    .replaceAll("学习 · 原型 · 分享", "学习 · 项目 · 分享")
+    .replaceAll("Personal homepage of Musu — learning to become an AI product manager through prototypes, notes, and practice.", "Personal homepage of Musu — learning to become an AI product manager through projects, notes, and practice.")
+    .replaceAll("牧晚吟 / Musu 的个人主页 —— 通过原型、笔记和实践，学习成为一名 AI 产品经理。", "王云飞 / Musu 的个人主页 —— 通过项目、笔记和实践，学习成为一名 AI 产品经理。");
 }
 
 export function renderProjectDetailHtml(
@@ -167,7 +202,8 @@ export function renderProjectDetailHtml(
   images: ProjectDetailImages = defaultImages,
 ) {
   const nextProject = nextPublicProject(detail);
-  let html = renderPublicFooterContent(template, "            ");
+  let html = renderProjectWording(template);
+  html = renderPublicFooterContent(html, "            ");
 
   for (const [slot, resolve] of contentSlots) {
     html = replaceSlotHtml(html, slot, resolve(detail));
@@ -182,7 +218,7 @@ export function renderProjectDetailHtml(
   html = replaceSlotAttribute(html, "project.link", "href", detail.linkHref);
   html = replaceSlotAttribute(html, "project.nextLink", "href", nextProject ? publicProjectHref(nextProject.slug) : "/#projects");
 
-  html = replaceSlotImage(html, "project.image.cover", images.cover, detail.coverAlt, detail.coverFallback);
+  html = replaceSlotImage(html, "project.image.cover", images.cover, detail.coverAlt, detail.coverFallback, false);
   html = replaceSlotImage(html, "project.image.galleryOne", images.galleryOne, detail.captionOneEn, detail.captionOneEn);
   html = replaceSlotImage(html, "project.image.galleryTwo", images.galleryTwo, detail.captionTwoEn, detail.captionTwoEn);
   html = replaceSlotImage(html, "project.image.wide", images.wide, detail.wideFallback, detail.wideFallback);

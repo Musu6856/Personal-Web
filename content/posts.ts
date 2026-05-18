@@ -5,8 +5,8 @@ export const posts: Post[] = [
   {
     slug: "learning-ai-products-by-making-prototypes",
     title: {
-      en: "Learning AI products by making prototypes",
-      zh: "通过做原型学习 AI 产品",
+      en: "Learning AI products by building projects",
+      zh: "通过项目实践学习 AI 产品",
     },
     date: "2026",
     dateDisplay: "May 14, 2026",
@@ -22,8 +22,8 @@ export const posts: Post[] = [
     },
     body: [
       {
-        en: "A prototype is useful when it makes an idea easier to question, not when it pretends the idea is already finished.",
-        zh: "原型真正有用的地方，不是证明一个想法已经完成，而是让这个想法更容易被追问。",
+        en: "A product project is useful when it makes an idea easier to question, not when it pretends the idea is already finished.",
+        zh: "项目真正有用的地方，不是证明一个想法已经完成，而是让这个想法更容易被追问。",
       },
     ],
     published: false,
@@ -32,8 +32,8 @@ export const posts: Post[] = [
   {
     slug: "noticing-ai-tools",
     title: {
-      en: "What I notice while using AI tools",
-      zh: "我在使用 AI 工具时观察到的事情",
+      en: "What I notice while building with AI tools",
+      zh: "我在用 AI 工具做项目时观察到的事",
     },
     date: "2026",
     dateDisplay: "May 15, 2026",
@@ -44,13 +44,13 @@ export const posts: Post[] = [
     image: assets.posts.noticingAiTools.cover,
     readTime: "5 min read",
     excerpt: {
-      en: "Short reflections on Codex, Obsidian, Open Design, Claude Code, and how these tools change the way ideas become prototypes.",
-      zh: "关于 Codex、Obsidian、Open Design、Claude Code，以及这些工具如何改变原型制作方式的简短观察。",
+      en: "Notes on how Codex, Obsidian, Open Design, and Claude Code change the way I shape ideas into working projects.",
+      zh: "记录 Codex、Obsidian、Open Design、Claude Code 这些工具如何改变我把想法做成项目的方式。",
     },
     body: [
       {
-        en: "I am collecting notes on how different AI tools affect the speed, shape, and friction of making prototypes.",
-        zh: "我在记录不同 AI 工具如何影响原型制作的速度、形状和阻力。",
+        en: "I am collecting notes on how different AI tools affect the speed, shape, and friction of making small product projects.",
+        zh: "我在记录不同 AI 工具如何影响做小项目时的速度、形状和阻力。",
       },
     ],
     published: true,

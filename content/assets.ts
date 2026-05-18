@@ -1,6 +1,6 @@
 export const assets = {
   site: {
-    hero: "assets/site/hero.png",
+    hero: "assets/site/hero.jpg",
     about: "assets/site/about.png",
     capabilities: "assets/site/capabilities.png",
     contact: "assets/site/contact.png",

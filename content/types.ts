@@ -17,7 +17,6 @@ export type Project = {
     wide: string;
   };
   summary: LocalizedText;
-  description: LocalizedText[];
   stack: string[];
   published: boolean;
   featured: boolean;

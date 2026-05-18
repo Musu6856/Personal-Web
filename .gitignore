@@ -13,3 +13,12 @@ image-drafts/
 tmp/
 .DS_Store
 Thumbs.db
+.codex-dev.err
+public/assets/**/old*.jpeg
+public/assets/**/old*.webp
+public/assets/**/old*.png
+public/assets/**/old*.jpg
+public/assets/**/backup*.jpeg
+public/assets/**/backup*.webp
+public/assets/**/backup*.png
+public/assets/**/backup*.jpg
