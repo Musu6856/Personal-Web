@@ -462,6 +462,26 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
   color: var(--ink);
   margin-bottom: 32px;
 }
+.pt-next .btn-ghost {
+  justify-content: center;
+  padding: 11px 24px;
+  border: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+.pt-next .btn-ghost:hover {
+  background: var(--coral);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.pt-next .btn-ghost .arrow { display: none; }
 
 /* Animations */
 [data-reveal] {
