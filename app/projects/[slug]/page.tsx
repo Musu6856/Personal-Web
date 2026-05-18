@@ -1,10 +1,14 @@
-import { getProject } from "@/content/projects";
+import { getProject, publicProjects } from "@/content/projects";
 import { projectDetailPage, projectDetailTitle } from "@/lib/page-factories";
 import { notFound } from "next/navigation";
 
 type ProjectPageProps = {
   params: Promise<{ slug: string }> | { slug: string };
 };
+
+export function generateStaticParams() {
+  return publicProjects.map((project) => ({ slug: project.slug }));
+}
 
 export async function generateMetadata({ params }: ProjectPageProps) {
   const { slug } = await params;
