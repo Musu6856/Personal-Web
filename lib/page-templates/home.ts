@@ -1481,7 +1481,17 @@ footer {
   .hero h1 { font-size: 38px; }
   .labs-grid { grid-template-columns: 1fr; }
   .cards { grid-template-columns: 1fr; }
-  .pills { justify-content: flex-start; }
+  .pills { justify-content: flex-start; max-width: 100%; }
+  .about-art,
+  .capabilities-art,
+  .cta-art { overflow: hidden; }
+  [data-reveal='left'],
+  [data-reveal='right'] { translate: 0 0; }
+  .about-side-note,
+  .capabilities-art .ribbon,
+  .capabilities-art .corner,
+  .cta-art .ribbon,
+  .cta-art .index { display: none; }
   section { padding: 80px 0; }
   .topbar-inner { font-size: 9px; }
   .work-deck {

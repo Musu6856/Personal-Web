@@ -48,7 +48,7 @@ export const toolSections: ToolSection[] = [
         badge: "Agent",
         description: {
           en: "My main coding agent for turning rough ideas, page drafts, and product experiments into working builds.",
-          zh: "我常用的编码 Agent，用来把粗略想法、页面草稿和产品实验推进成可以运行的小项目。",
+          zh: "我常用的编码 Agent，用来把早期想法、页面草稿和产品实验推进成可以运行的小项目。",
         },
       },
       {
