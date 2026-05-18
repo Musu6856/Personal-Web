@@ -1,5 +1,6 @@
 name = "personal-web"
-pages_build_output_dir = "out"
+compatibility_date = "2026-05-18"
 
-[vars]
-NODE_VERSION = "20.11.1"
+[assets]
+directory = "out"
+not_found_handling = "404-page"
