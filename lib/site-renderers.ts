@@ -449,19 +449,19 @@ function paperforgeArticleHtml() {
       <p data-len>This changed the product question. I was not asking how to generate a polished paper. I was asking what information should be extracted, what should be editable, and where the page should force the user to slow down and check their own assumptions.</p>
       <p data-lzh>这也改变了我对产品问题的理解。我问的不是“怎么生成一篇完整论文”，而是：哪些信息应该被提取出来？哪些内容必须可编辑？页面应该在哪些地方让用户停下来检查自己的假设？</p>
 
-      <h2 data-len>What the product needs to protect</h2>
-      <h2 data-lzh>这个产品需要保护什么</h2>
+      <h2 data-len>What the product needs to define</h2>
+      <h2 data-lzh>这个产品需要做什么</h2>
 
       <p data-len>PaperForge has three things that I think the interface needs to protect. First, the user's intention: the tool should keep asking what the research is really about instead of rushing into output. Second, the model elements: participants, strategies, assumptions, and payoff logic should not be buried in paragraphs. Third, editability: if the AI output cannot be changed, the user loses control too early.</p>
-      <p data-lzh>我觉得 PaperForge 的界面需要保护三件事。第一是用户的研究意图：工具不应该急着输出，而是要不断帮助用户确认到底在研究什么。第二是模型要素：参与者、策略、假设、收益逻辑这些东西不应该被埋在段落里。第三是可修改性：如果 AI 生成的内容不能被继续调整，用户就太早失去了控制权。</p>
+      <p data-lzh>我觉得 PaperForge 需要确定三件事。第一是用户的研究意图：工具不应该急着输出，而是要不断帮助用户确认到底在研究什么。第二是模型要素：参与者、策略、假设、收益逻辑这些东西不应该被埋在段落里。第三是可修改性：如果 AI 生成的内容不能被继续调整，用户就太早失去了控制权。</p>
 
       <p data-len>That is why the product should feel less like a chat box and more like a structured workspace. Chat is useful for exploration, but model setup needs something more stable: fields, sections, drafts, and a clear sense of what can still be changed.</p>
       <p data-lzh>所以这个产品不应该只像一个聊天框，而应该更像一个结构化工作台。聊天适合探索，但模型设定需要更稳定的承载方式：字段、分区、草稿，以及清楚地告诉用户哪些地方还可以继续改。</p>
 
       <ul>
-        <li><span data-len><b>Clarify:</b> Turn a loose research intention into explicit model elements.</span><span data-lzh><b>澄清：</b>把松散的研究意图拆成明确的模型要素。</span></li>
-        <li><span data-len><b>Expose:</b> Make assumptions and missing pieces visible instead of hiding them in prose.</span><span data-lzh><b>暴露：</b>让假设和缺口被看见，而不是藏在顺滑的文字里。</span></li>
-        <li><span data-len><b>Preserve control:</b> Keep the output editable so the user can continue judging and revising.</span><span data-lzh><b>保留控制：</b>让输出保持可编辑，让用户继续判断和修改。</span></li>
+        <li><span data-len><b>Anchor intent:</b> The product should guide users to clarify and calibrate their research goal before generating content.</span><span data-lzh><b>锚定研究意图：</b>产品不应优先生成内容，而应通过交互引导用户明确、校准研究目标，避免偏离方向。</span></li>
+        <li><span data-len><b>Make model elements explicit:</b> Core information such as players, strategic assumptions, and payoff logic should be structured, not hidden in natural-language paragraphs.</span><span data-lzh><b>显性化模型要素：</b>参与者、策略假设、收益逻辑等核心信息，需通过结构化方式呈现，而非隐藏在自然语言段落中。</span></li>
+        <li><span data-len><b>Protect user control:</b> All intermediate and final AI outputs should support editing and iteration so users can keep adjusting the work.</span><span data-lzh><b>保障用户控制权：</b>AI 生成的所有中间与最终产出，都应支持编辑与迭代，避免用户在流程中丧失调整能力。</span></li>
       </ul>
 
       <figure class="bp-figure">

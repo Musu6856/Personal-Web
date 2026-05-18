@@ -313,7 +313,7 @@ describe("site content model", () => {
     expect(renderBlogSlugPage("noticing-ai-tools")).toContain("我在用 AI 工具做项目时观察到的事");
     expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("把 PaperForge 当作一次产品练习");
     expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("问题不是生成更多文字");
-    expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("这个产品需要保护什么");
+    expect(renderBlogSlugPage("paperforge-as-product-exercise")).toContain("这个产品需要做什么");
     expect(renderBlogSlugPage("paperforge-as-product-exercise")).not.toContain("AI 让草稿更早出现");
     expect(() => renderProjectSlugPage("promptcase")).toThrow("Unknown project slug");
     expect(blogPostTitle()).toBe("What I notice while building with AI tools — Musu");
