@@ -39,40 +39,40 @@ export const toolSections: ToolSection[] = [
     slug: "software",
     label: { en: "Software & Editor", zh: "软件与编辑器" },
     intro: {
-      en: "Software, editors, and AI coding tools used to build small product projects.",
-      zh: "用来推进小产品项目的软件、编辑器和 AI 编码工具。",
+      en: "The tools I use to turn ideas, notes, and product directions into visible, testable versions.",
+      zh: "这些工具主要用来把想法、笔记和产品方向推进成可见、可验证的版本。",
     },
     items: [
       {
         name: "Codex",
         badge: "Agent",
         description: {
-          en: "My main coding agent for turning rough ideas, page drafts, and product experiments into working builds.",
-          zh: "我常用的编码 Agent，用来把早期想法、页面草稿和产品实验推进成可以运行的小项目。",
+          en: "My main coding agent for implementation and maintenance. I usually define the requirement, boundaries, and acceptance checks first, then use it to edit code, run tests, and fix issues step by step.",
+          zh: "我主要用 Codex 做代码实现和项目维护。通常会先把需求、边界和验收标准写清楚，再让它按步骤改代码、跑测试、修问题。",
         },
       },
       {
         name: "Obsidian",
         badge: "Notes",
         description: {
-          en: "Where I keep product notes, learning records, references, and early ideas before they become projects.",
-          zh: "我用它存放产品笔记、学习记录、参考资料，以及变成项目之前的早期想法。",
+          en: "I use Obsidian to build my personal knowledge base, with LLM-Wiki helping organize references, product observations, project experience, and learning records.",
+          zh: "我用 Obsidian 构建个人知识库，并结合 LLM-Wiki 整理资料、产品观察、项目经验和学习记录。",
         },
       },
       {
         name: "Open Design",
         badge: "Design",
         description: {
-          en: "A visual companion for checking designs, marking changes, and keeping the project close to the intended look.",
-          zh: "我用它检查设计、标注修改点，并尽量让项目接近想要的视觉效果。",
+          en: "I use Open Design to quickly produce product prototypes and page concepts, then judge whether the information structure, visual direction, and interaction details hold up.",
+          zh: "我用 Open Design 快速产出产品原型和页面方案。它主要负责把想法可视化，方便我继续判断信息结构、视觉方向和交互细节是否成立。",
         },
       },
       {
         name: "Claude Code",
         badge: "Coding",
         description: {
-          en: "Another AI coding tool I use to explore implementations, compare approaches, and learn from generated code.",
-          zh: "另一个我会使用的 AI 编码工具，用来探索实现方式、比较方案，也从生成的代码里学习。",
+          en: "I use Claude Code as a second coding perspective: for reading code, comparing implementation plans, and checking whether another agent would approach the same problem differently.",
+          zh: "我会把 Claude Code 当作第二个代码视角使用，用来理解代码、比较实现方案，也看看另一个 Agent 会不会用不同方式处理同一个问题。",
         },
       },
     ],
