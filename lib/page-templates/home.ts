@@ -1859,7 +1859,7 @@ footer {
     </div>
 
     <div class="projects-meta" data-reveal>
-      <span class="ring">05</span>
+      <span class="ring">04</span>
       <span class="meta-text">
         <b data-len>Ongoing &amp; planned</b><b data-lzh>进行中 &amp; 计划中</b>
         <span data-len>documenting AI product prototypes,<br/>web projects, and learning tools</span>
