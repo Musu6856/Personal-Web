@@ -292,6 +292,14 @@ describe("site content model", () => {
     expect(html).toContain(".pt-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }");
   });
 
+  it("wraps project detail metadata and quotes on small screens", async () => {
+    const html = pageTemplate("projectDetail");
+
+    expect(html).toContain("overflow-wrap: anywhere;");
+    expect(html).toContain("word-break: break-word;");
+    expect(html).toContain("margin-left: 0;");
+  });
+
   it("renders project detail figure labels as direct image text", async () => {
     const html = pageTemplate("projectDetail");
 
@@ -485,6 +493,8 @@ describe("site content model", () => {
     expect(paperforgeHtml).toContain("不替代用户自己的判断");
     expect(paperforgeHtml).toContain("真实可操作的页面");
     expect(weblearnboostHtml).toContain("把网页内容整理成学习材料的尝试");
+    expect(weblearnboostHtml).toContain("Latest Release: v0.1.1 Trial");
+    expect(weblearnboostHtml).toContain('href="https://github.com/Musu6856/WebLearnBoost/releases/tag/v0.1.1"');
   });
 
   it("keeps the tool list structure aligned with the original prototype", async () => {
@@ -509,6 +519,7 @@ describe("site content model", () => {
     expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/cover.png"');
     expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/model-setup.png"');
     expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/editor-state.png"');
+    expect(paperforgeHtml).toContain('src="/assets/projects/paperforge/wide.png"');
     expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/cover.png"');
     expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/wide.png"');
     expect(weblearnboostHtml).toContain('src="/assets/projects/weblearnboost/learning-map.png"');

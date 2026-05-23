@@ -362,6 +362,9 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
   font-size: 14px;
   font-weight: 500;
   color: var(--ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .pt-cover {
@@ -511,7 +514,7 @@ footer { border-top: 1px solid var(--line); padding: 60px 0 30px; margin-top: 60
 @media (max-width: 640px) {
   .pt-gallery { grid-template-columns: 1fr; }
   .pt-meta { grid-template-columns: 1fr; gap: 20px; }
-  .pt-body blockquote { font-size: 22px; padding-left: 20px; margin-left: -5%; }
+  .pt-body blockquote { font-size: 22px; padding-left: 20px; margin-left: 0; margin-right: 0; }
 }
 @media (max-width: 560px) { .container { padding: 0 16px; } .topbar-inner { font-size: 9px; } }
 </style>

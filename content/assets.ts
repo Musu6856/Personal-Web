@@ -12,7 +12,7 @@ export const assets = {
         cover: "assets/projects/paperforge/cover.png",
         galleryOne: "assets/projects/paperforge/model-setup.png",
         galleryTwo: "assets/projects/paperforge/editor-state.png",
-        wide: "assets/projects/paperforge/editor-state.png",
+        wide: "assets/projects/paperforge/wide.png",
       },
     },
     weblearnboost: {
